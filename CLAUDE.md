@@ -6,12 +6,12 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Protocollo e logica in `src/core/`: puro TypeScript, testati. `npm test` → 42 test verdi (node:test + tsx).
 - Schermate in `app/` (expo-router): connessione, poi tab Controllo / Galleria / Impostazioni. Scritte ma **mai compilate né provate su un telefono**.
 - Modulo nativo `modules/yi-native/` (Kotlin): `bindToWifi` (requestNetwork Wi-Fi senza internet + bindProcessToNetwork) e vista RTSP con Media3 1.11.1.
-- CI in `.github/workflows/android.yml`: test → expo prebuild → APK release arm64 → artifact `ControllaMI-apk`; su tag `v*` crea anche una Release con l'APK.
+- CI verde dal 10/11 in `.github/workflows/android.yml`: test → expo prebuild → APK release arm64 → artifact `ControllaMI-apk`; su tag `v*` crea anche una Release con l'APK.
 - Open source, licenza MIT. Repo privato finché l'app non è provata, poi va reso pubblico (README già scritto per il pubblico).
 - Repo: https://github.com/Mistere-Tech/ControllaMI (privato, branch main). GitHub CLI autenticata su questo PC (`C:/Program Files/GitHub CLI/gh.exe`).
 
 ## Prossimi passi
-1. Far passare la build della CI (o in locale: `npm install`, `npx expo install --fix`, `npx expo run:android`) e correggere gli eventuali errori di compilazione, soprattutto nel Kotlin.
+1. Scaricare l'APK dall'ultima build verde (gh run download -R Mistere-Tech/ControllaMI -n ControllaMI-apk) e installarlo sul telefono. Build locale su Windows: serve abilitare i percorsi lunghi (limite 260 caratteri nel C++), altrimenti usare la CI.
 2. Provare con la camera vera: msg_id, latenza della live view, Wi-Fi senza internet su Android 10+.
 
 ## Regole di lavoro scelte dall'utente
