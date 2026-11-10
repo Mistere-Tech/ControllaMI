@@ -3,6 +3,8 @@ import { Alert, FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, Vi
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
+import { SdBanner } from '../../src/ui/SdBanner';
+import { useProblems } from '../../src/state/ProblemContext';
 import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
 import { CamFile, formatSize } from '../../src/core/gallery';
 import { downloadToGallery } from '../../src/net/download';
@@ -14,6 +16,7 @@ export default function GalleriaScreen() {
   const insets = useSafeAreaInsets();
   const { controller, demo } = useCameraCtx();
   const st = useCameraState();
+  const { report, notify } = useProblems();
   const [filter, setFilter] = useState<Filter>('tutti');
   const [selecting, setSelecting] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -25,15 +28,15 @@ export default function GalleriaScreen() {
     try {
       await controller.loadFiles();
     } catch (e) {
-      Alert.alert('Galleria', (e as Error).message);
+      report(e, { retry: () => load() });
     } finally {
       setLoading(false);
     }
   }, [controller]);
 
   useEffect(() => {
-    if (st.status === 'connected') load();
-  }, [st.status, load]);
+    if (st.status === 'connected' && st.sd !== 'missing') load();
+  }, [st.status, st.sd, load]);
 
   // ricarica quando la camera finisce un video o una foto
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function GalleriaScreen() {
   const download = async () => {
     const list = st.files.filter((f) => selected.has(f.name));
     if (demo) {
-      Alert.alert('Demo', 'Nella camera simulata non ci sono file veri da scaricare.');
+      notify({ title: 'Modalità demo', message: 'Nella camera simulata non ci sono file veri da scaricare.', code: null, action: null, severity: 'warning' });
       return;
     }
     try {
@@ -70,10 +73,16 @@ export default function GalleriaScreen() {
         setProgress({ name: f.name, fraction: 0, index: i + 1, total: list.length });
         await downloadToGallery(f, (fraction) => setProgress({ name: f.name, fraction, index: i + 1, total: list.length }));
       }
-      Alert.alert('Fatto', list.length === 1 ? 'File salvato in galleria.' : `${list.length} file salvati in galleria.`);
+      notify({
+        title: 'Salvato',
+        message: list.length === 1 ? 'File salvato nella galleria del telefono.' : `${list.length} file salvati nella galleria del telefono.`,
+        code: null,
+        action: null,
+        severity: 'info',
+      });
       exitSelection();
     } catch (e) {
-      Alert.alert('Download interrotto', (e as Error).message);
+      report(e, { retry: () => download() });
     } finally {
       setProgress(null);
     }
@@ -94,7 +103,7 @@ export default function GalleriaScreen() {
               await controller.deleteFiles(names);
               exitSelection();
             } catch (e) {
-              Alert.alert('Eliminazione non riuscita', (e as Error).message);
+              report(e);
             }
           },
         },
@@ -140,6 +149,7 @@ export default function GalleriaScreen() {
         </Pressable>
       </View>
       <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}><ConnectionBadge demo={demo} /></View>
+      <SdBanner />
 
       <View style={s.filters}>
         {(['tutti', 'video', 'foto'] as Filter[]).map((f) => (

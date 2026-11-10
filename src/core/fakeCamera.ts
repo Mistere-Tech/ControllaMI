@@ -10,6 +10,10 @@ export class FakeCamera {
   recording = false;
   photosTaken = 0;
   mute = false;
+  /** Scheda SD inserita (senza, REC/foto/elenco file falliscono). */
+  sdInserted = true;
+  /** Alcuni firmware non riportano lo stato della SD nelle impostazioni. */
+  reportsSdStatus = true;
 
   private token: number;
   private nextToken: number;
@@ -53,6 +57,9 @@ export class FakeCamera {
   private cwd = '/';
   private counter = 43;
 
+  /** Codice inventato: quello vero della YI senza SD non è ancora noto (da verificare sulla camera). */
+  static readonly NO_SD = -27;
+
   constructor(opts: { token?: number } = {}) {
     this.token = opts.token ?? 1;
     this.nextToken = this.token;
@@ -94,8 +101,11 @@ export class FakeCamera {
     switch (id) {
       case MSG.STOP_SESSION:
         return [ok()];
-      case MSG.GET_ALL_SETTINGS:
-        return [ok({ param: Object.entries(this.settings).map(([k, v]) => ({ [k]: v })) })];
+      case MSG.GET_ALL_SETTINGS: {
+        const all: Record<string, string> = { ...this.settings };
+        if (this.reportsSdStatus) all.sd_card_status = this.sdInserted ? 'insert' : 'remove';
+        return [ok({ param: Object.entries(all).map(([k, v]) => ({ [k]: v })) })];
+      }
       case MSG.GET_SETTING:
         return [ok({ type: req.type, param: this.settings[req.type] })];
       case MSG.GET_OPTIONS: {
@@ -112,6 +122,7 @@ export class FakeCamera {
       case MSG.BATTERY:
         return [ok({ type: 'battery', param: '85' })];
       case MSG.START_RECORD:
+        if (!this.sdInserted) return err(FakeCamera.NO_SD);
         if (this.recording) return err(-14);
         this.recording = true;
         return [ok(), { msg_id: MSG.NOTIFICATION, type: 'start_video_record' }];
@@ -123,6 +134,7 @@ export class FakeCamera {
         return [ok(), { msg_id: MSG.NOTIFICATION, type: 'video_record_complete', param: `${MEDIA_DIR}/${name}` }];
       }
       case MSG.TAKE_PHOTO: {
+        if (!this.sdInserted) return err(FakeCamera.NO_SD);
         this.photosTaken++;
         const name = `YDXJ${String(this.counter++).padStart(4, '0')}.jpg`;
         this.files[name] = `4194304 bytes|${this.now()}`;
@@ -135,6 +147,7 @@ export class FakeCamera {
         this.cwd = req.param;
         return [ok({ pwd: this.cwd })];
       case MSG.LS:
+        if (!this.sdInserted) return err(FakeCamera.NO_SD);
         if (this.cwd !== MEDIA_DIR) return [ok({ listing: [] })];
         return [ok({ listing: Object.entries(this.files).map(([k, v]) => ({ [k]: v })) })];
       case MSG.DELETE_FILE: {

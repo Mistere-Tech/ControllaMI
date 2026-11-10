@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
+import { useProblems } from '../../src/state/ProblemContext';
 import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
 import { describeSetting, groupSettings } from '../../src/core/settings';
 import { C } from '../../src/ui/theme';
@@ -18,6 +19,7 @@ export default function ImpostazioniScreen() {
   const insets = useSafeAreaInsets();
   const { controller, demo } = useCameraCtx();
   const st = useCameraState();
+  const { report, notify } = useProblems();
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const groups = useMemo(() => groupSettings(st.settings), [st.settings]);
@@ -30,13 +32,13 @@ export default function ImpostazioniScreen() {
       const o = await controller.getOptions(key);
       if (!o.settable || o.options.length === 0) {
         setSheet(null);
-        Alert.alert(info.label, 'Questa impostazione non si può cambiare dall’app.');
+        notify({ title: info.label, message: 'Questa impostazione non si può cambiare dall’app.', code: null, action: null, severity: 'warning' });
         return;
       }
       setSheet({ key, label: info.label, value, options: o.options });
     } catch (e) {
       setSheet(null);
-      Alert.alert('Errore', (e as Error).message);
+      report(e, { retry: () => open(key, value) });
     }
   };
 
@@ -47,10 +49,7 @@ export default function ImpostazioniScreen() {
     try {
       await controller.changeSetting(key, opt);
     } catch (e) {
-      Alert.alert(
-        'Impostazione non cambiata',
-        st.recording ? 'Ferma la registrazione e riprova.' : (e as Error).message,
-      );
+      report(e, { retry: () => controller.changeSetting(key, opt).catch((err) => report(err)) });
     }
   };
 

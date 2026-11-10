@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
 import { useCameraCtx, useCameraState, useLiveView } from '../../src/state/CameraContext';
 import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
+import { SdBanner } from '../../src/ui/SdBanner';
+import { useProblems } from '../../src/state/ProblemContext';
 import { formatElapsed } from '../../src/core/CameraController';
 import { RtspView } from '../../modules/yi-native';
 import { C } from '../../src/ui/theme';
@@ -20,6 +22,7 @@ export default function ControlloScreen() {
   const { controller, live, demo, disconnect } = useCameraCtx();
   const st = useCameraState();
   const lv = useLiveView();
+  const { report } = useProblems();
   const [, tick] = useState(0);
   const [busy, setBusy] = useState(false);
 
@@ -46,11 +49,12 @@ export default function ControlloScreen() {
     try {
       await fn();
     } catch (e) {
-      Alert.alert('Comando non riuscito', (e as Error).message);
+      report(e, { retry: () => run(fn) });
     } finally {
       setBusy(false);
     }
   };
+  const sdBlocked = st.sd === 'missing' && !st.recording;
 
   const hint = st.status === 'reconnecting'
     ? 'Riconnessione in corso…'
@@ -81,6 +85,8 @@ export default function ControlloScreen() {
           <Text style={s.muted}>{st.battery != null ? `${st.battery}%` : '–'}</Text>
         </View>
       </View>
+
+      <SdBanner />
 
       <View style={s.live}>
         {lv.url && RtspView ? (
@@ -137,9 +143,10 @@ export default function ControlloScreen() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={video ? (st.recording ? 'Ferma registrazione' : 'Avvia registrazione') : 'Scatta foto'}
+          accessibilityState={{ disabled: st.status !== 'connected' || sdBlocked }}
           disabled={st.status !== 'connected'}
           onPress={() => run(() => controller.shutter())}
-          style={({ pressed }) => [s.shutter, (pressed || busy) && { opacity: 0.75 }]}
+          style={({ pressed }) => [s.shutter, (pressed || busy) && { opacity: 0.75 }, sdBlocked && { opacity: 0.35 }]}
         >
           <View
             style={{

@@ -1,6 +1,7 @@
 import { Transport } from './transport';
 import { YiClient, YiNotification } from './YiClient';
 import { CamFile } from './gallery';
+import { SdMissingError, SdState, sdStateFrom, sdStateFromNotification } from './errors';
 
 export type Status = 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'error';
 export type Mode = 'video' | 'photo';
@@ -18,6 +19,8 @@ export interface CameraState {
   lastFile: string | null;
   /** Tempi di risposta degli ultimi battiti (ms), dal più vecchio; null = nessuna risposta. */
   heartbeats: (number | null)[];
+  /** Scheda SD: ok, assente, da formattare o sconosciuto (firmware che non lo dice). */
+  sd: SdState;
 }
 
 export interface ControllerOptions {
@@ -51,6 +54,7 @@ const initial: CameraState = {
   files: [],
   lastFile: null,
   heartbeats: [],
+  sd: 'unknown',
 };
 
 /** Stato dell'app intorno al client: connessione, riconnessione, REC, impostazioni, file. */
@@ -136,6 +140,7 @@ export class CameraController {
       battery: battery?.level ?? null,
       charging: battery?.charging ?? false,
       settings,
+      sd: sdStateFrom(settings),
       heartbeats: [],
     });
     this.startHeartbeat(client);
@@ -222,8 +227,18 @@ export class CameraController {
         break;
       case 'setting_changed':
         // un'impostazione è cambiata (anche dai tasti): ricarica in background
-        this.client?.getAllSettings().then((settings) => this.set({ settings })).catch(() => {});
+        this.client?.getAllSettings().then((settings) => this.set({ settings, sd: sdStateFrom(settings) })).catch(() => {});
         break;
+      case 'sd_card_status': {
+        const sd = sdStateFromNotification(n.param);
+        if (sd) this.set({ sd });
+        // rilegge le impostazioni per sapere anche se la nuova SD va formattata
+        this.client?.getAllSettings().then((settings) => {
+          const fromSettings = sdStateFrom(settings);
+          this.set({ settings, sd: fromSettings === 'unknown' ? this.state.sd : fromSettings });
+        }).catch(() => {});
+        break;
+      }
     }
   }
 
@@ -232,18 +247,25 @@ export class CameraController {
     return this.client;
   }
 
+  /** Per i comandi che scrivono o leggono la SD: se sappiamo che manca, non disturbiamo la camera. */
+  private needSd(): YiClient {
+    const c = this.need();
+    if (this.state.sd === 'missing') throw new SdMissingError();
+    return c;
+  }
+
   setMode(mode: Mode) {
     if (this.state.recording) return;
     this.set({ mode });
   }
 
   async shutter() {
-    if (this.state.mode === 'photo') await this.need().takePhoto();
+    if (this.state.mode === 'photo') await this.needSd().takePhoto();
     else await this.toggleRecord();
   }
 
   async toggleRecord() {
-    const c = this.need();
+    const c = this.state.recording ? this.need() : this.needSd();
     if (this.state.recording) {
       await c.stopRecord();
       this.set({ recording: false, recordStartedAt: null });
@@ -259,7 +281,8 @@ export class CameraController {
   }
 
   async refreshSettings() {
-    this.set({ settings: await this.need().getAllSettings() });
+    const settings = await this.need().getAllSettings();
+    this.set({ settings, sd: sdStateFrom(settings) });
   }
 
   getOptions(key: string) {
@@ -272,7 +295,7 @@ export class CameraController {
   }
 
   async loadFiles() {
-    this.set({ files: await this.need().listFiles() });
+    this.set({ files: await this.needSd().listFiles() });
   }
 
   async deleteFiles(names: string[]) {
