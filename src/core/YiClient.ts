@@ -2,7 +2,7 @@ import { Transport } from './transport';
 import { JsonStreamParser } from './jsonStream';
 import { MSG } from './protocol';
 import { settingsToMap } from './settings';
-import { CamFile, MEDIA_DIR, parseListing, CAMERA_HOST } from './gallery';
+import { CamFile, CAMERA_HOST, DCIM_DIR, FIRST_MEDIA_DIR, mediaPath, parseListing, parseMediaDirs, sortFiles } from './gallery';
 
 export class YiError extends Error {
   constructor(public rval: number, public msgId: number) {
@@ -10,6 +10,9 @@ export class YiError extends Error {
     this.name = 'YiError';
   }
 }
+
+/** Risposta della YI a cd su una cartella che non c'è (visto sul telefono il 10/11). */
+const DIR_NOT_FOUND = -1;
 
 export interface YiNotification {
   type: string;
@@ -108,14 +111,40 @@ export class YiClient {
     return { level: parseInt(String(r.param), 10) || 0, charging: r.type === 'adapter' };
   }
 
+  /**
+   * Tutti i file della SD: legge DCIM e poi ogni cartella 100MEDIA, 101MEDIA…
+   * Una cartella che non esiste (la YI risponde -1 al cd) vuol dire "nessun file", non un errore:
+   * succede con una SD appena formattata.
+   */
   async listFiles(): Promise<CamFile[]> {
-    await this.send({ msg_id: MSG.CD, param: MEDIA_DIR });
-    const r = await this.send({ msg_id: MSG.LS, param: ' -D -S' });
-    return parseListing(Array.isArray(r.listing) ? r.listing : []);
+    if (!(await this.cd(DCIM_DIR))) return [];
+    const dirs = parseMediaDirs(await this.ls());
+    const out: CamFile[] = [];
+    for (const dir of dirs) {
+      if (!(await this.cd(mediaPath(dir)))) continue;
+      out.push(...parseListing(await this.ls(), dir));
+    }
+    return sortFiles(out);
   }
 
-  async deleteFile(name: string) {
-    await this.send({ msg_id: MSG.DELETE_FILE, param: `${MEDIA_DIR}/${name}` });
+  async deleteFile(name: string, dir: string = FIRST_MEDIA_DIR) {
+    await this.send({ msg_id: MSG.DELETE_FILE, param: mediaPath(dir, name) });
+  }
+
+  /** cd sulla camera; false se la cartella non esiste (rval -1). */
+  private async cd(path: string): Promise<boolean> {
+    try {
+      await this.send({ msg_id: MSG.CD, param: path });
+      return true;
+    } catch (e) {
+      if (e instanceof YiError && e.rval === DIR_NOT_FOUND) return false;
+      throw e;
+    }
+  }
+
+  private async ls(): Promise<Record<string, string>[]> {
+    const r = await this.send({ msg_id: MSG.LS, param: ' -D -S' });
+    return Array.isArray(r.listing) ? r.listing : [];
   }
 
   async startLiveView(): Promise<string> {

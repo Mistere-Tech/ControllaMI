@@ -363,7 +363,10 @@ export class CameraController {
 
   async deleteFiles(names: string[]) {
     const c = this.need();
-    for (const n of names) await c.deleteFile(n);
+    for (const n of names) {
+      const f = this.state.files.find((x) => x.name === n);
+      await c.deleteFile(n, f?.dir);
+    }
     this.set({ files: this.state.files.filter((f) => !names.includes(f.name)) });
   }
 

@@ -3,7 +3,7 @@
 App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, development build) per controllare la **YI Action Camera prima serie** (Xiaomi). Nata in una chat di Claude il 9–10/11/2026; questo file riassume dove siamo arrivati.
 
 ## Stato
-- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 125 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
+- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 132 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
 - Schermate in `app/` (expo-router): connessione, poi tab Controllo / Galleria / Impostazioni. Provata sul telefono il 10/11 (build #5): parte e la live view si vede.
 - Modulo nativo `modules/yi-native/` (Kotlin): `bindToWifi` (requestNetwork Wi-Fi senza internet + bindProcessToNetwork) e vista RTSP con Media3 1.11.1.
 - Live view: la decide `LiveViewSupervisor` (src/core/liveView.ts), il player nativo esegue. Riavvio a ogni ritorno sulla schermata, vf_stop/vf_start, cambio impostazione, errore, buffering bloccato.

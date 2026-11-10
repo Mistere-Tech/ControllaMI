@@ -1,5 +1,5 @@
 import { MSG } from './protocol';
-import { MEDIA_DIR } from './gallery';
+import { DCIM_DIR, FIRST_MEDIA_DIR, mediaPath } from './gallery';
 
 /**
  * Camera finta che risponde come la YI di prima serie.
@@ -52,13 +52,18 @@ export class FakeCamera {
     meter_mode: ['center', 'average', 'spot'],
     warp_enable: ['on', 'off'],
   };
-  private files: Record<string, string> = {
-    'YDXJ0042.mp4': '52428800 bytes|2016-03-01 10:20:30',
-    'YDXJ0042_thm.mp4': '20480 bytes|2016-03-01 10:20:30',
-    'YDXJ0041.mp4': '12582912 bytes|2016-03-01 10:15:00',
-    'YDXJ0040.jpg': '4194304 bytes|2016-03-01 10:10:00',
-    'YDXJ0039.jpg': '4194304 bytes|2016-03-01 10:09:00',
+  /** Cartelle dentro DCIM (100MEDIA, 101MEDIA…) con i loro file; null = la SD non ha nemmeno DCIM. */
+  private dcim: Record<string, Record<string, string>> | null = {
+    [FIRST_MEDIA_DIR]: {
+      'YDXJ0042.mp4': '52428800 bytes|2016-03-01 10:20:30',
+      'YDXJ0042_thm.mp4': '20480 bytes|2016-03-01 10:20:30',
+      'YDXJ0041.mp4': '12582912 bytes|2016-03-01 10:15:00',
+      'YDXJ0040.jpg': '4194304 bytes|2016-03-01 10:10:00',
+      'YDXJ0039.jpg': '4194304 bytes|2016-03-01 10:09:00',
+    },
   };
+  /** Errori da restituire una volta a un certo comando (msg_id → rval). */
+  private failures = new Map<number, number>();
   /** Canali verso i client collegati (li registra il transport in memoria). */
   private sinks = new Map<object, (msgs: any[]) => void>();
   private cwd = '/';
@@ -76,6 +81,35 @@ export class FakeCamera {
   }
 
   /** Valore attuale di un'impostazione (per i test). */
+  /** SD appena formattata: DCIM c'è ma senza cartelle 100MEDIA… */
+  formatSd() {
+    this.dcim = {};
+  }
+
+  /** SD senza la cartella DCIM. */
+  removeDcim() {
+    this.dcim = null;
+  }
+
+  addFile(dir: string, name: string, info: string) {
+    this.dcim ??= {};
+    (this.dcim[dir] ??= {})[name] = info;
+  }
+
+  /** La prossima risposta a `msgId` sarà l'errore `rval`. */
+  failNext(msgId: number, rval: number) {
+    this.failures.set(msgId, rval);
+  }
+
+  /** Dove la camera scrive i file nuovi: l'ultima cartella, creata se manca. */
+  private newFile(name: string, info: string): string {
+    this.dcim ??= {};
+    const dirs = Object.keys(this.dcim).sort();
+    const dir = dirs[dirs.length - 1] ?? FIRST_MEDIA_DIR;
+    (this.dcim[dir] ??= {})[name] = info;
+    return mediaPath(dir, name);
+  }
+
   get(key: string): string | undefined {
     return this.settings[key];
   }
@@ -134,6 +168,11 @@ export class FakeCamera {
     const id = req.msg_id;
     const ok = (extra: Record<string, unknown> = {}) => ({ rval: 0, msg_id: id, ...extra });
     const err = (rval: number) => [{ rval, msg_id: id }];
+    const forced = this.failures.get(id);
+    if (forced !== undefined) {
+      this.failures.delete(id);
+      return err(forced);
+    }
 
     if (id === MSG.START_SESSION) {
       this.token = this.nextToken;
@@ -180,8 +219,8 @@ export class FakeCamera {
         if (!this.recording) return err(-14);
         this.recording = false;
         const name = `YDXJ${String(this.counter++).padStart(4, '0')}.mp4`;
-        this.files[name] = `31457280 bytes|${this.now()}`;
-        return [ok(), { msg_id: MSG.NOTIFICATION, type: 'video_record_complete', param: `${MEDIA_DIR}/${name}` }];
+        const path = this.newFile(name, `31457280 bytes|${this.now()}`);
+        return [ok(), { msg_id: MSG.NOTIFICATION, type: 'video_record_complete', param: path }];
       }
       case MSG.STOP_PHOTO:
         if (!this.capturing) return err(-14);
@@ -196,28 +235,50 @@ export class FakeCamera {
         }
         this.photosTaken++;
         const name = `YDXJ${String(this.counter++).padStart(4, '0')}.jpg`;
-        this.files[name] = `4194304 bytes|${this.now()}`;
-        return [ok(), { msg_id: MSG.NOTIFICATION, type: 'photo_taken', param: `${MEDIA_DIR}/${name}` }];
+        const path = this.newFile(name, `4194304 bytes|${this.now()}`);
+        return [ok(), { msg_id: MSG.NOTIFICATION, type: 'photo_taken', param: path }];
       }
       case MSG.START_VF:
       case MSG.STOP_VF:
         return [ok()];
-      case MSG.CD:
-        this.cwd = req.param;
+      case MSG.CD: {
+        // come la YI vera: cd in una cartella che non esiste → -1
+        const path = String(req.param).replace(/\/+$/, '');
+        if (this.sdInserted && !this.dirExists(path)) return err(-1);
+        this.cwd = path;
         return [ok({ pwd: this.cwd })];
+      }
       case MSG.LS:
         if (!this.sdInserted) return err(FakeCamera.NO_SD);
-        if (this.cwd !== MEDIA_DIR) return [ok({ listing: [] })];
-        return [ok({ listing: Object.entries(this.files).map(([k, v]) => ({ [k]: v })) })];
+        return [ok({ listing: this.listing(this.cwd) })];
       case MSG.DELETE_FILE: {
-        const name = String(req.param).split('/').pop()!;
-        if (!this.files[name]) return err(-26);
-        delete this.files[name];
+        const parts = String(req.param).split('/');
+        const name = parts.pop()!;
+        const dir = parts.pop()!;
+        const files = this.dcim?.[dir];
+        if (!files || !files[name]) return err(-26);
+        delete files[name];
         return [ok()];
       }
       default:
         return err(-1);
     }
+  }
+
+  private dirExists(path: string): boolean {
+    if (path === '' || path === '/' || path === '/tmp' || path === '/tmp/fuse_d') return true;
+    if (!this.dcim) return false;
+    if (path === DCIM_DIR) return true;
+    const dir = path.startsWith(DCIM_DIR + '/') ? path.slice(DCIM_DIR.length + 1) : null;
+    return dir !== null && dir in this.dcim;
+  }
+
+  private listing(path: string): Record<string, string>[] {
+    if (!this.dcim) return [];
+    if (path === DCIM_DIR) return Object.keys(this.dcim).sort().map((d) => ({ [`${d}/`]: `0 bytes|${this.now()}` }));
+    const dir = path.startsWith(DCIM_DIR + '/') ? path.slice(DCIM_DIR.length + 1) : null;
+    const files = dir ? this.dcim[dir] : undefined;
+    return files ? Object.entries(files).map(([k, v]) => ({ [k]: v })) : [];
   }
 
   private now() {
