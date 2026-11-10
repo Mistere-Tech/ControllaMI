@@ -13,8 +13,11 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Aggiornamenti OTA obbligatori: src/core/updates.ts + `UpdateGate`. Legge `releases/latest` di GitHub (serve repo pubblico), blocca se c'è una versione più nuova anche offline se già nota; build `-dev` solo avviso.
 - Firma: chiave di release nei GitHub Secrets (`CONTROLLAMI_*`), plugin `plugins/withReleaseSigning.js`. Backup locale in `.firma-release/` (ignorata da git): l'utente deve copiarla in un posto sicuro.
 - CI `.github/workflows/android.yml`: test → versione (tag vX.Y.Z o X.Y.Z-dev.N) → prebuild → firma → APK arm64 → controllo certificato → artifact; su tag `v*` Release con l'APK.
-- Open source, licenza MIT. Repo privato finché l'app non è provata, poi va reso pubblico (README già scritto per il pubblico).
-- Repo: https://github.com/Mistere-Tech/ControllaMI (privato, branch main). GitHub CLI autenticata su questo PC (`C:/Program Files/GitHub CLI/gh.exe`).
+- Open source, licenza MIT. Repo **pubblico** dal 10/11/2026.
+- Prima Release: **v0.1.0** (10/11, versionCode 1000, firmata con la chiave di release); l'API `releases/latest` la vede senza login.
+- Connessione: ogni tentativo ha un tempo massimo (`connectTimeoutMs`, 12 s nell'app) e si può annullare.
+- Galleria: legge `DCIM` e ogni `xxxMEDIA`; cd in una cartella che non c'è → la YI risponde -1 (visto sul telefono) = nessun file.
+- Repo: https://github.com/Mistere-Tech/ControllaMI (branch main). GitHub CLI autenticata su questo PC (`C:/Program Files/GitHub CLI/gh.exe`).
 
 ## Da verificare con la camera vera
 - Codice d'errore della YI senza SD (nella camera finta è -27, inventato), nome della notifica SD (`sd_card_status`?) e delle notifiche `vf_start`/`vf_stop`.
@@ -22,9 +25,10 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Che il ritorno da Impostazioni non perda più la live view.
 
 ## Prossimi passi
-1. Build #10 provata sul telefono il 10/11: funziona. Manca la conferma del download dalla galleria (l'utente la prova la sera del 10/11).
+1. Provare la v0.1.0 sul telefono: connessione senza Wi-Fi della camera (errore dopo 12 s, Annulla), galleria e download.
+1b. Prima prova OTA: con la v0.1.0 installata, pubblicare v0.1.1 → l'app deve mostrare "Aggiornamento obbligatorio" e installarla.
 2. Build locale su Windows: serve abilitare i percorsi lunghi (limite 260 caratteri nel C++), altrimenti usare la CI.
-3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Vecchie esecuzioni delle Actions (#1–#11, sui commit di prima) cancellate il 10/11; restano #12 e #13. Prossimo: dopo la prova del download, rendere pubblico il repo e tag v0.1.0.
+3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Vecchie esecuzioni delle Actions (#1–#11, sui commit di prima) cancellate il 10/11; restano #12 e #13. Repo reso pubblico e tag v0.1.0 fatti il 10/11.
 
 ## Regole di lavoro scelte dall'utente
 - TDD: prima i test rossi, poi l'implementazione, poi i test verdi. Ogni bug ha un test di regressione.
@@ -36,6 +40,6 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Commit: aggiungere i file uno per uno, non `git add -A` (sono già finiti nel repo file di build e uno zip).
 
 ## Protocollo YI (TCP 192.168.42.1:7878, JSON senza separatori)
-257/258 sessione (token) · 3 tutte le impostazioni · 9 opzioni · 2 modifica · 13 batteria · 513/514 REC · 769 foto · 770 stop scatto continuo (da verificare) · 259 avvio stream (`rtsp://192.168.42.1/live`) · 1283 cd · 1282 ls · 1281 elimina · 7 notifiche. Errore -4 = token scaduto (il client rifà la sessione e ripete il comando). File via HTTP: `http://192.168.42.1/DCIM/100MEDIA/<nome>`.
+257/258 sessione (token) · 3 tutte le impostazioni · 9 opzioni · 2 modifica · 13 batteria · 513/514 REC · 769 foto · 770 stop scatto continuo (da verificare) · 259 avvio stream (`rtsp://192.168.42.1/live`) · 1283 cd · 1282 ls · 1281 elimina · 7 notifiche. Errore -4 = token scaduto (il client rifà la sessione e ripete il comando). File via HTTP: `http://192.168.42.1/DCIM/<cartella>/<nome>` (100MEDIA, 101MEDIA…).
 
 Il mock (`npm run mock`) usa la stessa `FakeCamera` dei test e della modalità demo.
