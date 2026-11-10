@@ -14,15 +14,18 @@ L'app ufficiale non è più aggiornata e sui telefoni recenti spesso non funzion
 2. Aprilo: Android ti chiede di consentire "installa app sconosciute" per il browser, conferma.
 3. Accendi il Wi-Fi della camera, collegati alla sua rete e apri ControllaMI.
 
+**Aggiornamenti:** all'avvio l'app controlla se c'è una versione nuova e, se c'è, chiede di installarla prima di continuare (per sicurezza si usa sempre l'ultima versione). Basta toccare "Scarica e installa" e confermare con "Installa".
+
 Requisiti: telefono Android a 64 bit (arm64, cioè quasi tutti quelli degli ultimi anni). L'APK non è sul Play Store.
 
 ## Cosa fa
 
-- Connessione al Wi-Fi della camera con riconnessione automatica
-- REC e foto, timer di registrazione, livello batteria
-- Live view dalla camera
-- Impostazioni lette dalla camera e modificabili
+- **Modalità Semplice**: video 1080p 60 fps al bitrate massimo, foto alla massima qualità, timelapse video o foto con l'intervallo che scegli, regolazione dell'esposizione. L'app imposta la camera da sola.
+- **Modalità Pro**: tutte le impostazioni della camera, a mano. Passando da una modalità all'altra le tue impostazioni Pro restano salvate.
+- Live view dalla camera, che si riprende da sola se si interrompe
+- Indicatore della connessione: stabile, instabile o persa, con riconnessione automatica
 - Galleria: elenco dei file, download nella galleria del telefono, eliminazione
+- Avvisi chiari in italiano quando un comando non riesce (ad esempio scheda SD assente)
 - Modalità demo con una camera simulata, per provare l'app senza camera
 
 ## Camere compatibili
@@ -67,7 +70,7 @@ git push origin v0.1.0
 
 la stessa Action pubblica una **Release** con l'APK allegato, ed è quella che trova chi scarica l'app.
 
-L'APK è firmato con la chiave di debug di Expo: si installa a mano senza problemi, ma non è adatto al Play Store.
+Gli APK sono firmati con la chiave di release del progetto, custodita nei GitHub Secrets: è quella che permette agli aggiornamenti di installarsi sopra l'app esistente. Le build di fork e pull request, che non hanno accesso ai Secrets, escono firmate con la chiave di debug di Expo.
 
 ### Struttura
 
