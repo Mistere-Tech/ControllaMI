@@ -22,9 +22,9 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Che il ritorno da Impostazioni non perda più la live view.
 
 ## Prossimi passi
-1. Installare l'APK firmato con la chiave di release (la prima volta bisogna disinstallare quello firmato con la chiave di debug) e provare con la camera.
+1. Build #10 provata sul telefono il 10/11: funziona. Manca la conferma del download dalla galleria (l'utente la prova la sera del 10/11).
 2. Build locale su Windows: serve abilitare i percorsi lunghi (limite 260 caratteri nel C++), altrimenti usare la CI.
-3. Prima di rendere pubblico il repo: ripulire la cronologia git (file di build e zip APK finiti per errore) — force push da concordare con l'utente.
+3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Prima di rendere pubblico: cancellare le vecchie esecuzioni delle Actions (puntano ai commit vecchi), poi tag v0.1.0.
 
 ## Regole di lavoro scelte dall'utente
 - TDD: prima i test rossi, poi l'implementazione, poi i test verdi. Ogni bug ha un test di regressione.
