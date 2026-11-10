@@ -172,7 +172,7 @@ const s = StyleSheet.create({
   connText: { color: C.text, fontSize: 14, fontWeight: '500' },
   muted: { color: C.muted, fontSize: 13 },
   live: { marginHorizontal: 16, aspectRatio: 16 / 9, borderRadius: 16, backgroundColor: C.black, borderWidth: 1, borderColor: C.border, overflow: 'hidden' },
-  livePlaceholder: { ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent: 'center', gap: 8 },
+  livePlaceholder: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', gap: 8 },
   liveMsg: { color: C.muted, fontSize: 13 },
   liveBadge: { position: 'absolute', top: 12, left: 12, backgroundColor: 'rgba(14,17,22,0.8)', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
   recBadge: { position: 'absolute', top: 12, right: 12, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(14,17,22,0.8)', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },

@@ -161,7 +161,7 @@ export default function GalleriaScreen() {
         columnWrapperStyle={{ gap: 6 }}
         contentContainerStyle={{ paddingHorizontal: 16, gap: 6, paddingBottom: 16 }}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={load} tintColor={C.accent} colors={[C.accent]} />}
-        ListEmptyComponent={!loading ? <Text style={s.empty}>Nessun file sulla scheda SD.</Text> : null}
+        ListEmptyComponent={!loading ? <Text style={s.empty}>Nessun file sulla scheda SD.</Text> : undefined}
       />
 
       {progress && (

@@ -24,15 +24,15 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="controllo"
-        options={{ title: 'Controllo', tabBarIcon: ({ color, size }) => <Ionicons name="aperture-outline" color={color} size={size} /> }}
+        options={{ title: 'Controllo', tabBarIcon: ({ color, size }) => <Ionicons name="aperture-outline" color={String(color)} size={size} /> }}
       />
       <Tabs.Screen
         name="galleria"
-        options={{ title: 'Galleria', tabBarIcon: ({ color, size }) => <Ionicons name="grid-outline" color={color} size={size} /> }}
+        options={{ title: 'Galleria', tabBarIcon: ({ color, size }) => <Ionicons name="grid-outline" color={String(color)} size={size} /> }}
       />
       <Tabs.Screen
         name="impostazioni"
-        options={{ title: 'Impostazioni', tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={color} size={size} /> }}
+        options={{ title: 'Impostazioni', tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={String(color)} size={size} /> }}
       />
     </Tabs>
   );

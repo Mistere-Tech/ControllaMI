@@ -54,7 +54,7 @@ npx expo run:android  # compila e installa su telefono collegato via USB
 
 Per provare l'app contro il mock: telefono e PC sulla stessa rete, nell'app tocca **Avanzate** e metti l'IP del PC.
 
-L'app è fatta con React Native + Expo SDK 54 (development build, non Expo Go) e un piccolo modulo nativo in Kotlin.
+L'app è fatta con React Native 0.88 + Expo SDK 58 (New Architecture, development build, non Expo Go) e un piccolo modulo nativo in Kotlin.
 
 ### Come nasce un APK
 

@@ -1,22 +1,31 @@
-import * as FileSystem from 'expo-file-system/legacy';
-import * as MediaLibrary from 'expo-media-library';
+import { DownloadTask, File, Paths } from 'expo-file-system';
+import { Asset, requestPermissionsAsync } from 'expo-media-library';
 import { CamFile } from '../core/gallery';
 
 /** Scarica un file dalla camera e lo salva nella galleria del telefono. */
 export async function downloadToGallery(file: CamFile, onProgress: (fraction: number) => void): Promise<void> {
-  const perm = await MediaLibrary.requestPermissionsAsync(true);
+  const perm = await requestPermissionsAsync(true, ['photo', 'video']);
   if (!perm.granted) throw new Error('Serve il permesso per salvare in galleria');
 
-  const target = `${FileSystem.cacheDirectory}${file.name}`;
-  const task = FileSystem.createDownloadResumable(file.url, target, {}, (p) => {
-    const total = p.totalBytesExpectedToWrite > 0 ? p.totalBytesExpectedToWrite : file.size;
-    if (total > 0) onProgress(Math.min(1, p.totalBytesWritten / total));
+  const target = new File(Paths.cache, file.name);
+  if (target.exists) target.delete();
+
+  const task = new DownloadTask(file.url, target);
+  const sub = task.addListener('progress', (p) => {
+    const total = p.totalBytes > 0 ? p.totalBytes : file.size;
+    if (total > 0) onProgress(Math.min(1, p.bytesWritten / total));
   });
-  const res = await task.downloadAsync();
-  if (!res || res.status >= 400) throw new Error(`Download non riuscito (${res?.status ?? 'nessuna risposta'})`);
+
+  let downloaded: File | null = null;
   try {
-    await MediaLibrary.saveToLibraryAsync(res.uri);
+    downloaded = await task.downloadAsync();
+    if (!downloaded || !downloaded.exists || downloaded.size === 0) {
+      throw new Error('Download non riuscito');
+    }
+    await Asset.create(downloaded.uri);
   } finally {
-    await FileSystem.deleteAsync(res.uri, { idempotent: true });
+    sub.remove();
+    task.release();
+    if (target.exists) target.delete();
   }
 }

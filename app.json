@@ -42,7 +42,8 @@
           "savePhotosPermission": "ControllaMI salva in galleria i video e le foto scaricati dalla camera.",
           "isAccessMediaLocationEnabled": false
         }
-      ]
+      ],
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": false

@@ -12,13 +12,13 @@ android {
     versionCode 1
     versionName "0.1.0"
   }
-  lintOptions {
+  lint {
     abortOnError false
   }
 }
 
 dependencies {
-  def media3 = "1.4.1"
+  def media3 = "1.11.1"
   implementation "androidx.media3:media3-exoplayer:$media3"
   implementation "androidx.media3:media3-exoplayer-rtsp:$media3"
   implementation "androidx.media3:media3-ui:$media3"
