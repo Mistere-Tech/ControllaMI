@@ -1,0 +1,184 @@
+✖ connect porta lo stato a connected e carica batteria e impostazioni (1.220129ms)
+✖ connect fallito → stato error con messaggio (1.146709ms)
+✖ toggleRecord avvia e ferma, e segna l'ora di inizio (0.200449ms)
+✖ la notifica di fine registrazione aggiorna lastFile (0.130178ms)
+✖ in modalità foto il pulsante scatta una foto (0.126305ms)
+✖ non si cambia modalità durante la registrazione (0.143764ms)
+✖ elapsedSeconds e formatElapsed (0.162233ms)
+✖ changeSetting aggiorna lo stato locale (0.109728ms)
+✖ changeSetting fallito lascia il valore vecchio e riporta l'errore (0.293473ms)
+✖ loadFiles e deleteFiles (0.352287ms)
+✖ se cade la connessione si riconnette da solo (1.390422ms)
+✖ disconnect manuale non riconnette (0.1463ms)
+✖ dopo troppi tentativi falliti si arrende con errore (0.090988ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 0
+ℹ fail 13
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 277.612347
+
+✖ failing tests:
+
+test at tests/cameraController.test.ts:30:1
+✖ connect porta lo stato a connected e carica batteria e impostazioni (1.220129ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:34:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+
+test at tests/cameraController.test.ts:41:1
+✖ connect fallito → stato error con messaggio (1.146709ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'error'
+  
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:44:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'error',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/cameraController.test.ts:48:1
+✖ toggleRecord avvia e ferma, e segna l'ora di inizio (0.200449ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:50:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:60:1
+✖ la notifica di fine registrazione aggiorna lastFile (0.130178ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:62:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:69:1
+✖ in modalità foto il pulsante scatta una foto (0.126305ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:71:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:78:1
+✖ non si cambia modalità durante la registrazione (0.143764ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:80:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:87:1
+✖ elapsedSeconds e formatElapsed (0.162233ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:89:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:97:1
+✖ changeSetting aggiorna lo stato locale (0.109728ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:99:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:104:1
+✖ changeSetting fallito lascia il valore vecchio e riporta l'errore (0.293473ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:106:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:111:1
+✖ loadFiles e deleteFiles (0.352287ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:113:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:121:1
+✖ se cade la connessione si riconnette da solo (1.390422ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:123:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:131:1
+✖ disconnect manuale non riconnette (0.1463ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:133:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/cameraController.test.ts:140:1
+✖ dopo troppi tentativi falliti si arrende con errore (0.090988ms)
+  Error: non implementato
+      at CameraController.connect (/home/claude/controllami/src/core/CameraController.ts:9:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/cameraController.test.ts:142:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)

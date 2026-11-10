@@ -1,0 +1,72 @@
+name: APK Android
+
+# - push su main: test + APK come artifact (per provare le ultime modifiche)
+# - tag v* (es. v0.1.0): come sopra, in più crea una Release pubblica con l'APK allegato
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Installa dipendenze
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+
+      - name: Allinea le versioni all'SDK Expo
+        run: npx expo install --fix
+
+      - name: Test (devono essere tutti verdi)
+        run: npm test
+
+      - name: Genera il progetto Android
+        run: npx expo prebuild --platform android --clean --no-install
+
+      - name: Compila APK (arm64, release)
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a
+
+      - name: Rinomina APK
+        id: apk
+        run: |
+          mkdir -p out
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then NAME="ControllaMI-${GITHUB_REF_NAME}-arm64.apk"; else NAME="ControllaMI-${{ github.run_number }}-arm64.apk"; fi
+          cp android/app/build/outputs/apk/release/*.apk "out/$NAME"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ControllaMI-apk
+          path: out/*.apk
+          retention-days: 30
+
+      - name: Pubblica la Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.apk
+          generate_release_notes: true
+          body: |
+            APK per Android 64 bit (arm64) per la **YI Action Camera prima serie**.
+            Scarica `${{ steps.apk.outputs.name }}` qui sotto e installalo sul telefono (consenti "installa app sconosciute").

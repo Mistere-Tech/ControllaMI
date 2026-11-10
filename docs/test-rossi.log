@@ -1,0 +1,379 @@
+✖ estrae un singolo oggetto completo (0.636406ms)
+✖ estrae più oggetti attaccati senza separatori (0.093348ms)
+✖ ricompone un oggetto spezzato in più pezzi (0.085711ms)
+✖ ignora graffe dentro le stringhe e gli escape (0.06565ms)
+✖ salta spazi e newline tra un oggetto e l'altro (0.065867ms)
+✖ scarta un oggetto malformato senza bloccare i successivi (0.073132ms)
+✖ il mock server parla il protocollo YI via TCP vero (0.879343ms)
+✖ parseListing interpreta nome, dimensione, data e tipo (0.628297ms)
+✖ parseListing ordina dal più recente (0.097911ms)
+✖ settingsToMap appiattisce la lista della camera (0.091578ms)
+✖ describeSetting dà etichetta italiana e gruppo (0.080694ms)
+✖ describeSetting segnala le impostazioni di sola lettura (0.076955ms)
+✖ connect ottiene il token dalla sessione 257 (1.397365ms)
+✖ i comandi inviati dopo connect usano il token (0.204855ms)
+✖ startRecord / stopRecord cambiano lo stato della camera (0.185149ms)
+✖ funziona anche con risposte spezzate a pezzi (0.152787ms)
+✖ getAllSettings restituisce una mappa chiave → valore (0.209025ms)
+✖ getOptions restituisce le opzioni e se è modificabile (0.136945ms)
+✖ setSetting modifica il valore (0.182846ms)
+✖ rval negativo diventa YiError con il codice (0.181993ms)
+✖ token scaduto (-4): rinegozia la sessione e ripete il comando una volta (0.38047ms)
+✖ i comandi in parallelo vengono serializzati e ricevono la risposta giusta (0.440085ms)
+✖ le notifiche msg_id 7 arrivano agli ascoltatori (0.221655ms)
+✖ timeout se la camera non risponde (0.126274ms)
+✖ dopo un timeout la coda continua a funzionare (0.109197ms)
+✖ chiusura della connessione rifiuta i comandi in attesa (0.101131ms)
+✖ listFiles restituisce i file della DCIM con URL di download (0.10407ms)
+✖ deleteFile rimuove il file (0.143242ms)
+✖ startLiveView restituisce l'URL RTSP (0.107694ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 0
+ℹ fail 29
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 594.482785
+
+✖ failing tests:
+
+test at tests/jsonStream.test.ts:5:1
+✖ estrae un singolo oggetto completo (0.636406ms)
+  Error: non implementato
+      at JsonStreamParser.feed (/home/claude/controllami/src/core/jsonStream.ts:1:65)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/jsonStream.test.ts:7:22)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+
+test at tests/jsonStream.test.ts:10:1
+✖ estrae più oggetti attaccati senza separatori (0.093348ms)
+  Error: non implementato
+      at JsonStreamParser.feed (/home/claude/controllami/src/core/jsonStream.ts:1:65)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/jsonStream.test.ts:12:17)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+
+test at tests/jsonStream.test.ts:18:1
+✖ ricompone un oggetto spezzato in più pezzi (0.085711ms)
+  Error: non implementato
+      at JsonStreamParser.feed (/home/claude/controllami/src/core/jsonStream.ts:1:65)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/jsonStream.test.ts:20:22)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/jsonStream.test.ts:25:1
+✖ ignora graffe dentro le stringhe e gli escape (0.06565ms)
+  Error: non implementato
+      at JsonStreamParser.feed (/home/claude/controllami/src/core/jsonStream.ts:1:65)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/jsonStream.test.ts:27:17)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/jsonStream.test.ts:31:1
+✖ salta spazi e newline tra un oggetto e l'altro (0.065867ms)
+  Error: non implementato
+      at JsonStreamParser.feed (/home/claude/controllami/src/core/jsonStream.ts:1:65)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/jsonStream.test.ts:33:18)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/jsonStream.test.ts:36:1
+✖ scarta un oggetto malformato senza bloccare i successivi (0.073132ms)
+  Error: non implementato
+      at JsonStreamParser.feed (/home/claude/controllami/src/core/jsonStream.ts:1:65)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/jsonStream.test.ts:38:17)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/mockServer.test.ts:28:1
+✖ il mock server parla il protocollo YI via TCP vero (0.879343ms)
+  Error: non implementato
+      at startMockServer (/home/claude/controllami/mock/mockServer.ts:2:9)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/mockServer.test.ts:29:24)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+
+test at tests/parsers.test.ts:6:1
+✖ parseListing interpreta nome, dimensione, data e tipo (0.628297ms)
+  Error: non implementato
+      at parseListing (/home/claude/controllami/src/core/gallery.ts:2:79)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/parsers.test.ts:7:17)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+
+test at tests/parsers.test.ts:20:1
+✖ parseListing ordina dal più recente (0.097911ms)
+  Error: non implementato
+      at parseListing (/home/claude/controllami/src/core/gallery.ts:2:79)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/parsers.test.ts:21:17)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+
+test at tests/parsers.test.ts:28:1
+✖ settingsToMap appiattisce la lista della camera (0.091578ms)
+  Error: non implementato
+      at settingsToMap (/home/claude/controllami/src/core/settings.ts:1:93)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/parsers.test.ts:29:20)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/parsers.test.ts:32:1
+✖ describeSetting dà etichetta italiana e gruppo (0.080694ms)
+  Error: non implementato
+      at describeSetting (/home/claude/controllami/src/core/settings.ts:2:106)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/parsers.test.ts:33:13)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/parsers.test.ts:41:1
+✖ describeSetting segnala le impostazioni di sola lettura (0.076955ms)
+  Error: non implementato
+      at describeSetting (/home/claude/controllami/src/core/settings.ts:2:106)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/parsers.test.ts:42:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:15:1
+✖ connect ottiene il token dalla sessione 257 (1.397365ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:17:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+
+test at tests/yiClient.test.ts:21:1
+✖ i comandi inviati dopo connect usano il token (0.204855ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:23:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+
+test at tests/yiClient.test.ts:29:1
+✖ startRecord / stopRecord cambiano lo stato della camera (0.185149ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:31:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:38:1
+✖ funziona anche con risposte spezzate a pezzi (0.152787ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:40:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:45:1
+✖ getAllSettings restituisce una mappa chiave → valore (0.209025ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:47:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:53:1
+✖ getOptions restituisce le opzioni e se è modificabile (0.136945ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:55:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:61:1
+✖ setSetting modifica il valore (0.182846ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:63:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:69:1
+✖ rval negativo diventa YiError con il codice (0.181993ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:71:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:79:1
+✖ token scaduto (-4): rinegozia la sessione e ripete il comando una volta (0.38047ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:81:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:88:1
+✖ i comandi in parallelo vengono serializzati e ricevono la risposta giusta (0.440085ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:90:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:96:1
+✖ le notifiche msg_id 7 arrivano agli ascoltatori (0.221655ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:98:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:106:1
+✖ timeout se la camera non risponde (0.126274ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:108:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:113:1
+✖ dopo un timeout la coda continua a funzionare (0.109197ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:115:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:123:1
+✖ chiusura della connessione rifiuta i comandi in attesa (0.101131ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:125:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:133:1
+✖ listFiles restituisce i file della DCIM con URL di download (0.10407ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:135:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:142:1
+✖ deleteFile rimuove il file (0.143242ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:144:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at tests/yiClient.test.ts:151:1
+✖ startLiveView restituisce l'URL RTSP (0.107694ms)
+  Error: non implementato
+      at YiClient.connect (/home/claude/controllami/src/core/YiClient.ts:7:52)
+      at TestContext.<anonymous> (/home/claude/controllami/tests/yiClient.test.ts:153:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)

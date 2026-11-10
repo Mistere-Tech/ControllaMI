@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "ControllaMI",
+    "slug": "controllami",
+    "scheme": "controllami",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
+    "backgroundColor": "#0E1116",
+    "android": {
+      "package": "com.controllami.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0E1116"
+      },
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.ACCESS_WIFI_STATE",
+        "android.permission.CHANGE_NETWORK_STATE"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true,
+            "buildArchs": [
+              "arm64-v8a"
+            ]
+          }
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "ControllaMI salva in galleria i video e le foto scaricati dalla camera.",
+          "savePhotosPermission": "ControllaMI salva in galleria i video e le foto scaricati dalla camera.",
+          "isAccessMediaLocationEnabled": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}

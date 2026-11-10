@@ -1,0 +1,262 @@
+TAP version 13
+# Subtest: connect porta lo stato a connected e carica batteria e impostazioni
+ok 1 - connect porta lo stato a connected e carica batteria e impostazioni
+  ---
+  duration_ms: 13.541244
+  type: 'test'
+  ...
+# Subtest: connect fallito → stato error con messaggio
+ok 2 - connect fallito → stato error con messaggio
+  ---
+  duration_ms: 0.504503
+  type: 'test'
+  ...
+# Subtest: toggleRecord avvia e ferma, e segna l'ora di inizio
+ok 3 - toggleRecord avvia e ferma, e segna l'ora di inizio
+  ---
+  duration_ms: 8.941981
+  type: 'test'
+  ...
+# Subtest: la notifica di fine registrazione aggiorna lastFile
+ok 4 - la notifica di fine registrazione aggiorna lastFile
+  ---
+  duration_ms: 11.929373
+  type: 'test'
+  ...
+# Subtest: in modalità foto il pulsante scatta una foto
+ok 5 - in modalità foto il pulsante scatta una foto
+  ---
+  duration_ms: 5.501495
+  type: 'test'
+  ...
+# Subtest: non si cambia modalità durante la registrazione
+ok 6 - non si cambia modalità durante la registrazione
+  ---
+  duration_ms: 4.416105
+  type: 'test'
+  ...
+# Subtest: elapsedSeconds e formatElapsed
+ok 7 - elapsedSeconds e formatElapsed
+  ---
+  duration_ms: 8.052795
+  type: 'test'
+  ...
+# Subtest: changeSetting aggiorna lo stato locale
+ok 8 - changeSetting aggiorna lo stato locale
+  ---
+  duration_ms: 5.652191
+  type: 'test'
+  ...
+# Subtest: changeSetting fallito lascia il valore vecchio e riporta l'errore
+ok 9 - changeSetting fallito lascia il valore vecchio e riporta l'errore
+  ---
+  duration_ms: 6.451473
+  type: 'test'
+  ...
+# Subtest: loadFiles e deleteFiles
+ok 10 - loadFiles e deleteFiles
+  ---
+  duration_ms: 11.595914
+  type: 'test'
+  ...
+# Subtest: se cade la connessione si riconnette da solo
+ok 11 - se cade la connessione si riconnette da solo
+  ---
+  duration_ms: 65.13327
+  type: 'test'
+  ...
+# Subtest: disconnect manuale non riconnette
+ok 12 - disconnect manuale non riconnette
+  ---
+  duration_ms: 44.14597
+  type: 'test'
+  ...
+# Subtest: dopo troppi tentativi falliti si arrende con errore
+ok 13 - dopo troppi tentativi falliti si arrende con errore
+  ---
+  duration_ms: 1504.275097
+  type: 'test'
+  ...
+# Subtest: estrae un singolo oggetto completo
+ok 14 - estrae un singolo oggetto completo
+  ---
+  duration_ms: 1.835226
+  type: 'test'
+  ...
+# Subtest: estrae più oggetti attaccati senza separatori
+ok 15 - estrae più oggetti attaccati senza separatori
+  ---
+  duration_ms: 0.213229
+  type: 'test'
+  ...
+# Subtest: ricompone un oggetto spezzato in più pezzi
+ok 16 - ricompone un oggetto spezzato in più pezzi
+  ---
+  duration_ms: 0.175125
+  type: 'test'
+  ...
+# Subtest: ignora graffe dentro le stringhe e gli escape
+ok 17 - ignora graffe dentro le stringhe e gli escape
+  ---
+  duration_ms: 0.137252
+  type: 'test'
+  ...
+# Subtest: salta spazi e newline tra un oggetto e l'altro
+ok 18 - salta spazi e newline tra un oggetto e l'altro
+  ---
+  duration_ms: 0.123751
+  type: 'test'
+  ...
+# Subtest: scarta un oggetto malformato senza bloccare i successivi
+ok 19 - scarta un oggetto malformato senza bloccare i successivi
+  ---
+  duration_ms: 0.10621
+  type: 'test'
+  ...
+# Subtest: il mock server parla il protocollo YI via TCP vero
+ok 20 - il mock server parla il protocollo YI via TCP vero
+  ---
+  duration_ms: 156.11926
+  type: 'test'
+  ...
+# Subtest: parseListing interpreta nome, dimensione, data e tipo
+ok 21 - parseListing interpreta nome, dimensione, data e tipo
+  ---
+  duration_ms: 0.939225
+  type: 'test'
+  ...
+# Subtest: parseListing ordina dal più recente
+ok 22 - parseListing ordina dal più recente
+  ---
+  duration_ms: 0.194334
+  type: 'test'
+  ...
+# Subtest: settingsToMap appiattisce la lista della camera
+ok 23 - settingsToMap appiattisce la lista della camera
+  ---
+  duration_ms: 1.157004
+  type: 'test'
+  ...
+# Subtest: describeSetting dà etichetta italiana e gruppo
+ok 24 - describeSetting dà etichetta italiana e gruppo
+  ---
+  duration_ms: 0.192374
+  type: 'test'
+  ...
+# Subtest: describeSetting segnala le impostazioni di sola lettura
+ok 25 - describeSetting segnala le impostazioni di sola lettura
+  ---
+  duration_ms: 0.14544
+  type: 'test'
+  ...
+# Subtest: connect ottiene il token dalla sessione 257
+ok 26 - connect ottiene il token dalla sessione 257
+  ---
+  duration_ms: 6.21062
+  type: 'test'
+  ...
+# Subtest: i comandi inviati dopo connect usano il token
+ok 27 - i comandi inviati dopo connect usano il token
+  ---
+  duration_ms: 5.926588
+  type: 'test'
+  ...
+# Subtest: startRecord / stopRecord cambiano lo stato della camera
+ok 28 - startRecord / stopRecord cambiano lo stato della camera
+  ---
+  duration_ms: 3.935352
+  type: 'test'
+  ...
+# Subtest: funziona anche con risposte spezzate a pezzi
+ok 29 - funziona anche con risposte spezzate a pezzi
+  ---
+  duration_ms: 2.54052
+  type: 'test'
+  ...
+# Subtest: getAllSettings restituisce una mappa chiave → valore
+ok 30 - getAllSettings restituisce una mappa chiave → valore
+  ---
+  duration_ms: 2.113587
+  type: 'test'
+  ...
+# Subtest: getOptions restituisce le opzioni e se è modificabile
+ok 31 - getOptions restituisce le opzioni e se è modificabile
+  ---
+  duration_ms: 3.084335
+  type: 'test'
+  ...
+# Subtest: setSetting modifica il valore
+ok 32 - setSetting modifica il valore
+  ---
+  duration_ms: 4.040467
+  type: 'test'
+  ...
+# Subtest: rval negativo diventa YiError con il codice
+ok 33 - rval negativo diventa YiError con il codice
+  ---
+  duration_ms: 3.344867
+  type: 'test'
+  ...
+# Subtest: token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+ok 34 - token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+  ---
+  duration_ms: 5.940768
+  type: 'test'
+  ...
+# Subtest: i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+ok 35 - i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+  ---
+  duration_ms: 3.591434
+  type: 'test'
+  ...
+# Subtest: le notifiche msg_id 7 arrivano agli ascoltatori
+ok 36 - le notifiche msg_id 7 arrivano agli ascoltatori
+  ---
+  duration_ms: 5.6771
+  type: 'test'
+  ...
+# Subtest: timeout se la camera non risponde
+ok 37 - timeout se la camera non risponde
+  ---
+  duration_ms: 506.114816
+  type: 'test'
+  ...
+# Subtest: dopo un timeout la coda continua a funzionare
+ok 38 - dopo un timeout la coda continua a funzionare
+  ---
+  duration_ms: 504.221234
+  type: 'test'
+  ...
+# Subtest: chiusura della connessione rifiuta i comandi in attesa
+ok 39 - chiusura della connessione rifiuta i comandi in attesa
+  ---
+  duration_ms: 2.8857
+  type: 'test'
+  ...
+# Subtest: listFiles restituisce i file della DCIM con URL di download
+ok 40 - listFiles restituisce i file della DCIM con URL di download
+  ---
+  duration_ms: 3.726907
+  type: 'test'
+  ...
+# Subtest: deleteFile rimuove il file
+ok 41 - deleteFile rimuove il file
+  ---
+  duration_ms: 7.947448
+  type: 'test'
+  ...
+# Subtest: startLiveView restituisce l'URL RTSP
+ok 42 - startLiveView restituisce l'URL RTSP
+  ---
+  duration_ms: 3.230755
+  type: 'test'
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3652.997268
