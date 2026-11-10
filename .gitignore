@@ -6,3 +6,6 @@ dist/
 *.apk
 *.keystore
 npm-debug.log*
+build/
+.cxx/
+.gradle/
