@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useMemo, useRef, useSyncExternalStore } from 'react';
 import { CameraController, CameraState } from '../core/CameraController';
+import { LiveViewState, LiveViewSupervisor } from '../core/liveView';
+import { computeHealth, Health } from '../core/health';
 import { FakeCamera } from '../core/fakeCamera';
 import { createInMemoryTransport } from '../core/inMemoryTransport';
 import { connectTcp } from '../net/tcpTransport';
@@ -8,6 +10,7 @@ import { CAMERA_HOST } from '../core/gallery';
 
 interface Ctx {
   controller: CameraController;
+  live: LiveViewSupervisor;
   demo: boolean;
   connectReal: (host?: string) => Promise<void>;
   connectDemo: () => Promise<void>;
@@ -31,13 +34,17 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
         timeoutMs: 5000,
         reconnectDelayMs: 1500,
         maxReconnects: 5,
+        heartbeatMs: 3000,
       }),
     [],
   );
 
+  const live = useMemo(() => new LiveViewSupervisor(controller), [controller]);
+
   const value = useMemo<Ctx>(
     () => ({
       controller,
+      live,
       get demo() {
         return modeRef.current.demo;
       },
@@ -54,7 +61,7 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
         if (!modeRef.current.demo) YiNative.unbind();
       },
     }),
-    [controller],
+    [controller, live],
   );
 
   return <CameraCtx.Provider value={value}>{children}</CameraCtx.Provider>;
@@ -72,4 +79,19 @@ export function useCameraState(): CameraState {
     (cb) => controller.subscribe(cb),
     () => controller.state,
   );
+}
+
+export function useLiveView(): LiveViewState {
+  const { live } = useCameraCtx();
+  return useSyncExternalStore(
+    (cb) => live.subscribe(cb),
+    () => live.state,
+  );
+}
+
+/** Salute della connessione: battiti della camera + stato della live view (se in uso). */
+export function useHealth(): Health {
+  const st = useCameraState();
+  const lv = useLiveView();
+  return computeHealth({ status: st.status, heartbeats: st.heartbeats, live: lv.phase === 'off' ? null : lv.phase });
 }

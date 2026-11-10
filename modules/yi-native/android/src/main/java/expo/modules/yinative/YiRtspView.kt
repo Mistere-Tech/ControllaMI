@@ -36,11 +36,13 @@ class YiRtspView(context: Context, appContext: AppContext) : ExpoView(context, a
   }
 
   fun setUrl(url: String?) {
-    if (url == currentUrl) return
+    if (url == currentUrl && player != null) return
     currentUrl = url
-    release()
-    if (url.isNullOrBlank()) return
+    releasePlayer()
+    if (!url.isNullOrBlank() && isAttachedToWindow) startPlayer(url)
+  }
 
+  private fun startPlayer(url: String) {
     val loadControl = DefaultLoadControl.Builder()
       .setBufferDurationsMs(500, 2000, 250, 500)
       .build()
@@ -71,15 +73,28 @@ class YiRtspView(context: Context, appContext: AppContext) : ExpoView(context, a
     player = p
   }
 
-  fun release() {
+  private fun releasePlayer() {
     playerView.player = null
     player?.release()
     player = null
   }
 
+  /** La vista viene distrutta: libera il player e dimentica l'URL. */
+  fun release() {
+    releasePlayer()
+    currentUrl = null
+  }
+
+  // Regressione del 10/11: staccando la vista (cambio tab) il player veniva distrutto
+  // insieme all'URL e al ritorno restava nero. Ora l'URL resta e il player riparte.
+  override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    val url = currentUrl
+    if (player == null && !url.isNullOrBlank()) startPlayer(url)
+  }
+
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    release()
-    currentUrl = null
+    releasePlayer()
   }
 }

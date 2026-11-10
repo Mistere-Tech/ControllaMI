@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
 import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
 import { CamFile, formatSize } from '../../src/core/gallery';
 import { downloadToGallery } from '../../src/net/download';
@@ -138,6 +139,7 @@ export default function GalleriaScreen() {
           <Text style={s.headerBtn}>{selecting ? 'Annulla' : 'Seleziona'}</Text>
         </Pressable>
       </View>
+      <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}><ConnectionBadge demo={demo} /></View>
 
       <View style={s.filters}>
         {(['tutti', 'video', 'foto'] as Filter[]).map((f) => (

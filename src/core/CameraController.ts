@@ -16,6 +16,8 @@ export interface CameraState {
   settings: Record<string, string>;
   files: CamFile[];
   lastFile: string | null;
+  /** Tempi di risposta degli ultimi battiti (ms), dal più vecchio; null = nessuna risposta. */
+  heartbeats: (number | null)[];
 }
 
 export interface ControllerOptions {
@@ -23,8 +25,13 @@ export interface ControllerOptions {
   timeoutMs?: number;
   reconnectDelayMs?: number;
   maxReconnects?: number;
+  /** Ogni quanto controllare che la camera risponda (ms); 0 = mai. */
+  heartbeatMs?: number;
   now?: () => number;
 }
+
+/** Quanti battiti tenere in memoria. */
+const HEARTBEAT_HISTORY = 10;
 
 export function formatElapsed(total: number): string {
   const s = Math.max(0, Math.floor(total));
@@ -43,6 +50,7 @@ const initial: CameraState = {
   settings: {},
   files: [],
   lastFile: null,
+  heartbeats: [],
 };
 
 /** Stato dell'app intorno al client: connessione, riconnessione, REC, impostazioni, file. */
@@ -51,6 +59,8 @@ export class CameraController {
   client: YiClient | null = null;
 
   private listeners = new Set<(s: CameraState) => void>();
+  private notificationListeners = new Set<(n: YiNotification) => void>();
+  private heartbeatTimer: ReturnType<typeof setTimeout> | null = null;
   private manualClose = false;
   private attempts = 0;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
@@ -64,6 +74,14 @@ export class CameraController {
     this.listeners.add(l);
     return () => {
       this.listeners.delete(l);
+    };
+  }
+
+  /** Notifiche della camera (vf_start, sd_card_status, …) per chi sta sopra al controller. */
+  onNotification(l: (n: YiNotification) => void): () => void {
+    this.notificationListeners.add(l);
+    return () => {
+      this.notificationListeners.delete(l);
     };
   }
 
@@ -90,14 +108,15 @@ export class CameraController {
     this.reconnectTimer = null;
     const c = this.client;
     this.client = null;
+    this.stopHeartbeat();
     c?.close();
-    this.set({ status: 'disconnected', recording: false, recordStartedAt: null });
+    this.set({ status: 'disconnected', recording: false, recordStartedAt: null, heartbeats: [] });
   }
 
   private async open() {
     const transport = await this.opts.createTransport();
     const client = new YiClient(transport, { timeoutMs: this.opts.timeoutMs });
-    client.onNotification((n) => this.onNotification(n));
+    client.onNotification((n) => this.handleNotification(n));
     client.onDisconnect(() => this.onLost(client));
     try {
       await client.connect();
@@ -117,12 +136,46 @@ export class CameraController {
       battery: battery?.level ?? null,
       charging: battery?.charging ?? false,
       settings,
+      heartbeats: [],
     });
+    this.startHeartbeat(client);
+  }
+
+  private startHeartbeat(client: YiClient) {
+    this.stopHeartbeat();
+    const every = this.opts.heartbeatMs ?? 3000;
+    if (every <= 0) return;
+    const beat = () => {
+      this.heartbeatTimer = setTimeout(async () => {
+        if (client !== this.client || this.manualClose) return;
+        const t0 = this.now();
+        let sample: number | null;
+        try {
+          const b = await client.getBattery();
+          sample = this.now() - t0;
+          if (client === this.client) this.set({ battery: b.level, charging: b.charging });
+        } catch {
+          sample = null;
+        }
+        if (client !== this.client) return;
+        this.set({ heartbeats: [...this.state.heartbeats, sample].slice(-HEARTBEAT_HISTORY) });
+        beat();
+      }, every);
+      // nei test (Node) il battito non deve tenere vivo il processo
+      (this.heartbeatTimer as { unref?: () => void }).unref?.();
+    };
+    beat();
+  }
+
+  private stopHeartbeat() {
+    if (this.heartbeatTimer) clearTimeout(this.heartbeatTimer);
+    this.heartbeatTimer = null;
   }
 
   private onLost(client: YiClient) {
     if (this.manualClose || client !== this.client) return;
     this.client = null;
+    this.stopHeartbeat();
     this.set({ status: 'reconnecting' });
     this.scheduleReconnect();
   }
@@ -146,7 +199,8 @@ export class CameraController {
     }, delay);
   }
 
-  private onNotification(n: YiNotification) {
+  private handleNotification(n: YiNotification) {
+    this.notificationListeners.forEach((l) => l(n));
     switch (n.type) {
       case 'start_video_record':
         if (!this.state.recording) this.set({ recording: true, recordStartedAt: this.now() });

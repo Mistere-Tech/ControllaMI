@@ -1,0 +1,348 @@
+
+> controllami@0.1.0 test
+> tsx --test tests/*.test.ts
+
+TAP version 13
+# Subtest: connect porta lo stato a connected e carica batteria e impostazioni
+ok 1 - connect porta lo stato a connected e carica batteria e impostazioni
+  ---
+  duration_ms: 45.3782
+  type: 'test'
+  ...
+# Subtest: connect fallito → stato error con messaggio
+ok 2 - connect fallito → stato error con messaggio
+  ---
+  duration_ms: 1.4888
+  type: 'test'
+  ...
+# Subtest: toggleRecord avvia e ferma, e segna l'ora di inizio
+ok 3 - toggleRecord avvia e ferma, e segna l'ora di inizio
+  ---
+  duration_ms: 72.5024
+  type: 'test'
+  ...
+# Subtest: la notifica di fine registrazione aggiorna lastFile
+ok 4 - la notifica di fine registrazione aggiorna lastFile
+  ---
+  duration_ms: 83.7196
+  type: 'test'
+  ...
+# Subtest: in modalità foto il pulsante scatta una foto
+ok 5 - in modalità foto il pulsante scatta una foto
+  ---
+  duration_ms: 60.1594
+  type: 'test'
+  ...
+# Subtest: non si cambia modalità durante la registrazione
+ok 6 - non si cambia modalità durante la registrazione
+  ---
+  duration_ms: 52.5685
+  type: 'test'
+  ...
+# Subtest: elapsedSeconds e formatElapsed
+ok 7 - elapsedSeconds e formatElapsed
+  ---
+  duration_ms: 58.2479
+  type: 'test'
+  ...
+# Subtest: changeSetting aggiorna lo stato locale
+ok 8 - changeSetting aggiorna lo stato locale
+  ---
+  duration_ms: 27.478
+  type: 'test'
+  ...
+# Subtest: changeSetting fallito lascia il valore vecchio e riporta l'errore
+ok 9 - changeSetting fallito lascia il valore vecchio e riporta l'errore
+  ---
+  duration_ms: 33.2145
+  type: 'test'
+  ...
+# Subtest: loadFiles e deleteFiles
+ok 10 - loadFiles e deleteFiles
+  ---
+  duration_ms: 81.7789
+  type: 'test'
+  ...
+# Subtest: se cade la connessione si riconnette da solo
+not ok 11 - se cade la connessione si riconnette da solo
+  ---
+  duration_ms: 105.044
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\cameraController.test.ts:121:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'reconnecting'
+    - 'connected'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'connected'
+  actual: 'reconnecting'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (F:\File\Sviluppo\Repos\ControllaMI\tests\cameraController.test.ts:127:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: disconnect manuale non riconnette
+ok 12 - disconnect manuale non riconnette
+  ---
+  duration_ms: 86.844
+  type: 'test'
+  ...
+# Subtest: dopo troppi tentativi falliti si arrende con errore
+ok 13 - dopo troppi tentativi falliti si arrende con errore
+  ---
+  duration_ms: 1555.169
+  type: 'test'
+  ...
+# node:internal/modules/cjs/loader:1401
+#   const err = new Error(message);
+#               ^
+# Error: Cannot find module '../src/core/health'
+# Require stack:
+# - F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\health.test.ts
+#     at node:internal/modules/cjs/loader:1401:15
+#     at nextResolveSimple (F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:23:1010)
+#     at F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:22:4512
+#     at F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:22:2830
+#     at resolveTsPaths (F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:23:762)
+#     at F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:23:1203
+#     at j._resolveFilename (file:///F:/File/Sviluppo/Repos/ControllaMI/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:18825)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+#     at Function._load (node:internal/modules/cjs/loader:1211:37) {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: [ 'F:\\\\File\\\\Sviluppo\\\\Repos\\\\ControllaMI\\\\tests\\\\health.test.ts' ]
+# }
+# Node.js v22.17.0
+# Subtest: tests\\health.test.ts
+not ok 2 - tests\\health.test.ts
+  ---
+  duration_ms: 702.4538
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\health.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: estrae un singolo oggetto completo
+ok 15 - estrae un singolo oggetto completo
+  ---
+  duration_ms: 3.8093
+  type: 'test'
+  ...
+# Subtest: estrae più oggetti attaccati senza separatori
+ok 16 - estrae più oggetti attaccati senza separatori
+  ---
+  duration_ms: 0.4715
+  type: 'test'
+  ...
+# Subtest: ricompone un oggetto spezzato in più pezzi
+ok 17 - ricompone un oggetto spezzato in più pezzi
+  ---
+  duration_ms: 1.7575
+  type: 'test'
+  ...
+# Subtest: ignora graffe dentro le stringhe e gli escape
+ok 18 - ignora graffe dentro le stringhe e gli escape
+  ---
+  duration_ms: 0.4723
+  type: 'test'
+  ...
+# Subtest: salta spazi e newline tra un oggetto e l'altro
+ok 19 - salta spazi e newline tra un oggetto e l'altro
+  ---
+  duration_ms: 0.3549
+  type: 'test'
+  ...
+# Subtest: scarta un oggetto malformato senza bloccare i successivi
+ok 20 - scarta un oggetto malformato senza bloccare i successivi
+  ---
+  duration_ms: 0.3147
+  type: 'test'
+  ...
+# node:internal/modules/cjs/loader:1401
+#   const err = new Error(message);
+#               ^
+# Error: Cannot find module '../src/core/liveView'
+# Require stack:
+# - F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\liveView.test.ts
+#     at node:internal/modules/cjs/loader:1401:15
+#     at nextResolveSimple (F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:23:1010)
+#     at F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:22:4512
+#     at F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:22:2830
+#     at resolveTsPaths (F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:23:762)
+#     at F:\\File\\Sviluppo\\Repos\\ControllaMI\\node_modules\\tsx\\dist\\register-B1c7OH6V.cjs:23:1203
+#     at j._resolveFilename (file:///F:/File/Sviluppo/Repos/ControllaMI/node_modules/tsx/dist/register-nyXW-TH3.mjs:2:18825)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+#     at Function._load (node:internal/modules/cjs/loader:1211:37) {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: [ 'F:\\\\File\\\\Sviluppo\\\\Repos\\\\ControllaMI\\\\tests\\\\liveView.test.ts' ]
+# }
+# Node.js v22.17.0
+# Subtest: tests\\liveView.test.ts
+not ok 4 - tests\\liveView.test.ts
+  ---
+  duration_ms: 735.9973
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\liveView.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: il mock server parla il protocollo YI via TCP vero
+ok 22 - il mock server parla il protocollo YI via TCP vero
+  ---
+  duration_ms: 210.7297
+  type: 'test'
+  ...
+# Subtest: parseListing interpreta nome, dimensione, data e tipo
+ok 23 - parseListing interpreta nome, dimensione, data e tipo
+  ---
+  duration_ms: 2.5066
+  type: 'test'
+  ...
+# Subtest: parseListing ordina dal più recente
+ok 24 - parseListing ordina dal più recente
+  ---
+  duration_ms: 0.5852
+  type: 'test'
+  ...
+# Subtest: settingsToMap appiattisce la lista della camera
+ok 25 - settingsToMap appiattisce la lista della camera
+  ---
+  duration_ms: 2.4893
+  type: 'test'
+  ...
+# Subtest: describeSetting dà etichetta italiana e gruppo
+ok 26 - describeSetting dà etichetta italiana e gruppo
+  ---
+  duration_ms: 0.4183
+  type: 'test'
+  ...
+# Subtest: describeSetting segnala le impostazioni di sola lettura
+ok 27 - describeSetting segnala le impostazioni di sola lettura
+  ---
+  duration_ms: 0.2049
+  type: 'test'
+  ...
+# Subtest: connect ottiene il token dalla sessione 257
+ok 28 - connect ottiene il token dalla sessione 257
+  ---
+  duration_ms: 15.6914
+  type: 'test'
+  ...
+# Subtest: i comandi inviati dopo connect usano il token
+ok 29 - i comandi inviati dopo connect usano il token
+  ---
+  duration_ms: 2.0212
+  type: 'test'
+  ...
+# Subtest: startRecord / stopRecord cambiano lo stato della camera
+ok 30 - startRecord / stopRecord cambiano lo stato della camera
+  ---
+  duration_ms: 61.3725
+  type: 'test'
+  ...
+# Subtest: funziona anche con risposte spezzate a pezzi
+ok 31 - funziona anche con risposte spezzate a pezzi
+  ---
+  duration_ms: 31.7353
+  type: 'test'
+  ...
+# Subtest: getAllSettings restituisce una mappa chiave → valore
+ok 32 - getAllSettings restituisce una mappa chiave → valore
+  ---
+  duration_ms: 19.5887
+  type: 'test'
+  ...
+# Subtest: getOptions restituisce le opzioni e se è modificabile
+ok 33 - getOptions restituisce le opzioni e se è modificabile
+  ---
+  duration_ms: 32.1749
+  type: 'test'
+  ...
+# Subtest: setSetting modifica il valore
+ok 34 - setSetting modifica il valore
+  ---
+  duration_ms: 30.9804
+  type: 'test'
+  ...
+# Subtest: rval negativo diventa YiError con il codice
+ok 35 - rval negativo diventa YiError con il codice
+  ---
+  duration_ms: 29.3386
+  type: 'test'
+  ...
+# Subtest: token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+ok 36 - token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+  ---
+  duration_ms: 52.3316
+  type: 'test'
+  ...
+# Subtest: i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+ok 37 - i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+  ---
+  duration_ms: 34.2976
+  type: 'test'
+  ...
+# Subtest: le notifiche msg_id 7 arrivano agli ascoltatori
+ok 38 - le notifiche msg_id 7 arrivano agli ascoltatori
+  ---
+  duration_ms: 50.8264
+  type: 'test'
+  ...
+# Subtest: timeout se la camera non risponde
+ok 39 - timeout se la camera non risponde
+  ---
+  duration_ms: 516.2845
+  type: 'test'
+  ...
+# Subtest: dopo un timeout la coda continua a funzionare
+ok 40 - dopo un timeout la coda continua a funzionare
+  ---
+  duration_ms: 531.3034
+  type: 'test'
+  ...
+# Subtest: chiusura della connessione rifiuta i comandi in attesa
+ok 41 - chiusura della connessione rifiuta i comandi in attesa
+  ---
+  duration_ms: 0.9295
+  type: 'test'
+  ...
+# Subtest: listFiles restituisce i file della DCIM con URL di download
+ok 42 - listFiles restituisce i file della DCIM con URL di download
+  ---
+  duration_ms: 34.2958
+  type: 'test'
+  ...
+# Subtest: deleteFile rimuove il file
+ok 43 - deleteFile rimuove il file
+  ---
+  duration_ms: 99.7633
+  type: 'test'
+  ...
+# Subtest: startLiveView restituisce l'URL RTSP
+ok 44 - startLiveView restituisce l'URL RTSP
+  ---
+  duration_ms: 37.0698
+  type: 'test'
+  ...
+1..44
+# tests 44
+# suites 0
+# pass 41
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2898.9627

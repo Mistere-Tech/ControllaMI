@@ -4,6 +4,7 @@ import { CameraController, formatElapsed } from '../src/core/CameraController';
 import { FakeCamera } from '../src/core/fakeCamera';
 import { createInMemoryTransport } from '../src/core/inMemoryTransport';
 import { Transport } from '../src/core/transport';
+import { waitFor } from './helpers';
 
 function setup(opts: { failFirst?: number } = {}) {
   const cam = new FakeCamera({ token: 7 });
@@ -62,8 +63,7 @@ test('la notifica di fine registrazione aggiorna lastFile', async () => {
   await ctrl.connect();
   await ctrl.toggleRecord();
   await ctrl.toggleRecord();
-  await wait(5);
-  assert.match(ctrl.state.lastFile ?? '', /YDXJ\d+\.mp4$/);
+  await waitFor(() => /YDXJ\d+\.mp4$/.test(ctrl.state.lastFile ?? ''));
 });
 
 test('in modalità foto il pulsante scatta una foto', async () => {
@@ -123,8 +123,7 @@ test('se cade la connessione si riconnette da solo', async () => {
   await ctrl.connect();
   transports[0].close();
   assert.equal(ctrl.state.status, 'reconnecting');
-  await wait(60);
-  assert.equal(ctrl.state.status, 'connected');
+  await waitFor(() => ctrl.state.status === 'connected');
   assert.equal(transports.length, 2);
 });
 
@@ -142,6 +141,5 @@ test('dopo troppi tentativi falliti si arrende con errore', async () => {
   await ctrl.connect();
   cam.mute = true; // la camera non risponde più alla sessione
   transports[0].close();
-  await wait(1500);
-  assert.equal(ctrl.state.status, 'error');
+  await waitFor(() => ctrl.state.status === 'error', 3000);
 });

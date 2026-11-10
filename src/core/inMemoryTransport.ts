@@ -22,7 +22,7 @@ export function createInMemoryTransport(cam: FakeCamera, opts: { chunked?: boole
     }
   };
 
-  return {
+  const transport: Transport = {
     write(data) {
       if (!open) throw new Error('Connessione chiusa');
       const reqs = parser.feed(data);
@@ -38,7 +38,10 @@ export function createInMemoryTransport(cam: FakeCamera, opts: { chunked?: boole
     close() {
       if (!open) return;
       open = false;
+      cam.detach(transport);
       closeCbs.forEach((c) => c());
     },
   };
+  cam.attach(transport, (msgs) => deliver(msgs.map((o) => JSON.stringify(o)).join('')));
+  return transport;
 }

@@ -10,6 +10,7 @@ export const C = {
   onAccent: '#1A0E05',
   rec: '#FF5C5C',
   ok: '#3DD68C',
+  warn: '#F5C04A', // connessione instabile
   black: '#05070A',
 };
 

@@ -48,12 +48,27 @@ export class FakeCamera {
     'YDXJ0040.jpg': '4194304 bytes|2016-03-01 10:10:00',
     'YDXJ0039.jpg': '4194304 bytes|2016-03-01 10:09:00',
   };
+  /** Canali verso i client collegati (li registra il transport in memoria). */
+  private sinks = new Map<object, (msgs: any[]) => void>();
   private cwd = '/';
   private counter = 43;
 
   constructor(opts: { token?: number } = {}) {
     this.token = opts.token ?? 1;
     this.nextToken = this.token;
+  }
+
+  attach(channel: object, send: (msgs: any[]) => void) {
+    this.sinks.set(channel, send);
+  }
+
+  detach(channel: object) {
+    this.sinks.delete(channel);
+  }
+
+  /** Manda una notifica spontanea (msg_id 7) al client collegato su `channel`. */
+  notify(channel: object, n: { type: string; param?: unknown }) {
+    this.sinks.get(channel)?.([{ msg_id: MSG.NOTIFICATION, ...n }]);
   }
 
   /** Simula un token scaduto: la sessione successiva darà `next`. */

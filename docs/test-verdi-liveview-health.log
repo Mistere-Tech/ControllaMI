@@ -1,0 +1,368 @@
+
+> controllami@0.1.0 test
+> tsx --test tests/*.test.ts
+
+TAP version 13
+# Subtest: connect porta lo stato a connected e carica batteria e impostazioni
+ok 1 - connect porta lo stato a connected e carica batteria e impostazioni
+  ---
+  duration_ms: 29.3015
+  type: 'test'
+  ...
+# Subtest: connect fallito → stato error con messaggio
+ok 2 - connect fallito → stato error con messaggio
+  ---
+  duration_ms: 1.5044
+  type: 'test'
+  ...
+# Subtest: toggleRecord avvia e ferma, e segna l'ora di inizio
+ok 3 - toggleRecord avvia e ferma, e segna l'ora di inizio
+  ---
+  duration_ms: 42.6282
+  type: 'test'
+  ...
+# Subtest: la notifica di fine registrazione aggiorna lastFile
+ok 4 - la notifica di fine registrazione aggiorna lastFile
+  ---
+  duration_ms: 32.1139
+  type: 'test'
+  ...
+# Subtest: in modalità foto il pulsante scatta una foto
+ok 5 - in modalità foto il pulsante scatta una foto
+  ---
+  duration_ms: 48.4032
+  type: 'test'
+  ...
+# Subtest: non si cambia modalità durante la registrazione
+ok 6 - non si cambia modalità durante la registrazione
+  ---
+  duration_ms: 46.207
+  type: 'test'
+  ...
+# Subtest: elapsedSeconds e formatElapsed
+ok 7 - elapsedSeconds e formatElapsed
+  ---
+  duration_ms: 47.081
+  type: 'test'
+  ...
+# Subtest: changeSetting aggiorna lo stato locale
+ok 8 - changeSetting aggiorna lo stato locale
+  ---
+  duration_ms: 53.7206
+  type: 'test'
+  ...
+# Subtest: changeSetting fallito lascia il valore vecchio e riporta l'errore
+ok 9 - changeSetting fallito lascia il valore vecchio e riporta l'errore
+  ---
+  duration_ms: 46.9601
+  type: 'test'
+  ...
+# Subtest: loadFiles e deleteFiles
+ok 10 - loadFiles e deleteFiles
+  ---
+  duration_ms: 71.2256
+  type: 'test'
+  ...
+# Subtest: se cade la connessione si riconnette da solo
+ok 11 - se cade la connessione si riconnette da solo
+  ---
+  duration_ms: 108.0364
+  type: 'test'
+  ...
+# Subtest: disconnect manuale non riconnette
+ok 12 - disconnect manuale non riconnette
+  ---
+  duration_ms: 90.9038
+  type: 'test'
+  ...
+# Subtest: dopo troppi tentativi falliti si arrende con errore
+ok 13 - dopo troppi tentativi falliti si arrende con errore
+  ---
+  duration_ms: 1060.548
+  type: 'test'
+  ...
+# Subtest: camera non connessa → persa
+ok 14 - camera non connessa → persa
+  ---
+  duration_ms: 2.0257
+  type: 'test'
+  ...
+# Subtest: risposte veloci e live view che va → stabile
+ok 15 - risposte veloci e live view che va → stabile
+  ---
+  duration_ms: 0.359
+  type: 'test'
+  ...
+# Subtest: una risposta mancata o lenta tra le ultime → instabile
+ok 16 - una risposta mancata o lenta tra le ultime → instabile
+  ---
+  duration_ms: 0.2567
+  type: 'test'
+  ...
+# Subtest: contano solo le ultime 3 risposte
+ok 17 - contano solo le ultime 3 risposte
+  ---
+  duration_ms: 0.2493
+  type: 'test'
+  ...
+# Subtest: live view che riprova o va in errore → instabile
+ok 18 - live view che riprova o va in errore → instabile
+  ---
+  duration_ms: 0.418
+  type: 'test'
+  ...
+# Subtest: etichette in italiano
+ok 19 - etichette in italiano
+  ---
+  duration_ms: 0.3147
+  type: 'test'
+  ...
+# Subtest: il controller manda un battito periodico e registra i tempi di risposta
+ok 20 - il controller manda un battito periodico e registra i tempi di risposta
+  ---
+  duration_ms: 226.7395
+  type: 'test'
+  ...
+# Subtest: il battito si ferma con disconnect
+ok 21 - il battito si ferma con disconnect
+  ---
+  duration_ms: 172.1394
+  type: 'test'
+  ...
+# Subtest: estrae un singolo oggetto completo
+ok 22 - estrae un singolo oggetto completo
+  ---
+  duration_ms: 3.6928
+  type: 'test'
+  ...
+# Subtest: estrae più oggetti attaccati senza separatori
+ok 23 - estrae più oggetti attaccati senza separatori
+  ---
+  duration_ms: 0.4471
+  type: 'test'
+  ...
+# Subtest: ricompone un oggetto spezzato in più pezzi
+ok 24 - ricompone un oggetto spezzato in più pezzi
+  ---
+  duration_ms: 0.4589
+  type: 'test'
+  ...
+# Subtest: ignora graffe dentro le stringhe e gli escape
+ok 25 - ignora graffe dentro le stringhe e gli escape
+  ---
+  duration_ms: 0.389
+  type: 'test'
+  ...
+# Subtest: salta spazi e newline tra un oggetto e l'altro
+ok 26 - salta spazi e newline tra un oggetto e l'altro
+  ---
+  duration_ms: 0.3242
+  type: 'test'
+  ...
+# Subtest: scarta un oggetto malformato senza bloccare i successivi
+ok 27 - scarta un oggetto malformato senza bloccare i successivi
+  ---
+  duration_ms: 0.2931
+  type: 'test'
+  ...
+# Subtest: con la schermata attiva e la camera connessa la live view parte (259) e dà un URL
+ok 28 - con la schermata attiva e la camera connessa la live view parte (259) e dà un URL
+  ---
+  duration_ms: 44.4852
+  type: 'test'
+  ...
+# Subtest: regressione: uscendo dalla schermata e tornando la live view riparte con un nuovo player
+ok 29 - regressione: uscendo dalla schermata e tornando la live view riparte con un nuovo player
+  ---
+  duration_ms: 48.4411
+  type: 'test'
+  ...
+# Subtest: se la camera ferma lo stream (vf_stop) e lo riprende (vf_start) la live view si riavvia
+ok 30 - se la camera ferma lo stream (vf_stop) e lo riprende (vf_start) la live view si riavvia
+  ---
+  duration_ms: 77.6795
+  type: 'test'
+  ...
+# Subtest: dopo un cambio di impostazione la live view si riavvia da sola
+ok 31 - dopo un cambio di impostazione la live view si riavvia da sola
+  ---
+  duration_ms: 116.0979
+  type: 'test'
+  ...
+# Subtest: errore del player → nuovi tentativi con attesa crescente finché non torna "ready"
+ok 32 - errore del player → nuovi tentativi con attesa crescente finché non torna "ready"
+  ---
+  duration_ms: 103.0529
+  type: 'test'
+  ...
+# Subtest: immagine bloccata in buffering troppo a lungo → riavvio
+ok 33 - immagine bloccata in buffering troppo a lungo → riavvio
+  ---
+  duration_ms: 103.423
+  type: 'test'
+  ...
+# Subtest: un buffering breve non riavvia la live view
+ok 34 - un buffering breve non riavvia la live view
+  ---
+  duration_ms: 132.2837
+  type: 'test'
+  ...
+# Subtest: se cade la connessione la live view si spegne e riparte quando la camera torna
+ok 35 - se cade la connessione la live view si spegne e riparte quando la camera torna
+  ---
+  duration_ms: 115.7734
+  type: 'test'
+  ...
+# Subtest: con la schermata non attiva non manda comandi alla camera
+ok 36 - con la schermata non attiva non manda comandi alla camera
+  ---
+  duration_ms: 66.8925
+  type: 'test'
+  ...
+# Subtest: il mock server parla il protocollo YI via TCP vero
+ok 37 - il mock server parla il protocollo YI via TCP vero
+  ---
+  duration_ms: 136.8348
+  type: 'test'
+  ...
+# Subtest: parseListing interpreta nome, dimensione, data e tipo
+ok 38 - parseListing interpreta nome, dimensione, data e tipo
+  ---
+  duration_ms: 3.0175
+  type: 'test'
+  ...
+# Subtest: parseListing ordina dal più recente
+ok 39 - parseListing ordina dal più recente
+  ---
+  duration_ms: 0.7161
+  type: 'test'
+  ...
+# Subtest: settingsToMap appiattisce la lista della camera
+ok 40 - settingsToMap appiattisce la lista della camera
+  ---
+  duration_ms: 2.1978
+  type: 'test'
+  ...
+# Subtest: describeSetting dà etichetta italiana e gruppo
+ok 41 - describeSetting dà etichetta italiana e gruppo
+  ---
+  duration_ms: 0.351
+  type: 'test'
+  ...
+# Subtest: describeSetting segnala le impostazioni di sola lettura
+ok 42 - describeSetting segnala le impostazioni di sola lettura
+  ---
+  duration_ms: 0.202
+  type: 'test'
+  ...
+# Subtest: connect ottiene il token dalla sessione 257
+ok 43 - connect ottiene il token dalla sessione 257
+  ---
+  duration_ms: 11.3536
+  type: 'test'
+  ...
+# Subtest: i comandi inviati dopo connect usano il token
+ok 44 - i comandi inviati dopo connect usano il token
+  ---
+  duration_ms: 28.5322
+  type: 'test'
+  ...
+# Subtest: startRecord / stopRecord cambiano lo stato della camera
+ok 45 - startRecord / stopRecord cambiano lo stato della camera
+  ---
+  duration_ms: 21.0985
+  type: 'test'
+  ...
+# Subtest: funziona anche con risposte spezzate a pezzi
+ok 46 - funziona anche con risposte spezzate a pezzi
+  ---
+  duration_ms: 29.2397
+  type: 'test'
+  ...
+# Subtest: getAllSettings restituisce una mappa chiave → valore
+ok 47 - getAllSettings restituisce una mappa chiave → valore
+  ---
+  duration_ms: 16.1015
+  type: 'test'
+  ...
+# Subtest: getOptions restituisce le opzioni e se è modificabile
+ok 48 - getOptions restituisce le opzioni e se è modificabile
+  ---
+  duration_ms: 15.2934
+  type: 'test'
+  ...
+# Subtest: setSetting modifica il valore
+ok 49 - setSetting modifica il valore
+  ---
+  duration_ms: 30.7648
+  type: 'test'
+  ...
+# Subtest: rval negativo diventa YiError con il codice
+ok 50 - rval negativo diventa YiError con il codice
+  ---
+  duration_ms: 31.2336
+  type: 'test'
+  ...
+# Subtest: token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+ok 51 - token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+  ---
+  duration_ms: 52.3592
+  type: 'test'
+  ...
+# Subtest: i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+ok 52 - i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+  ---
+  duration_ms: 32.3686
+  type: 'test'
+  ...
+# Subtest: le notifiche msg_id 7 arrivano agli ascoltatori
+ok 53 - le notifiche msg_id 7 arrivano agli ascoltatori
+  ---
+  duration_ms: 31.6903
+  type: 'test'
+  ...
+# Subtest: timeout se la camera non risponde
+ok 54 - timeout se la camera non risponde
+  ---
+  duration_ms: 505.5494
+  type: 'test'
+  ...
+# Subtest: dopo un timeout la coda continua a funzionare
+ok 55 - dopo un timeout la coda continua a funzionare
+  ---
+  duration_ms: 533.5019
+  type: 'test'
+  ...
+# Subtest: chiusura della connessione rifiuta i comandi in attesa
+ok 56 - chiusura della connessione rifiuta i comandi in attesa
+  ---
+  duration_ms: 1.0178
+  type: 'test'
+  ...
+# Subtest: listFiles restituisce i file della DCIM con URL di download
+ok 57 - listFiles restituisce i file della DCIM con URL di download
+  ---
+  duration_ms: 16.8452
+  type: 'test'
+  ...
+# Subtest: deleteFile rimuove il file
+ok 58 - deleteFile rimuove il file
+  ---
+  duration_ms: 65.3682
+  type: 'test'
+  ...
+# Subtest: startLiveView restituisce l'URL RTSP
+ok 59 - startLiveView restituisce l'URL RTSP
+  ---
+  duration_ms: 17.6147
+  type: 'test'
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 59
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2370.6862

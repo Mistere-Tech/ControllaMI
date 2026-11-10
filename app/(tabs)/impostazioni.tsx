@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
 import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
 import { describeSetting, groupSettings } from '../../src/core/settings';
 import { C } from '../../src/ui/theme';
@@ -15,7 +16,7 @@ interface Sheet {
 
 export default function ImpostazioniScreen() {
   const insets = useSafeAreaInsets();
-  const { controller } = useCameraCtx();
+  const { controller, demo } = useCameraCtx();
   const st = useCameraState();
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -67,6 +68,7 @@ export default function ImpostazioniScreen() {
   return (
     <View style={[s.root, { paddingTop: insets.top + 16 }]}>
       <Text style={s.title}>Impostazioni</Text>
+      <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}><ConnectionBadge demo={demo} /></View>
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24, gap: 20 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={C.accent} colors={[C.accent]} />}

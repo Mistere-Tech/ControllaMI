@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
+import { router, useFocusEffect } from 'expo-router';
+import { useCameraCtx, useCameraState, useLiveView } from '../../src/state/CameraContext';
+import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
 import { formatElapsed } from '../../src/core/CameraController';
-import { RtspView, PlaybackState } from '../../modules/yi-native';
+import { RtspView } from '../../modules/yi-native';
 import { C } from '../../src/ui/theme';
 
 function shortRes(v?: string) {
@@ -16,11 +17,10 @@ function shortRes(v?: string) {
 
 export default function ControlloScreen() {
   const insets = useSafeAreaInsets();
-  const { controller, demo, disconnect } = useCameraCtx();
+  const { controller, live, demo, disconnect } = useCameraCtx();
   const st = useCameraState();
+  const lv = useLiveView();
   const [, tick] = useState(0);
-  const [liveUrl, setLiveUrl] = useState<string | null>(null);
-  const [liveState, setLiveState] = useState<PlaybackState | 'off'>('off');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -29,21 +29,15 @@ export default function ControlloScreen() {
     return () => clearInterval(id);
   }, [st.recording]);
 
-  // live view: si avvia quando la schermata è connessa, si spegne se cade
-  useEffect(() => {
-    if (st.status !== 'connected' || demo || !RtspView) {
-      setLiveUrl(null);
-      return;
-    }
-    let cancelled = false;
-    controller
-      .startLiveView()
-      .then((url) => !cancelled && setLiveUrl(url))
-      .catch(() => !cancelled && setLiveState('error'));
-    return () => {
-      cancelled = true;
-    };
-  }, [st.status, demo, controller]);
+  // live view attiva solo mentre questa schermata è in primo piano:
+  // ogni ritorno qui (es. da Impostazioni) la riavvia con un player nuovo
+  useFocusEffect(
+    useCallback(() => {
+      if (demo || !RtspView) return;
+      live.setActive(true);
+      return () => live.setActive(false);
+    }, [live, demo]),
+  );
 
   const video = st.mode === 'video';
   const run = async (fn: () => Promise<void>) => {
@@ -80,8 +74,7 @@ export default function ControlloScreen() {
           style={s.connRow}
           hitSlop={8}
         >
-          <View style={[s.dot, { backgroundColor: st.status === 'connected' ? C.ok : C.accent }]} />
-          <Text style={s.connText}>{demo ? 'Camera simulata' : 'YI connessa'}</Text>
+          <ConnectionBadge demo={demo} />
         </Pressable>
         <View style={s.connRow}>
           <Ionicons name={st.charging ? 'battery-charging-outline' : 'battery-half-outline'} size={18} color={C.muted} />
@@ -90,14 +83,23 @@ export default function ControlloScreen() {
       </View>
 
       <View style={s.live}>
-        {liveUrl && RtspView ? (
-          <RtspView url={liveUrl} style={StyleSheet.absoluteFill} onPlaybackState={(e) => setLiveState(e.nativeEvent.state)} />
+        {lv.url && RtspView ? (
+          <RtspView
+            key={lv.generation}
+            url={lv.url}
+            style={StyleSheet.absoluteFill}
+            onPlaybackState={(e) => live.onPlayerState(e.nativeEvent.state)}
+          />
         ) : null}
-        {(!liveUrl || liveState !== 'ready') && (
+        {lv.phase !== 'playing' && (
           <View style={s.livePlaceholder} pointerEvents="none">
             <Ionicons name="videocam-outline" size={40} color={C.faint} />
             <Text style={s.liveMsg}>
-              {demo ? 'Live view non disponibile in demo' : liveState === 'error' ? 'Live view non disponibile' : 'Avvio live view…'}
+              {demo
+                ? 'Live view non disponibile in demo'
+                : lv.phase === 'retrying'
+                  ? 'Live view interrotta · riprovo…'
+                  : 'Avvio live view…'}
             </Text>
           </View>
         )}
@@ -167,9 +169,7 @@ export default function ControlloScreen() {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: C.bg },
   topBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 16 },
-  connRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  dot: { width: 8, height: 8, borderRadius: 4 },
-  connText: { color: C.text, fontSize: 14, fontWeight: '500' },
+  connRow: { flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 1 },
   muted: { color: C.muted, fontSize: 13 },
   live: { marginHorizontal: 16, aspectRatio: 16 / 9, borderRadius: 16, backgroundColor: C.black, borderWidth: 1, borderColor: C.border, overflow: 'hidden' },
   livePlaceholder: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', gap: 8 },
