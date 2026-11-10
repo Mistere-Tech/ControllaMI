@@ -19,7 +19,8 @@
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",
         "android.permission.ACCESS_WIFI_STATE",
-        "android.permission.CHANGE_NETWORK_STATE"
+        "android.permission.CHANGE_NETWORK_STATE",
+        "android.permission.REQUEST_INSTALL_PACKAGES"
       ]
     },
     "plugins": [
@@ -43,7 +44,8 @@
           "isAccessMediaLocationEnabled": false
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "./plugins/withReleaseSigning"
     ],
     "experiments": {
       "typedRoutes": false

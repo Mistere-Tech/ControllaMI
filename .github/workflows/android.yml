@@ -41,12 +41,38 @@ jobs:
       - name: Test (devono essere tutti verdi)
         run: npm test
 
+      - name: Versione dell'app (dal tag, o -dev su main)
+        run: npx tsx scripts/set-version.ts "$GITHUB_REF" "$GITHUB_RUN_NUMBER"
+
       - name: Genera il progetto Android
         run: npx expo prebuild --platform android --clean --no-install
 
+      # Chiave di firma da GitHub Secrets. Senza (es. fork) la build esce firmata con la chiave di debug.
+      - name: Prepara la chiave di firma
+        env:
+          KEYSTORE_BASE64: ${{ secrets.CONTROLLAMI_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/controllami-release.keystore"
+            echo "CONTROLLAMI_KEYSTORE=$RUNNER_TEMP/controllami-release.keystore" >> "$GITHUB_ENV"
+            echo "Firma: chiave di release"
+          else
+            echo "::warning::Nessuna chiave di release nei Secrets: APK firmato con la chiave di debug"
+          fi
+
       - name: Compila APK (arm64, release)
         working-directory: android
+        env:
+          CONTROLLAMI_KEYSTORE_PASSWORD: ${{ secrets.CONTROLLAMI_KEYSTORE_PASSWORD }}
+          CONTROLLAMI_KEY_ALIAS: ${{ secrets.CONTROLLAMI_KEY_ALIAS }}
+          CONTROLLAMI_KEY_PASSWORD: ${{ secrets.CONTROLLAMI_KEY_PASSWORD }}
         run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a
+
+      - name: Controlla la firma dell'APK
+        if: env.CONTROLLAMI_KEYSTORE != ''
+        run: |
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          "$APKSIGNER" verify --print-certs android/app/build/outputs/apk/release/*.apk | grep -i "certificate DN" | tee /dev/stderr | grep -q "ControllaMI"
 
       - name: Rinomina APK
         id: apk
