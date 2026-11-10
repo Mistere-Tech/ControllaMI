@@ -84,6 +84,7 @@ export class YiClient {
   async startRecord() { await this.send({ msg_id: MSG.START_RECORD }); }
   async stopRecord() { await this.send({ msg_id: MSG.STOP_RECORD }); }
   async takePhoto() { await this.send({ msg_id: MSG.TAKE_PHOTO }); }
+  async stopPhoto() { await this.send({ msg_id: MSG.STOP_PHOTO }); }
 
   async getAllSettings(): Promise<Record<string, string>> {
     const r = await this.send({ msg_id: MSG.GET_ALL_SETTINGS });

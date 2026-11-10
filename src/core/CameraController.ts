@@ -275,6 +275,15 @@ export class CameraController {
     }
   }
 
+  /** Avvia lo scatto continuo (timelapse foto): con capture_mode "cont." il 769 parte e non si ferma. */
+  async startPhotoCapture() {
+    await this.needSd().takePhoto();
+  }
+
+  async stopPhotoCapture() {
+    await this.need().stopPhoto();
+  }
+
   elapsedSeconds(): number {
     if (!this.state.recordStartedAt) return 0;
     return Math.floor((this.now() - this.state.recordStartedAt) / 1000);

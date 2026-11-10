@@ -1,4 +1,4 @@
-export type SettingGroup = 'Video' | 'Foto' | 'Camera' | 'Info' | 'Altro';
+export type SettingGroup = 'Video' | 'Foto' | 'Timelapse' | 'Camera' | 'Info' | 'Altro';
 
 export interface SettingInfo {
   key: string;
@@ -12,17 +12,21 @@ const KNOWN: Record<string, [string, SettingGroup, boolean?]> = {
   video_standard: ['Standard', 'Video'],
   video_quality: ['Qualità', 'Video'],
   video_stamp: ['Timestamp sul video', 'Video'],
-  timelapse_video: ['Timelapse video', 'Video'],
+  timelapse_video: ['Intervallo timelapse video', 'Timelapse'],
+  rec_mode: ['Modalità registrazione', 'Video'],
   record_mode: ['Modalità registrazione', 'Video'],
   loop_rec: ['Registrazione in loop', 'Video'],
   video_rotate: ['Capovolgi immagine', 'Video'],
-  meter_mode: ['Esposizione', 'Video'],
+  meter_mode: ['Misurazione esposizione', 'Video'],
+  exposure_value: ['Esposizione (EV)', 'Video'],
+  ev: ['Esposizione (EV)', 'Video'],
+  ev_compensation: ['Esposizione (EV)', 'Video'],
   warp_enable: ['Correzione distorsione', 'Video'],
   photo_size: ['Dimensione', 'Foto'],
   photo_quality: ['Qualità', 'Foto'],
   photo_stamp: ['Timestamp sulla foto', 'Foto'],
   capture_mode: ['Modalità scatto', 'Foto'],
-  precise_cont_time: ['Intervallo timelapse', 'Foto'],
+  precise_cont_time: ['Intervallo timelapse foto', 'Timelapse'],
   burst_capture_number: ['Raffica', 'Foto'],
   precise_selftime: ['Autoscatto', 'Foto'],
   auto_power_off: ['Spegnimento automatico', 'Camera'],
@@ -57,7 +61,7 @@ export function describeSetting(key: string): SettingInfo {
   return { key, label: key.replace(/_/g, ' '), group: 'Altro', readOnly: false };
 }
 
-export const GROUP_ORDER: SettingGroup[] = ['Video', 'Foto', 'Camera', 'Info', 'Altro'];
+export const GROUP_ORDER: SettingGroup[] = ['Video', 'Foto', 'Timelapse', 'Camera', 'Info', 'Altro'];
 
 /** Raggruppa le impostazioni per la schermata, nell'ordine dei gruppi. */
 export function groupSettings(map: Record<string, string>) {

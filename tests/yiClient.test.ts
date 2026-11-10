@@ -39,7 +39,7 @@ test('funziona anche con risposte spezzate a pezzi', async () => {
   const { client } = setup({ chunked: true });
   await client.connect();
   const s = await client.getAllSettings();
-  assert.equal(s.video_resolution, '1920x1080 60P 16:9');
+  assert.equal(s.video_resolution, '1920x1080 50P 16:9');
 });
 
 test('getAllSettings restituisce una mappa chiave → valore', async () => {
@@ -54,7 +54,7 @@ test('getOptions restituisce le opzioni e se è modificabile', async () => {
   const { client } = setup();
   await client.connect();
   const o = await client.getOptions('video_resolution');
-  assert.ok(o.options.includes('1920x1080 30P 16:9'));
+  assert.ok(o.options.includes('1920x1080 25P 16:9'), 'in PAL le risoluzioni sono a 50/25 fps');
   assert.equal(o.settable, true);
 });
 

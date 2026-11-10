@@ -3,7 +3,8 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
-import { useCameraCtx, useCameraState, useLiveView } from '../../src/state/CameraContext';
+import { useCameraCtx, useCameraState, useLiveView, useModes } from '../../src/state/CameraContext';
+import { SimpleControls } from '../../src/ui/SimpleControls';
 import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
 import { SdBanner } from '../../src/ui/SdBanner';
 import { useProblems } from '../../src/state/ProblemContext';
@@ -19,9 +20,11 @@ function shortRes(v?: string) {
 
 export default function ControlloScreen() {
   const insets = useSafeAreaInsets();
-  const { controller, live, demo, disconnect } = useCameraCtx();
+  const { controller, live, modes, demo, disconnect } = useCameraCtx();
   const st = useCameraState();
   const lv = useLiveView();
+  const ms = useModes();
+  const simple = ms.uiMode === 'simple';
   const { report } = useProblems();
   const [, tick] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -54,17 +57,23 @@ export default function ControlloScreen() {
       setBusy(false);
     }
   };
-  const sdBlocked = st.sd === 'missing' && !st.recording;
+  const active = st.recording || ms.capturing;
+  const sdBlocked = st.sd === 'missing' && !active;
+  const timelapsePhoto = !video && /cont/i.test(st.settings.capture_mode ?? '');
 
   const hint = st.status === 'reconnecting'
     ? 'Riconnessione in corso…'
-    : video
-      ? st.recording ? 'Registrazione in corso' : 'Pronta a registrare'
-      : 'Pronta a scattare';
+    : busy && !active
+      ? 'Preparo la camera…'
+      : ms.capturing
+        ? 'Timelapse foto in corso'
+        : video
+          ? st.recording ? 'Registrazione in corso' : 'Pronta a registrare'
+          : timelapsePhoto ? 'Pronta per il timelapse' : 'Pronta a scattare';
 
   const chips = video
-    ? [shortRes(st.settings.video_resolution), st.settings.video_standard, st.settings.video_quality].filter(Boolean)
-    : [st.settings.photo_size?.split(' ')[0], st.settings.capture_mode].filter(Boolean);
+    ? [shortRes(st.settings.video_resolution), st.settings.video_quality, st.settings.timelapse_video && st.settings.timelapse_video !== 'off' ? `ogni ${st.settings.timelapse_video} s` : ''].filter(Boolean)
+    : [st.settings.photo_size?.split(' ')[0], timelapsePhoto ? `ogni ${st.settings.precise_cont_time ?? ''}` : st.settings.capture_mode].filter(Boolean);
 
   const lastName = st.lastFile?.split('/').pop();
 
@@ -113,6 +122,9 @@ export default function ControlloScreen() {
         {st.recording && (
           <View style={s.recBadge}><View style={s.recDot} /><Text style={s.liveBadgeText}>REC</Text></View>
         )}
+        {ms.capturing && (
+          <View style={s.recBadge}><Ionicons name="timer-outline" size={12} color={C.text} /><Text style={s.liveBadgeText}>TIMELAPSE</Text></View>
+        )}
       </View>
 
       <View style={s.timerBox}>
@@ -121,19 +133,23 @@ export default function ControlloScreen() {
       </View>
 
       <View style={{ alignItems: 'center', paddingVertical: 8 }}>
-        <View style={s.segment}>
-          {(['video', 'photo'] as const).map((m) => (
-            <Pressable
-              key={m}
-              accessibilityRole="button"
-              accessibilityState={{ selected: st.mode === m, disabled: st.recording }}
-              onPress={() => controller.setMode(m)}
-              style={[s.segBtn, st.mode === m && { backgroundColor: C.border }]}
-            >
-              <Text style={s.segText}>{m === 'video' ? 'Video' : 'Foto'}</Text>
-            </Pressable>
-          ))}
-        </View>
+        {simple ? (
+          <SimpleControls run={run} disabled={busy || active || st.status !== 'connected'} />
+        ) : (
+          <View style={s.segment}>
+            {(['video', 'photo'] as const).map((m) => (
+              <Pressable
+                key={m}
+                accessibilityRole="button"
+                accessibilityState={{ selected: st.mode === m, disabled: active }}
+                onPress={() => controller.setMode(m)}
+                style={[s.segBtn, st.mode === m && { backgroundColor: C.border }]}
+              >
+                <Text style={s.segText}>{m === 'video' ? 'Video' : 'Foto'}</Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
       </View>
 
       <View style={s.shutterRow}>
@@ -142,17 +158,21 @@ export default function ControlloScreen() {
         </Pressable>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={video ? (st.recording ? 'Ferma registrazione' : 'Avvia registrazione') : 'Scatta foto'}
+          accessibilityLabel={
+            video
+              ? st.recording ? 'Ferma registrazione' : 'Avvia registrazione'
+              : timelapsePhoto ? (ms.capturing ? 'Ferma timelapse' : 'Avvia timelapse') : 'Scatta foto'
+          }
           accessibilityState={{ disabled: st.status !== 'connected' || sdBlocked }}
           disabled={st.status !== 'connected'}
-          onPress={() => run(() => controller.shutter())}
+          onPress={() => run(() => modes.shutter())}
           style={({ pressed }) => [s.shutter, (pressed || busy) && { opacity: 0.75 }, sdBlocked && { opacity: 0.35 }]}
         >
           <View
             style={{
-              width: st.recording ? 32 : 68,
-              height: st.recording ? 32 : 68,
-              borderRadius: st.recording ? 8 : 34,
+              width: active ? 32 : 68,
+              height: active ? 32 : 68,
+              borderRadius: active ? 8 : 34,
               backgroundColor: video ? C.rec : C.text,
             }}
           />

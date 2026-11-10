@@ -1,0 +1,602 @@
+
+> controllami@0.1.0 test
+> tsx --test tests/*.test.ts
+
+TAP version 13
+# Subtest: connect porta lo stato a connected e carica batteria e impostazioni
+ok 1 - connect porta lo stato a connected e carica batteria e impostazioni
+  ---
+  duration_ms: 40.9636
+  type: 'test'
+  ...
+# Subtest: connect fallito → stato error con messaggio
+ok 2 - connect fallito → stato error con messaggio
+  ---
+  duration_ms: 1.0694
+  type: 'test'
+  ...
+# Subtest: toggleRecord avvia e ferma, e segna l'ora di inizio
+ok 3 - toggleRecord avvia e ferma, e segna l'ora di inizio
+  ---
+  duration_ms: 45.3558
+  type: 'test'
+  ...
+# Subtest: la notifica di fine registrazione aggiorna lastFile
+ok 4 - la notifica di fine registrazione aggiorna lastFile
+  ---
+  duration_ms: 70.1447
+  type: 'test'
+  ...
+# Subtest: in modalità foto il pulsante scatta una foto
+ok 5 - in modalità foto il pulsante scatta una foto
+  ---
+  duration_ms: 43.9163
+  type: 'test'
+  ...
+# Subtest: non si cambia modalità durante la registrazione
+ok 6 - non si cambia modalità durante la registrazione
+  ---
+  duration_ms: 36.4808
+  type: 'test'
+  ...
+# Subtest: elapsedSeconds e formatElapsed
+ok 7 - elapsedSeconds e formatElapsed
+  ---
+  duration_ms: 17.4297
+  type: 'test'
+  ...
+# Subtest: changeSetting aggiorna lo stato locale
+ok 8 - changeSetting aggiorna lo stato locale
+  ---
+  duration_ms: 46.0716
+  type: 'test'
+  ...
+# Subtest: changeSetting fallito lascia il valore vecchio e riporta l'errore
+ok 9 - changeSetting fallito lascia il valore vecchio e riporta l'errore
+  ---
+  duration_ms: 53.2089
+  type: 'test'
+  ...
+# Subtest: loadFiles e deleteFiles
+ok 10 - loadFiles e deleteFiles
+  ---
+  duration_ms: 109.0186
+  type: 'test'
+  ...
+# Subtest: se cade la connessione si riconnette da solo
+ok 11 - se cade la connessione si riconnette da solo
+  ---
+  duration_ms: 116.0053
+  type: 'test'
+  ...
+# Subtest: disconnect manuale non riconnette
+ok 12 - disconnect manuale non riconnette
+  ---
+  duration_ms: 86.2578
+  type: 'test'
+  ...
+# Subtest: dopo troppi tentativi falliti si arrende con errore
+ok 13 - dopo troppi tentativi falliti si arrende con errore
+  ---
+  duration_ms: 1050.364
+  type: 'test'
+  ...
+# Subtest: timeout → la camera non risponde, si può riprovare
+ok 14 - timeout → la camera non risponde, si può riprovare
+  ---
+  duration_ms: 2.4688
+  type: 'test'
+  ...
+# Subtest: connessione chiusa → connessione persa, ci pensa la riconnessione automatica
+ok 15 - connessione chiusa → connessione persa, ci pensa la riconnessione automatica
+  ---
+  duration_ms: 0.9793
+  type: 'test'
+  ...
+# Subtest: -14 durante la registrazione → ferma prima la registrazione
+ok 16 - -14 durante la registrazione → ferma prima la registrazione
+  ---
+  duration_ms: 0.6595
+  type: 'test'
+  ...
+# Subtest: -14 senza registrazione → camera occupata, riprova
+ok 17 - -14 senza registrazione → camera occupata, riprova
+  ---
+  duration_ms: 0.2865
+  type: 'test'
+  ...
+# Subtest: -9 → valore non accettato dalla camera
+ok 18 - -9 → valore non accettato dalla camera
+  ---
+  duration_ms: 0.2637
+  type: 'test'
+  ...
+# Subtest: codice sconosciuto → messaggio generico in italiano, codice solo come dettaglio
+ok 19 - codice sconosciuto → messaggio generico in italiano, codice solo come dettaglio
+  ---
+  duration_ms: 0.3652
+  type: 'test'
+  ...
+# Subtest: SD assente: errore dedicato con azione "inserisci la SD"
+ok 20 - SD assente: errore dedicato con azione "inserisci la SD"
+  ---
+  duration_ms: 0.4516
+  type: 'test'
+  ...
+# Subtest: qualsiasi rifiuto della camera con la SD assente diventa "Scheda SD assente"
+ok 21 - qualsiasi rifiuto della camera con la SD assente diventa "Scheda SD assente"
+  ---
+  duration_ms: 0.4025
+  type: 'test'
+  ...
+# Subtest: SD da formattare → messaggio dedicato
+ok 22 - SD da formattare → messaggio dedicato
+  ---
+  duration_ms: 0.651
+  type: 'test'
+  ...
+# Subtest: errore qualsiasi senza messaggio → testo generico, mai vuoto
+ok 23 - errore qualsiasi senza messaggio → testo generico, mai vuoto
+  ---
+  duration_ms: 0.9802
+  type: 'test'
+  ...
+# Subtest: camera non connessa → persa
+ok 24 - camera non connessa → persa
+  ---
+  duration_ms: 2.7473
+  type: 'test'
+  ...
+# Subtest: risposte veloci e live view che va → stabile
+ok 25 - risposte veloci e live view che va → stabile
+  ---
+  duration_ms: 1.3909
+  type: 'test'
+  ...
+# Subtest: una risposta mancata o lenta tra le ultime → instabile
+ok 26 - una risposta mancata o lenta tra le ultime → instabile
+  ---
+  duration_ms: 0.2492
+  type: 'test'
+  ...
+# Subtest: contano solo le ultime 3 risposte
+ok 27 - contano solo le ultime 3 risposte
+  ---
+  duration_ms: 0.2033
+  type: 'test'
+  ...
+# Subtest: live view che riprova o va in errore → instabile
+ok 28 - live view che riprova o va in errore → instabile
+  ---
+  duration_ms: 0.3107
+  type: 'test'
+  ...
+# Subtest: etichette in italiano
+ok 29 - etichette in italiano
+  ---
+  duration_ms: 0.2199
+  type: 'test'
+  ...
+# Subtest: il controller manda un battito periodico e registra i tempi di risposta
+ok 30 - il controller manda un battito periodico e registra i tempi di risposta
+  ---
+  duration_ms: 261.6642
+  type: 'test'
+  ...
+# Subtest: il battito si ferma con disconnect
+ok 31 - il battito si ferma con disconnect
+  ---
+  duration_ms: 163.3308
+  type: 'test'
+  ...
+# Subtest: estrae un singolo oggetto completo
+ok 32 - estrae un singolo oggetto completo
+  ---
+  duration_ms: 3.234
+  type: 'test'
+  ...
+# Subtest: estrae più oggetti attaccati senza separatori
+ok 33 - estrae più oggetti attaccati senza separatori
+  ---
+  duration_ms: 0.4789
+  type: 'test'
+  ...
+# Subtest: ricompone un oggetto spezzato in più pezzi
+ok 34 - ricompone un oggetto spezzato in più pezzi
+  ---
+  duration_ms: 0.4695
+  type: 'test'
+  ...
+# Subtest: ignora graffe dentro le stringhe e gli escape
+ok 35 - ignora graffe dentro le stringhe e gli escape
+  ---
+  duration_ms: 0.4343
+  type: 'test'
+  ...
+# Subtest: salta spazi e newline tra un oggetto e l'altro
+ok 36 - salta spazi e newline tra un oggetto e l'altro
+  ---
+  duration_ms: 0.365
+  type: 'test'
+  ...
+# Subtest: scarta un oggetto malformato senza bloccare i successivi
+ok 37 - scarta un oggetto malformato senza bloccare i successivi
+  ---
+  duration_ms: 0.3227
+  type: 'test'
+  ...
+# Subtest: con la schermata attiva e la camera connessa la live view parte (259) e dà un URL
+ok 38 - con la schermata attiva e la camera connessa la live view parte (259) e dà un URL
+  ---
+  duration_ms: 39.3536
+  type: 'test'
+  ...
+# Subtest: regressione: uscendo dalla schermata e tornando la live view riparte con un nuovo player
+ok 39 - regressione: uscendo dalla schermata e tornando la live view riparte con un nuovo player
+  ---
+  duration_ms: 83.8701
+  type: 'test'
+  ...
+# Subtest: se la camera ferma lo stream (vf_stop) e lo riprende (vf_start) la live view si riavvia
+ok 40 - se la camera ferma lo stream (vf_stop) e lo riprende (vf_start) la live view si riavvia
+  ---
+  duration_ms: 83.0952
+  type: 'test'
+  ...
+# Subtest: dopo un cambio di impostazione la live view si riavvia da sola
+ok 41 - dopo un cambio di impostazione la live view si riavvia da sola
+  ---
+  duration_ms: 83.3417
+  type: 'test'
+  ...
+# Subtest: errore del player → nuovi tentativi con attesa crescente finché non torna "ready"
+ok 42 - errore del player → nuovi tentativi con attesa crescente finché non torna "ready"
+  ---
+  duration_ms: 144.8206
+  type: 'test'
+  ...
+# Subtest: immagine bloccata in buffering troppo a lungo → riavvio
+ok 43 - immagine bloccata in buffering troppo a lungo → riavvio
+  ---
+  duration_ms: 120.4664
+  type: 'test'
+  ...
+# Subtest: un buffering breve non riavvia la live view
+ok 44 - un buffering breve non riavvia la live view
+  ---
+  duration_ms: 134.0422
+  type: 'test'
+  ...
+# Subtest: se cade la connessione la live view si spegne e riparte quando la camera torna
+ok 45 - se cade la connessione la live view si spegne e riparte quando la camera torna
+  ---
+  duration_ms: 98.837
+  type: 'test'
+  ...
+# Subtest: con la schermata non attiva non manda comandi alla camera
+ok 46 - con la schermata non attiva non manda comandi alla camera
+  ---
+  duration_ms: 70.9161
+  type: 'test'
+  ...
+# Subtest: il mock server parla il protocollo YI via TCP vero
+ok 47 - il mock server parla il protocollo YI via TCP vero
+  ---
+  duration_ms: 200.3126
+  type: 'test'
+  ...
+# Subtest: parseListing interpreta nome, dimensione, data e tipo
+ok 48 - parseListing interpreta nome, dimensione, data e tipo
+  ---
+  duration_ms: 4.5979
+  type: 'test'
+  ...
+# Subtest: parseListing ordina dal più recente
+ok 49 - parseListing ordina dal più recente
+  ---
+  duration_ms: 0.5893
+  type: 'test'
+  ...
+# Subtest: settingsToMap appiattisce la lista della camera
+ok 50 - settingsToMap appiattisce la lista della camera
+  ---
+  duration_ms: 1.4484
+  type: 'test'
+  ...
+# Subtest: describeSetting dà etichetta italiana e gruppo
+ok 51 - describeSetting dà etichetta italiana e gruppo
+  ---
+  duration_ms: 0.3554
+  type: 'test'
+  ...
+# Subtest: describeSetting segnala le impostazioni di sola lettura
+ok 52 - describeSetting segnala le impostazioni di sola lettura
+  ---
+  duration_ms: 0.2205
+  type: 'test'
+  ...
+# Subtest: video: sceglie 1080p a 60 fps tra le opzioni
+ok 53 - video: sceglie 1080p a 60 fps tra le opzioni
+  ---
+  duration_ms: 1.5234
+  type: 'test'
+  ...
+# Subtest: video: senza 60P sceglie il 1080p con più fps
+ok 54 - video: senza 60P sceglie il 1080p con più fps
+  ---
+  duration_ms: 0.1999
+  type: 'test'
+  ...
+# Subtest: video: accetta anche le varianti 1080p 60 in 4:3 o con suffissi
+ok 55 - video: accetta anche le varianti 1080p 60 in 4:3 o con suffissi
+  ---
+  duration_ms: 0.2115
+  type: 'test'
+  ...
+# Subtest: qualità: S.Fine (bitrate massimo) prima di tutto
+ok 56 - qualità: S.Fine (bitrate massimo) prima di tutto
+  ---
+  duration_ms: 0.3027
+  type: 'test'
+  ...
+# Subtest: foto: sceglie la risoluzione con più megapixel
+ok 57 - foto: sceglie la risoluzione con più megapixel
+  ---
+  duration_ms: 0.3053
+  type: 'test'
+  ...
+# Subtest: intervallo: il valore più vicino a quello chiesto, qualunque sia il formato
+ok 58 - intervallo: il valore più vicino a quello chiesto, qualunque sia il formato
+  ---
+  duration_ms: 0.4168
+  type: 'test'
+  ...
+# Subtest: esposizione: preferisce la compensazione EV, altrimenti la misurazione
+ok 59 - esposizione: preferisce la compensazione EV, altrimenti la misurazione
+  ---
+  duration_ms: 0.1799
+  type: 'test'
+  ...
+# Subtest: GARANZIA: Video in modalità Semplice = 1080p 60 fps, qualità S.Fine (bitrate massimo), NTSC
+ok 60 - GARANZIA: Video in modalità Semplice = 1080p 60 fps, qualità S.Fine (bitrate massimo), NTSC
+  ---
+  duration_ms: 178.0087
+  type: 'test'
+  ...
+# Subtest: Video Semplice partendo da PAL: passa a NTSC e poi trova il 60P (le opzioni cambiano con lo standard)
+ok 61 - Video Semplice partendo da PAL: passa a NTSC e poi trova il 60P (le opzioni cambiano con lo standard)
+  ---
+  duration_ms: 149.6809
+  type: 'test'
+  ...
+# Subtest: Foto in modalità Semplice = risoluzione massima, scatto singolo di qualità
+ok 62 - Foto in modalità Semplice = risoluzione massima, scatto singolo di qualità
+  ---
+  duration_ms: 98.691
+  type: 'test'
+  ...
+# Subtest: Timelapse video in Semplice: qualità massima + intervallo scelto
+ok 63 - Timelapse video in Semplice: qualità massima + intervallo scelto
+  ---
+  duration_ms: 201.2096
+  type: 'test'
+  ...
+# Subtest: tornando a Video normale il timelapse si spegne
+ok 64 - tornando a Video normale il timelapse si spegne
+  ---
+  duration_ms: 396.1511
+  type: 'test'
+  ...
+# Subtest: Timelapse foto in Semplice: scatto continuo alla risoluzione massima con l'intervallo scelto
+ok 65 - Timelapse foto in Semplice: scatto continuo alla risoluzione massima con l'intervallo scelto
+  ---
+  duration_ms: 137.8529
+  type: 'test'
+  ...
+# Subtest: le impostazioni che la camera non ha vengono saltate senza errori
+ok 66 - le impostazioni che la camera non ha vengono saltate senza errori
+  ---
+  duration_ms: 132.7635
+  type: 'test'
+  ...
+# Subtest: Pro → Semplice: i valori tornano quelli della Semplice; Semplice → Pro: tornano i tuoi
+ok 67 - Pro → Semplice: i valori tornano quelli della Semplice; Semplice → Pro: tornano i tuoi
+  ---
+  duration_ms: 284.6225
+  type: 'test'
+  ...
+# Subtest: in Semplice, se qualcuno cambia un valore (anche dai tasti della camera) prima del REC viene ripristinato
+ok 68 - in Semplice, se qualcuno cambia un valore (anche dai tasti della camera) prima del REC viene ripristinato
+  ---
+  duration_ms: 338.3091
+  type: 'test'
+  ...
+# Subtest: in Pro il pulsante non tocca le impostazioni
+ok 69 - in Pro il pulsante non tocca le impostazioni
+  ---
+  duration_ms: 59.954
+  type: 'test'
+  ...
+# Subtest: timelapse foto: il pulsante avvia e ferma lo scatto continuo
+ok 70 - timelapse foto: il pulsante avvia e ferma lo scatto continuo
+  ---
+  duration_ms: 165.8633
+  type: 'test'
+  ...
+# Subtest: esposizione in Semplice: con la compensazione EV si regola e resta anche quando i valori vengono ripristinati
+ok 71 - esposizione in Semplice: con la compensazione EV si regola e resta anche quando i valori vengono ripristinati
+  ---
+  duration_ms: 317.9315
+  type: 'test'
+  ...
+# Subtest: esposizione senza compensazione EV: si usa la misurazione (centro / media / spot)
+ok 72 - esposizione senza compensazione EV: si usa la misurazione (centro / media / spot)
+  ---
+  duration_ms: 58.2813
+  type: 'test'
+  ...
+# Subtest: la modalità scelta (Semplice/Pro, intervalli, esposizione) viene ricordata
+ok 73 - la modalità scelta (Semplice/Pro, intervalli, esposizione) viene ricordata
+  ---
+  duration_ms: 26.4005
+  type: 'test'
+  ...
+# Subtest: la prima volta parte in modalità Semplice
+ok 74 - la prima volta parte in modalità Semplice
+  ---
+  duration_ms: 46.5106
+  type: 'test'
+  ...
+# Subtest: sdStateFrom legge lo stato della SD dalle impostazioni
+ok 75 - sdStateFrom legge lo stato della SD dalle impostazioni
+  ---
+  duration_ms: 2.8281
+  type: 'test'
+  ...
+# Subtest: alla connessione senza SD lo stato dice "missing"
+ok 76 - alla connessione senza SD lo stato dice "missing"
+  ---
+  duration_ms: 36.6579
+  type: 'test'
+  ...
+# Subtest: con la SD lo stato dice "ok"
+ok 77 - con la SD lo stato dice "ok"
+  ---
+  duration_ms: 30.9405
+  type: 'test'
+  ...
+# Subtest: senza SD REC e foto non partono e non mandano comandi alla camera
+ok 78 - senza SD REC e foto non partono e non mandano comandi alla camera
+  ---
+  duration_ms: 38.8713
+  type: 'test'
+  ...
+# Subtest: senza SD la galleria non chiede l'elenco file alla camera
+ok 79 - senza SD la galleria non chiede l'elenco file alla camera
+  ---
+  duration_ms: 29.9488
+  type: 'test'
+  ...
+# Subtest: la notifica sd_card_status aggiorna lo stato: tolta e rimessa
+ok 80 - la notifica sd_card_status aggiorna lo stato: tolta e rimessa
+  ---
+  duration_ms: 67.4612
+  type: 'test'
+  ...
+# Subtest: stato SD sconosciuto (firmware che non lo dice) → i comandi partono lo stesso
+ok 81 - stato SD sconosciuto (firmware che non lo dice) → i comandi partono lo stesso
+  ---
+  duration_ms: 34.3222
+  type: 'test'
+  ...
+# Subtest: connect ottiene il token dalla sessione 257
+ok 82 - connect ottiene il token dalla sessione 257
+  ---
+  duration_ms: 7.3103
+  type: 'test'
+  ...
+# Subtest: i comandi inviati dopo connect usano il token
+ok 83 - i comandi inviati dopo connect usano il token
+  ---
+  duration_ms: 30.5738
+  type: 'test'
+  ...
+# Subtest: startRecord / stopRecord cambiano lo stato della camera
+ok 84 - startRecord / stopRecord cambiano lo stato della camera
+  ---
+  duration_ms: 32.6239
+  type: 'test'
+  ...
+# Subtest: funziona anche con risposte spezzate a pezzi
+ok 85 - funziona anche con risposte spezzate a pezzi
+  ---
+  duration_ms: 36.9696
+  type: 'test'
+  ...
+# Subtest: getAllSettings restituisce una mappa chiave → valore
+ok 86 - getAllSettings restituisce una mappa chiave → valore
+  ---
+  duration_ms: 14.9623
+  type: 'test'
+  ...
+# Subtest: getOptions restituisce le opzioni e se è modificabile
+ok 87 - getOptions restituisce le opzioni e se è modificabile
+  ---
+  duration_ms: 15.5324
+  type: 'test'
+  ...
+# Subtest: setSetting modifica il valore
+ok 88 - setSetting modifica il valore
+  ---
+  duration_ms: 35.3503
+  type: 'test'
+  ...
+# Subtest: rval negativo diventa YiError con il codice
+ok 89 - rval negativo diventa YiError con il codice
+  ---
+  duration_ms: 17.0233
+  type: 'test'
+  ...
+# Subtest: token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+ok 90 - token scaduto (-4): rinegozia la sessione e ripete il comando una volta
+  ---
+  duration_ms: 33.9334
+  type: 'test'
+  ...
+# Subtest: i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+ok 91 - i comandi in parallelo vengono serializzati e ricevono la risposta giusta
+  ---
+  duration_ms: 30.7152
+  type: 'test'
+  ...
+# Subtest: le notifiche msg_id 7 arrivano agli ascoltatori
+ok 92 - le notifiche msg_id 7 arrivano agli ascoltatori
+  ---
+  duration_ms: 36.1133
+  type: 'test'
+  ...
+# Subtest: timeout se la camera non risponde
+ok 93 - timeout se la camera non risponde
+  ---
+  duration_ms: 513.6101
+  type: 'test'
+  ...
+# Subtest: dopo un timeout la coda continua a funzionare
+ok 94 - dopo un timeout la coda continua a funzionare
+  ---
+  duration_ms: 519.6423
+  type: 'test'
+  ...
+# Subtest: chiusura della connessione rifiuta i comandi in attesa
+ok 95 - chiusura della connessione rifiuta i comandi in attesa
+  ---
+  duration_ms: 1.3699
+  type: 'test'
+  ...
+# Subtest: listFiles restituisce i file della DCIM con URL di download
+ok 96 - listFiles restituisce i file della DCIM con URL di download
+  ---
+  duration_ms: 46.0022
+  type: 'test'
+  ...
+# Subtest: deleteFile rimuove il file
+ok 97 - deleteFile rimuove il file
+  ---
+  duration_ms: 69.1117
+  type: 'test'
+  ...
+# Subtest: startLiveView restituisce l'URL RTSP
+ok 98 - startLiveView restituisce l'URL RTSP
+  ---
+  duration_ms: 16.6095
+  type: 'test'
+  ...
+1..98
+# tests 98
+# suites 0
+# pass 98
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3719.8292

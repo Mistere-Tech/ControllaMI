@@ -4,7 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
 import { useProblems } from '../../src/state/ProblemContext';
-import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
+import { useCameraCtx, useCameraState, useModes } from '../../src/state/CameraContext';
+import { UiMode } from '../../src/core/modes';
 import { describeSetting, groupSettings } from '../../src/core/settings';
 import { C } from '../../src/ui/theme';
 
@@ -17,12 +18,28 @@ interface Sheet {
 
 export default function ImpostazioniScreen() {
   const insets = useSafeAreaInsets();
-  const { controller, demo } = useCameraCtx();
+  const { controller, modes, demo } = useCameraCtx();
+  const ms = useModes();
+  const [switching, setSwitching] = useState(false);
   const st = useCameraState();
   const { report, notify } = useProblems();
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const groups = useMemo(() => groupSettings(st.settings), [st.settings]);
+  const allGroups = useMemo(() => groupSettings(st.settings), [st.settings]);
+  // in Semplice video/foto/timelapse li decide l'app: si vedono solo le impostazioni generali
+  const groups = ms.uiMode === 'simple' ? allGroups.filter((g) => g.title === 'Camera' || g.title === 'Info') : allGroups;
+
+  const switchMode = async (m: UiMode) => {
+    if (m === ms.uiMode || switching) return;
+    setSwitching(true);
+    try {
+      await modes.setUiMode(m);
+    } catch (e) {
+      report(e, { retry: () => switchMode(m) });
+    } finally {
+      setSwitching(false);
+    }
+  };
 
   const open = async (key: string, value: string) => {
     const info = describeSetting(key);
@@ -68,6 +85,35 @@ export default function ImpostazioniScreen() {
     <View style={[s.root, { paddingTop: insets.top + 16 }]}>
       <Text style={s.title}>Impostazioni</Text>
       <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}><ConnectionBadge demo={demo} /></View>
+      <View style={s.modeBox}>
+        <View style={s.modeSegment}>
+          {(
+            [
+              ['simple', 'Semplice'],
+              ['pro', 'Pro'],
+            ] as const
+          ).map(([m, label]) => (
+            <Pressable
+              key={m}
+              accessibilityRole="button"
+              accessibilityLabel={`Modalità ${label}`}
+              accessibilityState={{ selected: ms.uiMode === m, disabled: switching || st.recording }}
+              disabled={switching || st.recording}
+              onPress={() => switchMode(m)}
+              style={[s.modeBtn, ms.uiMode === m && { backgroundColor: C.border }]}
+            >
+              <Text style={s.modeText}>{label}</Text>
+            </Pressable>
+          ))}
+        </View>
+        <Text style={s.modeHint}>
+          {switching
+            ? 'Preparo la camera…'
+            : ms.uiMode === 'simple'
+              ? 'Video 1080p 60 fps e foto alla massima qualità, impostati dall’app. Le tue impostazioni Pro restano salvate.'
+              : 'Tutte le impostazioni della camera, a mano. Tornando in Semplice la camera torna ai valori migliori.'}
+        </Text>
+      </View>
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24, gap: 20 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={C.accent} colors={[C.accent]} />}
@@ -128,6 +174,11 @@ export default function ImpostazioniScreen() {
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: C.bg },
   title: { color: C.text, fontSize: 28, fontWeight: '700', paddingHorizontal: 20, paddingBottom: 12 },
+  modeBox: { paddingHorizontal: 16, paddingBottom: 16, gap: 8 },
+  modeSegment: { flexDirection: 'row', backgroundColor: C.surface, borderWidth: 1, borderColor: C.border, borderRadius: 14, padding: 4, gap: 4 },
+  modeBtn: { flex: 1, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  modeText: { color: C.text, fontSize: 15, fontWeight: '600' },
+  modeHint: { color: C.muted, fontSize: 13, lineHeight: 18, paddingHorizontal: 4 },
   empty: { color: C.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
   groupTitle: { color: C.muted, fontSize: 12, fontWeight: '600', letterSpacing: 0.8, paddingHorizontal: 4 },
   card: { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1, borderRadius: 16, overflow: 'hidden' },

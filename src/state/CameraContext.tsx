@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useMemo, useRef, useSyncExternalStore } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { CameraController, CameraState } from '../core/CameraController';
 import { LiveViewState, LiveViewSupervisor } from '../core/liveView';
 import { computeHealth, Health } from '../core/health';
+import { ModeManager, ModeState } from '../core/modes';
+import { filePrefsStorage } from '../net/prefsStorage';
 import { FakeCamera } from '../core/fakeCamera';
 import { createInMemoryTransport } from '../core/inMemoryTransport';
 import { connectTcp } from '../net/tcpTransport';
@@ -11,6 +13,7 @@ import { CAMERA_HOST } from '../core/gallery';
 interface Ctx {
   controller: CameraController;
   live: LiveViewSupervisor;
+  modes: ModeManager;
   demo: boolean;
   connectReal: (host?: string) => Promise<void>;
   connectDemo: () => Promise<void>;
@@ -40,11 +43,25 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
   );
 
   const live = useMemo(() => new LiveViewSupervisor(controller), [controller]);
+  const modes = useMemo(() => new ModeManager(controller, filePrefsStorage()), [controller]);
+
+  // preferenze salvate; a ogni (ri)connessione in Semplice la camera torna ai valori migliori
+  useEffect(() => {
+    modes.load();
+    let last = controller.state.status;
+    return controller.subscribe((s) => {
+      if (s.status === 'connected' && last !== 'connected' && modes.state.uiMode === 'simple') {
+        modes.applySimple().catch(() => {});
+      }
+      last = s.status;
+    });
+  }, [controller, modes]);
 
   const value = useMemo<Ctx>(
     () => ({
       controller,
       live,
+      modes,
       get demo() {
         return modeRef.current.demo;
       },
@@ -61,7 +78,7 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
         if (!modeRef.current.demo) YiNative.unbind();
       },
     }),
-    [controller, live],
+    [controller, live, modes],
   );
 
   return <CameraCtx.Provider value={value}>{children}</CameraCtx.Provider>;
@@ -94,4 +111,12 @@ export function useHealth(): Health {
   const st = useCameraState();
   const lv = useLiveView();
   return computeHealth({ status: st.status, heartbeats: st.heartbeats, live: lv.phase === 'off' ? null : lv.phase });
+}
+
+export function useModes(): ModeState {
+  const { modes } = useCameraCtx();
+  return useSyncExternalStore(
+    (cb) => modes.subscribe(cb),
+    () => modes.state,
+  );
 }
