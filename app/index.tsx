@@ -15,7 +15,7 @@ const STEPS = [
 
 export default function ConnessioneScreen() {
   const insets = useSafeAreaInsets();
-  const { connectReal, connectDemo } = useCameraCtx();
+  const { connectReal, connectDemo, disconnect } = useCameraCtx();
   const state = useCameraState();
   const [host, setHost] = useState(CAMERA_HOST);
   const [advanced, setAdvanced] = useState(false);
@@ -83,13 +83,23 @@ export default function ConnessioneScreen() {
         >
           <Text style={s.primaryText}>{busy ? 'Connessione…' : 'Connetti alla camera'}</Text>
         </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => Linking.sendIntent('android.settings.WIFI_SETTINGS').catch(() => Linking.openSettings())}
-          style={({ pressed }) => [s.secondary, pressed && { opacity: 0.7 }]}
-        >
-          <Text style={s.secondaryText}>Apri impostazioni Wi-Fi</Text>
-        </Pressable>
+        {busy ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={disconnect}
+            style={({ pressed }) => [s.secondary, pressed && { opacity: 0.7 }]}
+          >
+            <Text style={s.secondaryText}>Annulla</Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => Linking.sendIntent('android.settings.WIFI_SETTINGS').catch(() => Linking.openSettings())}
+            style={({ pressed }) => [s.secondary, pressed && { opacity: 0.7 }]}
+          >
+            <Text style={s.secondaryText}>Apri impostazioni Wi-Fi</Text>
+          </Pressable>
+        )}
         <View style={s.linksRow}>
           <Pressable accessibilityRole="button" onPress={() => connectDemo().catch(() => {})} hitSlop={8}>
             <Text style={s.link}>Usa la camera simulata (demo)</Text>

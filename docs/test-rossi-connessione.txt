@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: connessione: se il Wi-Fi/la camera non rispondono mai → errore entro il tempo massimo, non caricamento infinito
+not ok 1 - connessione: se il Wi-Fi/la camera non rispondono mai → errore entro il tempo massimo, non caricamento infinito
+  ---
+  duration_ms: 8.8334
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\connect.test.ts:29:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:518:28)
+    process.emit (F:\File\Sviluppo\Repos\ControllaMI\node_modules\tsx\dist\suppress-warnings.cjs:1:472)
+  ...
+# Subtest: connessione: TCP aperto ma la camera non risponde alla sessione → errore entro il tempo massimo
+not ok 2 - connessione: TCP aperto ma la camera non risponde alla sessione → errore entro il tempo massimo
+  ---
+  duration_ms: 0
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\connect.test.ts:42:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:518:28)
+    process.emit (F:\File\Sviluppo\Repos\ControllaMI\node_modules\tsx\dist\suppress-warnings.cjs:1:472)
+  ...
+# Subtest: connessione: il trasporto arrivato dopo il tempo massimo viene chiuso e non "riaccende" lo stato
+not ok 3 - connessione: il trasporto arrivato dopo il tempo massimo viene chiuso e non "riaccende" lo stato
+  ---
+  duration_ms: 0
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\connect.test.ts:55:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:518:28)
+    process.emit (F:\File\Sviluppo\Repos\ControllaMI\node_modules\tsx\dist\suppress-warnings.cjs:1:472)
+  ...
+# Subtest: connessione: Annulla durante il caricamento → stato disconnesso subito, nessun errore mostrato
+not ok 4 - connessione: Annulla durante il caricamento → stato disconnesso subito, nessun errore mostrato
+  ---
+  duration_ms: 0
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\connect.test.ts:78:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:518:28)
+    process.emit (F:\File\Sviluppo\Repos\ControllaMI\node_modules\tsx\dist\suppress-warnings.cjs:1:472)
+  ...
+# Subtest: connessione: dopo un tempo scaduto si può riprovare e collegarsi
+not ok 5 - connessione: dopo un tempo scaduto si può riprovare e collegarsi
+  ---
+  duration_ms: 0
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\connect.test.ts:94:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:518:28)
+    process.emit (F:\File\Sviluppo\Repos\ControllaMI\node_modules\tsx\dist\suppress-warnings.cjs:1:472)
+  ...
+# Subtest: riconnessione: anche i tentativi automatici hanno un tempo massimo (niente "riconnessione" infinita)
+not ok 6 - riconnessione: anche i tentativi automatici hanno un tempo massimo (niente "riconnessione" infinita)
+  ---
+  duration_ms: 0
+  type: 'test'
+  location: 'F:\\File\\Sviluppo\\Repos\\ControllaMI\\tests\\connect.test.ts:115:1'
+  failureType: 'cancelledByParent'
+  error: 'Promise resolution is still pending but the event loop has already resolved'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    process.emit (node:events:518:28)
+    process.emit (F:\File\Sviluppo\Repos\ControllaMI\node_modules\tsx\dist\suppress-warnings.cjs:1:472)
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 0
+# fail 0
+# cancelled 6
+# skipped 0
+# todo 0
+# duration_ms 801.8644

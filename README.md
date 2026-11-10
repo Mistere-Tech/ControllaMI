@@ -37,7 +37,7 @@ Requisiti: telefono Android a 64 bit (arm64, cioè quasi tutti quelli degli ulti
 
 ## Stato del progetto
 
-🚧 **Versione iniziale, in sviluppo.** Il protocollo è coperto da test automatici, ma l'app non è ancora stata provata su tutte le versioni di firmware. Se qualcosa non funziona con la tua camera, apri una [segnalazione](https://github.com/Mistere-Tech/ControllaMI/issues) indicando modello di telefono, versione di Android e firmware della camera.
+🧪 **Prima versione pubblica (0.1.x).** Provata su una YI prima serie: live view, foto, video, timelapse, impostazioni e download dalla galleria funzionano. Il protocollo è coperto da test automatici, ma l'app non è ancora stata provata su tutte le versioni di firmware. Se qualcosa non funziona con la tua camera, apri una [segnalazione](https://github.com/Mistere-Tech/ControllaMI/issues) indicando modello di telefono, versione di Android e firmware della camera.
 
 Problema noto su Android 10 e successivi: quando ti colleghi al Wi-Fi della camera Android può chiedere "Questa rete non ha accesso a internet, rimanere connessi?". Rispondi **sì**.
 

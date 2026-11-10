@@ -35,6 +35,8 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
           return connectTcp(modeRef.current.host, 7878);
         },
         timeoutMs: 5000,
+        // Wi-Fi (fino a 5 s) + TCP + sessione: oltre, il telefono non è sul Wi-Fi della camera
+        connectTimeoutMs: 12_000,
         reconnectDelayMs: 1500,
         maxReconnects: 5,
         heartbeatMs: 3000,

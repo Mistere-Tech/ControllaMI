@@ -3,7 +3,7 @@
 App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, development build) per controllare la **YI Action Camera prima serie** (Xiaomi). Nata in una chat di Claude il 9–10/11/2026; questo file riassume dove siamo arrivati.
 
 ## Stato
-- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 119 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
+- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 125 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
 - Schermate in `app/` (expo-router): connessione, poi tab Controllo / Galleria / Impostazioni. Provata sul telefono il 10/11 (build #5): parte e la live view si vede.
 - Modulo nativo `modules/yi-native/` (Kotlin): `bindToWifi` (requestNetwork Wi-Fi senza internet + bindProcessToNetwork) e vista RTSP con Media3 1.11.1.
 - Live view: la decide `LiveViewSupervisor` (src/core/liveView.ts), il player nativo esegue. Riavvio a ogni ritorno sulla schermata, vf_stop/vf_start, cambio impostazione, errore, buffering bloccato.
@@ -24,7 +24,7 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 ## Prossimi passi
 1. Build #10 provata sul telefono il 10/11: funziona. Manca la conferma del download dalla galleria (l'utente la prova la sera del 10/11).
 2. Build locale su Windows: serve abilitare i percorsi lunghi (limite 260 caratteri nel C++), altrimenti usare la CI.
-3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Prima di rendere pubblico: cancellare le vecchie esecuzioni delle Actions (puntano ai commit vecchi), poi tag v0.1.0.
+3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Vecchie esecuzioni delle Actions (#1–#11, sui commit di prima) cancellate il 10/11; restano #12 e #13. Prossimo: dopo la prova del download, rendere pubblico il repo e tag v0.1.0.
 
 ## Regole di lavoro scelte dall'utente
 - TDD: prima i test rossi, poi l'implementazione, poi i test verdi. Ogni bug ha un test di regressione.

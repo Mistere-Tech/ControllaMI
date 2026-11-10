@@ -26,11 +26,24 @@ export interface CameraState {
 export interface ControllerOptions {
   createTransport: () => Promise<Transport>;
   timeoutMs?: number;
+  /** Tempo massimo per un intero tentativo di connessione (Wi-Fi + TCP + sessione), ms. */
+  connectTimeoutMs?: number;
   reconnectDelayMs?: number;
   maxReconnects?: number;
   /** Ogni quanto controllare che la camera risponda (ms); 0 = mai. */
   heartbeatMs?: number;
   now?: () => number;
+}
+
+/** Messaggio quando la camera non si trova (di solito: telefono non sul Wi-Fi della camera). */
+export const CONNECT_HINT = 'Non trovo la camera. Collega il telefono al Wi-Fi YDXJ_… e riprova.';
+
+/** Tentativo di connessione superato da un altro, annullato o scaduto. */
+class AbandonedError extends Error {}
+
+function connectError(e: Error): string {
+  if (/timeout/i.test(e.message)) return CONNECT_HINT;
+  return `${CONNECT_HINT} (${e.message})`;
 }
 
 /** Quanti battiti tenere in memoria. */
@@ -68,6 +81,9 @@ export class CameraController {
   private manualClose = false;
   private attempts = 0;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Numero del tentativo in corso: un tentativo con numero vecchio non deve più toccare lo stato. */
+  private openId = 0;
+  private cancelOpen: ((e: Error) => void) | null = null;
   private now: () => number;
 
   constructor(private opts: ControllerOptions) {
@@ -99,15 +115,17 @@ export class CameraController {
     this.attempts = 0;
     this.set({ status: 'connecting', error: null });
     try {
-      await this.open();
+      await this.openWithDeadline();
     } catch (e) {
-      this.set({ status: 'error', error: (e as Error).message });
+      if (!this.manualClose) this.set({ status: 'error', error: connectError(e as Error) });
       throw e;
     }
   }
 
   disconnect() {
     this.manualClose = true;
+    this.openId++;
+    this.cancelOpen?.(new AbandonedError('Connessione annullata'));
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
     this.reconnectTimer = null;
     const c = this.client;
@@ -117,23 +135,59 @@ export class CameraController {
     this.set({ status: 'disconnected', recording: false, recordStartedAt: null, heartbeats: [] });
   }
 
-  private async open() {
+  /**
+   * Un tentativo di connessione con tempo massimo: se il Wi-Fi, il TCP o la camera non
+   * rispondono mai, dopo `connectTimeoutMs` si arrende (prima restava in caricamento per sempre).
+   * Anche disconnect() lo interrompe subito (pulsante Annulla).
+   */
+  private openWithDeadline(): Promise<void> {
+    const id = ++this.openId;
+    const ms = this.opts.connectTimeoutMs ?? 15_000;
+    let abandon!: (e: Error) => void;
+    const abandoned = new Promise<never>((_, reject) => (abandon = reject));
+    abandoned.catch(() => {});
+    const timer = setTimeout(() => abandon(new Error('Timeout connessione')), ms);
+    this.cancelOpen = abandon;
+    return Promise.race([this.open(id, abandoned), abandoned])
+      .catch((e) => {
+        if (this.openId === id) this.openId++; // il tentativo rimasto appeso, se torna, si chiude da solo
+        abandon(e);
+        throw e;
+      })
+      .finally(() => {
+        clearTimeout(timer);
+        if (this.cancelOpen === abandon) this.cancelOpen = null;
+      });
+  }
+
+  private async open(id: number, abandoned: Promise<never>) {
+    const stale = () => id !== this.openId;
     const transport = await this.opts.createTransport();
+    if (stale()) {
+      transport.close();
+      throw new AbandonedError('Tentativo di connessione scaduto');
+    }
     const client = new YiClient(transport, { timeoutMs: this.opts.timeoutMs });
     client.onNotification((n) => this.handleNotification(n));
-    client.onDisconnect(() => this.onLost(client));
     try {
-      await client.connect();
+      await Promise.race([client.connect(), abandoned]);
+      if (stale()) throw new AbandonedError('Tentativo di connessione scaduto');
     } catch (e) {
-      transport.close();
+      client.close();
       throw e;
     }
+    client.onDisconnect(() => this.onLost(client));
     this.client = client;
     this.attempts = 0;
     const [battery, settings] = await Promise.all([
       client.getBattery().catch(() => null),
       client.getAllSettings().catch(() => ({} as Record<string, string>)),
     ]);
+    if (stale()) {
+      if (this.client === client) this.client = null;
+      client.close();
+      throw new AbandonedError('Tentativo di connessione scaduto');
+    }
     this.set({
       status: 'connected',
       error: null,
@@ -197,7 +251,7 @@ export class CameraController {
       this.reconnectTimer = null;
       if (this.manualClose) return;
       try {
-        await this.open();
+        await this.openWithDeadline();
       } catch {
         if (!this.manualClose) this.scheduleReconnect();
       }
