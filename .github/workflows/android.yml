@@ -27,15 +27,16 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: android-actions/setup-android@v3
+      # L'SDK Android è già installato sulle macchine ubuntu-latest (ANDROID_HOME).
+      # android-actions/setup-android@v3 fallisce con le cmdline-tools recenti (pacchetto "tools" sparito).
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Installa dipendenze
-        run: npm install --no-audit --no-fund --legacy-peer-deps
+      - name: Installa dipendenze (dal package-lock)
+        run: npm ci --no-audit --no-fund
 
-      - name: Allinea le versioni all'SDK Expo
-        run: npx expo install --fix
+      - name: Controlla le versioni rispetto all'SDK Expo
+        run: npx expo install --check
 
       - name: Test (devono essere tutti verdi)
         run: npm test
