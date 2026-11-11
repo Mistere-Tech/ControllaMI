@@ -26,7 +26,7 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 
 ## Prossimi passi
 1. Provare la v0.1.0 sul telefono: connessione senza Wi-Fi della camera (errore dopo 12 s, Annulla), galleria e download.
-1b. Prima prova OTA: con la v0.1.0 installata, pubblicare v0.1.1 → l'app deve mostrare "Aggiornamento obbligatorio" e installarla.
+1b. Prima prova OTA: v0.1.1 (italiano + inglese) pubblicata l'11/11, versionCode 1001. L'utente installa la v0.1.0 dallo zip e verifica che l'app mostri "Aggiornamento obbligatorio" e installi la 0.1.1.
 2. Build locale su Windows: serve abilitare i percorsi lunghi (limite 260 caratteri nel C++), altrimenti usare la CI.
 3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Vecchie esecuzioni delle Actions (#1–#11, sui commit di prima) cancellate il 10/11; restano #12 e #13. Repo reso pubblico e tag v0.1.0 fatti il 10/11.
 
