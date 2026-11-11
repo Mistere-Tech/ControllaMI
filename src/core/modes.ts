@@ -35,12 +35,7 @@ export function memoryStorage(): PrefsStorage {
   };
 }
 
-export const SIMPLE_LABEL: Record<SimpleMode, string> = {
-  video: 'Video',
-  photo: 'Foto',
-  timelapse_video: 'Timelapse video',
-  timelapse_photo: 'Timelapse foto',
-};
+export const SIMPLE_MODES: readonly SimpleMode[] = ['video', 'photo', 'timelapse_video', 'timelapse_photo'];
 
 /** Intervalli proposti in Semplice (secondi). */
 export const INTERVAL_CHOICES = [0.5, 1, 2, 5, 10, 30, 60];
@@ -87,7 +82,7 @@ export class ModeManager {
       const saved = JSON.parse(raw) as Partial<ModeState>;
       this.set({
         uiMode: saved.uiMode === 'pro' ? 'pro' : 'simple',
-        simpleMode: saved.simpleMode && saved.simpleMode in SIMPLE_LABEL ? saved.simpleMode : 'video',
+        simpleMode: saved.simpleMode && SIMPLE_MODES.includes(saved.simpleMode) ? saved.simpleMode : 'video',
         intervals: { ...DEFAULTS.intervals, ...(saved.intervals ?? {}) },
         exposure: saved.exposure ?? null,
         proSnapshot: saved.proSnapshot ?? null,

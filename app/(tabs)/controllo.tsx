@@ -11,6 +11,7 @@ import { useProblems } from '../../src/state/ProblemContext';
 import { formatElapsed } from '../../src/core/CameraController';
 import { RtspView } from '../../modules/yi-native';
 import { C } from '../../src/ui/theme';
+import { t } from '../../src/core/i18n';
 
 function shortRes(v?: string) {
   if (!v) return '';
@@ -62,18 +63,18 @@ export default function ControlloScreen() {
   const timelapsePhoto = !video && /cont/i.test(st.settings.capture_mode ?? '');
 
   const hint = st.status === 'reconnecting'
-    ? 'Riconnessione in corso…'
+    ? t('control.reconnecting')
     : busy && !active
-      ? 'Preparo la camera…'
+      ? t('control.preparing')
       : ms.capturing
-        ? 'Timelapse foto in corso'
+        ? t('control.timelapseRunning')
         : video
-          ? st.recording ? 'Registrazione in corso' : 'Pronta a registrare'
-          : timelapsePhoto ? 'Pronta per il timelapse' : 'Pronta a scattare';
+          ? st.recording ? t('control.recording') : t('control.readyRecord')
+          : timelapsePhoto ? t('control.readyTimelapse') : t('control.readyPhoto');
 
   const chips = video
-    ? [shortRes(st.settings.video_resolution), st.settings.video_quality, st.settings.timelapse_video && st.settings.timelapse_video !== 'off' ? `ogni ${st.settings.timelapse_video} s` : ''].filter(Boolean)
-    : [st.settings.photo_size?.split(' ')[0], timelapsePhoto ? `ogni ${st.settings.precise_cont_time ?? ''}` : st.settings.capture_mode].filter(Boolean);
+    ? [shortRes(st.settings.video_resolution), st.settings.video_quality, st.settings.timelapse_video && st.settings.timelapse_video !== 'off' ? t('control.every', { value: `${st.settings.timelapse_video} s` }) : ''].filter(Boolean)
+    : [st.settings.photo_size?.split(' ')[0], timelapsePhoto ? t('control.every', { value: st.settings.precise_cont_time ?? '' }) : st.settings.capture_mode].filter(Boolean);
 
   const lastName = st.lastFile?.split('/').pop();
 
@@ -82,8 +83,8 @@ export default function ControlloScreen() {
       <View style={s.topBar}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Disconnetti"
-          onPress={() => Alert.alert('Disconnettere la camera?', undefined, [{ text: 'Annulla', style: 'cancel' }, { text: 'Disconnetti', style: 'destructive', onPress: disconnect }])}
+          accessibilityLabel={t('control.disconnect')}
+          onPress={() => Alert.alert(t('control.disconnectAsk'), undefined, [{ text: t('common.cancel'), style: 'cancel' }, { text: t('control.disconnect'), style: 'destructive', onPress: disconnect }])}
           style={s.connRow}
           hitSlop={8}
         >
@@ -111,10 +112,10 @@ export default function ControlloScreen() {
             <Ionicons name="videocam-outline" size={40} color={C.faint} />
             <Text style={s.liveMsg}>
               {demo
-                ? 'Live view non disponibile in demo'
+                ? t('control.liveDemo')
                 : lv.phase === 'retrying'
-                  ? 'Live view interrotta · riprovo…'
-                  : 'Avvio live view…'}
+                  ? t('control.liveRetrying')
+                  : t('control.liveStarting')}
             </Text>
           </View>
         )}
@@ -145,7 +146,7 @@ export default function ControlloScreen() {
                 onPress={() => controller.setMode(m)}
                 style={[s.segBtn, st.mode === m && { backgroundColor: C.border }]}
               >
-                <Text style={s.segText}>{m === 'video' ? 'Video' : 'Foto'}</Text>
+                <Text style={s.segText}>{m === 'video' ? t('mode.video') : t('mode.photo')}</Text>
               </Pressable>
             ))}
           </View>
@@ -153,15 +154,15 @@ export default function ControlloScreen() {
       </View>
 
       <View style={s.shutterRow}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Apri galleria" onPress={() => router.navigate('/(tabs)/galleria')} style={s.sideBtn}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('control.openGallery')} onPress={() => router.navigate('/(tabs)/galleria')} style={s.sideBtn}>
           <Ionicons name="images-outline" size={22} color={C.text} />
         </Pressable>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={
             video
-              ? st.recording ? 'Ferma registrazione' : 'Avvia registrazione'
-              : timelapsePhoto ? (ms.capturing ? 'Ferma timelapse' : 'Avvia timelapse') : 'Scatta foto'
+              ? st.recording ? t('control.stopRec') : t('control.startRec')
+              : timelapsePhoto ? (ms.capturing ? t('control.stopTimelapse') : t('control.startTimelapse')) : t('control.takePhoto')
           }
           accessibilityState={{ disabled: st.status !== 'connected' || sdBlocked }}
           disabled={st.status !== 'connected'}
@@ -177,7 +178,7 @@ export default function ControlloScreen() {
             }}
           />
         </Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel="Impostazioni" onPress={() => router.navigate('/(tabs)/impostazioni')} style={[s.sideBtn, { borderRadius: 26 }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('tabs.settings')} onPress={() => router.navigate('/(tabs)/impostazioni')} style={[s.sideBtn, { borderRadius: 26 }]}>
           <Ionicons name="options-outline" size={22} color={C.text} />
         </Pressable>
       </View>
@@ -188,7 +189,7 @@ export default function ControlloScreen() {
         ))}
       </View>
 
-      {lastName ? <Text style={[s.muted, { textAlign: 'center', marginTop: 12 }]}>Ultimo file: {lastName}</Text> : null}
+      {lastName ? <Text style={[s.muted, { textAlign: 'center', marginTop: 12 }]}>{t('control.lastFile', { name: lastName })}</Text> : null}
     </View>
   );
 }

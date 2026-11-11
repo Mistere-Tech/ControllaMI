@@ -3,6 +3,7 @@ import { Tabs, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useCameraState } from '../../src/state/CameraContext';
 import { C } from '../../src/ui/theme';
+import { t } from '../../src/core/i18n';
 
 export default function TabsLayout() {
   const state = useCameraState();
@@ -24,15 +25,15 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="controllo"
-        options={{ title: 'Controllo', tabBarIcon: ({ color, size }) => <Ionicons name="aperture-outline" color={String(color)} size={size} /> }}
+        options={{ title: t('tabs.control'), tabBarIcon: ({ color, size }) => <Ionicons name="aperture-outline" color={String(color)} size={size} /> }}
       />
       <Tabs.Screen
         name="galleria"
-        options={{ title: 'Galleria', tabBarIcon: ({ color, size }) => <Ionicons name="grid-outline" color={String(color)} size={size} /> }}
+        options={{ title: t('tabs.gallery'), tabBarIcon: ({ color, size }) => <Ionicons name="grid-outline" color={String(color)} size={size} /> }}
       />
       <Tabs.Screen
         name="impostazioni"
-        options={{ title: 'Impostazioni', tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={String(color)} size={size} /> }}
+        options={{ title: t('tabs.settings'), tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={String(color)} size={size} /> }}
       />
     </Tabs>
   );

@@ -1,11 +1,12 @@
 import { YiError } from './YiClient';
+import { t } from './i18n';
 
 export type SdState = 'ok' | 'missing' | 'needs_format' | 'unknown';
 
 /** Il comando non parte perché manca la scheda SD (lo sappiamo prima di chiedere alla camera). */
 export class SdMissingError extends Error {
   constructor() {
-    super('Scheda SD assente');
+    super(t('err.sdMissing.title'));
     this.name = 'SdMissingError';
   }
 }
@@ -46,51 +47,53 @@ export function sdStateFromNotification(param: unknown): SdState | null {
   return null;
 }
 
-const SD_MISSING: Omit<CameraProblem, 'code'> = {
-  title: 'Scheda SD assente',
-  message: 'Inserisci una scheda SD nella camera per registrare, scattare e vedere la galleria.',
+const sdMissing = (code: string | null): CameraProblem => ({
+  title: t('err.sdMissing.title'),
+  message: t('err.sdMissing.message'),
+  code,
   action: 'insert_sd',
   severity: 'warning',
-};
+});
 
-const SD_FORMAT: Omit<CameraProblem, 'code'> = {
-  title: 'Scheda SD da formattare',
-  message: 'La camera chiede di formattare la scheda SD: fallo dal menu della camera, poi riprova.',
+const sdFormat = (code: string | null): CameraProblem => ({
+  title: t('err.sdFormat.title'),
+  message: t('err.sdFormat.message'),
+  code,
   action: null,
   severity: 'warning',
-};
+});
 
-/** Traduce qualsiasi errore di un comando in un messaggio chiaro, in italiano. */
+/** Traduce qualsiasi errore di un comando in un messaggio chiaro, nella lingua dell'app. */
 export function describeError(e: unknown, ctx: ErrorContext = {}): CameraProblem {
-  if (e instanceof SdMissingError) return { ...SD_MISSING, code: null };
+  if (e instanceof SdMissingError) return sdMissing(null);
 
   if (e instanceof YiError) {
     const code = `${e.rval} · ${e.msgId}`;
     // la camera rifiuta il comando e sappiamo che la SD manca o va formattata: è quasi certamente quello
-    if (ctx.sd === 'missing') return { ...SD_MISSING, code };
-    if (ctx.sd === 'needs_format') return { ...SD_FORMAT, code };
+    if (ctx.sd === 'missing') return sdMissing(code);
+    if (ctx.sd === 'needs_format') return sdFormat(code);
     switch (e.rval) {
       case -14:
         return ctx.recording
-          ? { title: 'Camera occupata', message: 'Ferma la registrazione e riprova.', code, action: null, severity: 'warning' }
-          : { title: 'Camera occupata', message: 'La camera sta finendo un’altra operazione. Riprova tra un attimo.', code, action: 'retry', severity: 'warning' };
+          ? { title: t('err.busy.title'), message: t('err.busy.recording'), code, action: null, severity: 'warning' }
+          : { title: t('err.busy.title'), message: t('err.busy.message'), code, action: 'retry', severity: 'warning' };
       case -9:
-        return { title: 'Valore non accettato', message: 'La camera non accetta questo valore in questa modalità.', code, action: null, severity: 'warning' };
+        return { title: t('err.badValue.title'), message: t('err.badValue.message'), code, action: null, severity: 'warning' };
       default:
-        return { title: 'Comando non riuscito', message: 'La camera ha rifiutato il comando. Riprova; se succede ancora, riavvia la camera.', code, action: 'retry', severity: 'error' };
+        return { title: t('err.failed.title'), message: t('err.failed.message'), code, action: 'retry', severity: 'error' };
     }
   }
 
   const msg = e instanceof Error ? e.message : '';
   if (/^Timeout/i.test(msg)) {
-    return { title: 'La camera non risponde', message: 'Controlla di essere vicino alla camera e riprova.', code: null, action: 'retry', severity: 'error' };
+    return { title: t('err.timeout.title'), message: t('err.timeout.message'), code: null, action: 'retry', severity: 'error' };
   }
   if (/Connessione chiusa|non connessa/i.test(msg)) {
-    return { title: 'Connessione persa', message: 'Sto provando a ricollegarmi alla camera…', code: null, action: null, severity: 'warning' };
+    return { title: t('err.lost.title'), message: t('err.lost.message'), code: null, action: null, severity: 'warning' };
   }
   return {
-    title: 'Comando non riuscito',
-    message: msg || 'Qualcosa è andato storto. Riprova.',
+    title: t('err.failed.title'),
+    message: msg || t('err.generic'),
     code: null,
     action: 'retry',
     severity: 'error',

@@ -6,8 +6,9 @@ import { ConnectionBadge } from '../../src/ui/ConnectionBadge';
 import { useProblems } from '../../src/state/ProblemContext';
 import { useCameraCtx, useCameraState, useModes } from '../../src/state/CameraContext';
 import { UiMode } from '../../src/core/modes';
-import { describeSetting, groupSettings } from '../../src/core/settings';
+import { describeSetting, groupLabel, groupSettings } from '../../src/core/settings';
 import { C } from '../../src/ui/theme';
+import { t } from '../../src/core/i18n';
 
 interface Sheet {
   key: string;
@@ -49,7 +50,7 @@ export default function ImpostazioniScreen() {
       const o = await controller.getOptions(key);
       if (!o.settable || o.options.length === 0) {
         setSheet(null);
-        notify({ title: info.label, message: 'Questa impostazione non si può cambiare dall’app.', code: null, action: null, severity: 'warning' });
+        notify({ title: info.label, message: t('settings.readOnly'), code: null, action: null, severity: 'warning' });
         return;
       }
       setSheet({ key, label: info.label, value, options: o.options });
@@ -83,20 +84,20 @@ export default function ImpostazioniScreen() {
 
   return (
     <View style={[s.root, { paddingTop: insets.top + 16 }]}>
-      <Text style={s.title}>Impostazioni</Text>
+      <Text style={s.title}>{t('tabs.settings')}</Text>
       <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}><ConnectionBadge demo={demo} /></View>
       <View style={s.modeBox}>
         <View style={s.modeSegment}>
           {(
             [
-              ['simple', 'Semplice'],
-              ['pro', 'Pro'],
+              ['simple', t('settings.simple')],
+              ['pro', t('settings.pro')],
             ] as const
           ).map(([m, label]) => (
             <Pressable
               key={m}
               accessibilityRole="button"
-              accessibilityLabel={`Modalità ${label}`}
+              accessibilityLabel={t('settings.modeA11y', { mode: label })}
               accessibilityState={{ selected: ms.uiMode === m, disabled: switching || st.recording }}
               disabled={switching || st.recording}
               onPress={() => switchMode(m)}
@@ -108,20 +109,20 @@ export default function ImpostazioniScreen() {
         </View>
         <Text style={s.modeHint}>
           {switching
-            ? 'Preparo la camera…'
+            ? t('control.preparing')
             : ms.uiMode === 'simple'
-              ? 'Video 1080p 60 fps e foto alla massima qualità, impostati dall’app. Le tue impostazioni Pro restano salvate.'
-              : 'Tutte le impostazioni della camera, a mano. Tornando in Semplice la camera torna ai valori migliori.'}
+              ? t('settings.simpleHint')
+              : t('settings.proHint')}
         </Text>
       </View>
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24, gap: 20 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={C.accent} colors={[C.accent]} />}
       >
-        {groups.length === 0 && <Text style={s.empty}>Nessuna impostazione letta dalla camera. Trascina giù per riprovare.</Text>}
+        {groups.length === 0 && <Text style={s.empty}>{t('settings.empty')}</Text>}
         {groups.map((g) => (
           <View key={g.title} style={{ gap: 8 }}>
-            <Text style={s.groupTitle}>{g.title.toUpperCase()}</Text>
+            <Text style={s.groupTitle}>{groupLabel(g.title).toUpperCase()}</Text>
             <View style={s.card}>
               {g.items.map((it, i) => (
                 <Pressable
@@ -144,7 +145,7 @@ export default function ImpostazioniScreen() {
       </ScrollView>
 
       <Modal visible={!!sheet} transparent animationType="slide" onRequestClose={() => setSheet(null)}>
-        <Pressable style={s.backdrop} onPress={() => setSheet(null)} accessibilityLabel="Chiudi" />
+        <Pressable style={s.backdrop} onPress={() => setSheet(null)} accessibilityLabel={t('common.close')} />
         <View style={[s.sheet, { paddingBottom: insets.bottom + 16 }]}>
           <Text style={s.sheetTitle}>{sheet?.label}</Text>
           {sheet?.options == null ? (

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { HEALTH_LABEL, Health } from '../core/health';
+import { healthLabel, Health } from '../core/health';
+import { t } from '../core/i18n';
 import { useCameraState, useHealth } from '../state/CameraContext';
 import { C } from './theme';
 
@@ -12,10 +13,10 @@ export function ConnectionBadge({ demo }: { demo?: boolean }) {
   const st = useCameraState();
   const last = st.heartbeats[st.heartbeats.length - 1];
   const label = demo
-    ? 'Camera simulata'
+    ? t('health.simulated')
     : health === 'lost' && st.status === 'reconnecting'
-      ? 'Connessione persa · riconnessione…'
-      : HEALTH_LABEL[health];
+      ? t('health.reconnecting')
+      : healthLabel(health);
 
   return (
     <View

@@ -3,7 +3,7 @@
 App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, development build) per controllare la **YI Action Camera prima serie** (Xiaomi). Nata in una chat di Claude il 9–10/11/2026; questo file riassume dove siamo arrivati.
 
 ## Stato
-- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 132 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
+- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 143 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
 - Schermate in `app/` (expo-router): connessione, poi tab Controllo / Galleria / Impostazioni. Provata sul telefono il 10/11 (build #5): parte e la live view si vede.
 - Modulo nativo `modules/yi-native/` (Kotlin): `bindToWifi` (requestNetwork Wi-Fi senza internet + bindProcessToNetwork) e vista RTSP con Media3 1.11.1.
 - Live view: la decide `LiveViewSupervisor` (src/core/liveView.ts), il player nativo esegue. Riavvio a ogni ritorno sulla schermata, vf_stop/vf_start, cambio impostazione, errore, buffering bloccato.
@@ -34,7 +34,7 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - TDD: prima i test rossi, poi l'implementazione, poi i test verdi. Ogni bug ha un test di regressione.
 - UI secondo il design: https://claude.ai/artifact/NWct9uawRk6p88WLMqiArp (tema scuro, arancio #FF8A3D per le azioni, rosso #FF5C5C solo per REC, giallo #F5C04A per "instabile"/avvisi).
 - Avanzamento tracciato su Trello: https://trello.com/b/XxFlhs2k/controllami-app-yi-action-cam-android-64-bit
-- Testi dell'app in italiano.
+- Testi dell'app in italiano e inglese: tutti in `src/core/i18n.ts` (`t('chiave')`), lingua dal telefono (`expo-localization`, italiano se il telefono è in italiano, altrimenti inglese). Il test `tests/i18n.test.ts` blocca i testi scritti a mano nelle schermate. Si risponde all'utente in italiano.
 - Restare sulle ultime versioni stabili (Expo SDK, React Native, Media3, Node LTS, JDK LTS, GitHub Actions) per non accumulare debito tecnico. Ultimo aggiornamento 10/11/2026: Expo 58, RN 0.88.1, React 19.3, TS 6, Node 24, Java 21.
 - Aggiornamento dell'app sempre obbligatorio all'ultima versione (sicurezza); l'utente conferma solo "Installa".
 - Commit: aggiungere i file uno per uno, non `git add -A` (sono già finiti nel repo file di build e uno zip).

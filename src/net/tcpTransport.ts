@@ -45,7 +45,7 @@ export function connectTcp(host: string, port = 7878, timeoutMs = 5000): Promise
     socket.on('error', (err: any) => {
       if (!settled) {
         settled = true;
-        reject(new Error(`Camera non raggiungibile su ${host}:${port} (${err?.message ?? err})`));
+        reject(new Error(`${host}:${port} – ${err?.message ?? err}`));
       }
     });
     socket.on('close', fireClose);

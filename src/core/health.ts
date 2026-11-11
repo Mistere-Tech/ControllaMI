@@ -1,13 +1,12 @@
+import { t } from './i18n';
 import type { Status } from './CameraController';
 import type { LivePhase } from './liveView';
 
 export type Health = 'stable' | 'unstable' | 'lost';
 
-export const HEALTH_LABEL: Record<Health, string> = {
-  stable: 'Connessione stabile',
-  unstable: 'Connessione instabile',
-  lost: 'Connessione persa',
-};
+export function healthLabel(h: Health): string {
+  return t(`health.${h}`);
+}
 
 /** Oltre questo tempo di risposta (ms) la connessione è considerata lenta. */
 export const SLOW_MS = 1500;

@@ -9,8 +9,10 @@ import { useCameraCtx, useCameraState } from '../../src/state/CameraContext';
 import { CamFile, formatSize } from '../../src/core/gallery';
 import { downloadToGallery } from '../../src/net/download';
 import { C } from '../../src/ui/theme';
+import { t } from '../../src/core/i18n';
 
 type Filter = 'tutti' | 'video' | 'foto';
+const FILTER_LABEL = { tutti: 'gallery.filter.all', video: 'gallery.filter.video', foto: 'gallery.filter.photo' } as const;
 
 export default function GalleriaScreen() {
   const insets = useSafeAreaInsets();
@@ -64,7 +66,7 @@ export default function GalleriaScreen() {
   const download = async () => {
     const list = st.files.filter((f) => selected.has(f.name));
     if (demo) {
-      notify({ title: 'Modalità demo', message: 'Nella camera simulata non ci sono file veri da scaricare.', code: null, action: null, severity: 'warning' });
+      notify({ title: t('gallery.demoTitle'), message: t('gallery.demoMessage'), code: null, action: null, severity: 'warning' });
       return;
     }
     try {
@@ -74,8 +76,8 @@ export default function GalleriaScreen() {
         await downloadToGallery(f, (fraction) => setProgress({ name: f.name, fraction, index: i + 1, total: list.length }));
       }
       notify({
-        title: 'Salvato',
-        message: list.length === 1 ? 'File salvato nella galleria del telefono.' : `${list.length} file salvati nella galleria del telefono.`,
+        title: t('gallery.savedTitle'),
+        message: list.length === 1 ? t('gallery.savedOne') : t('gallery.savedMany', { n: list.length }),
         code: null,
         action: null,
         severity: 'info',
@@ -91,12 +93,12 @@ export default function GalleriaScreen() {
   const remove = () => {
     const names = [...selected];
     Alert.alert(
-      names.length === 1 ? 'Eliminare il file dalla camera?' : `Eliminare ${names.length} file dalla camera?`,
-      'L’operazione non si può annullare.',
+      names.length === 1 ? t('gallery.deleteOne') : t('gallery.deleteMany', { n: names.length }),
+      t('gallery.cannotUndo'),
       [
-        { text: 'Annulla', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Elimina',
+          text: t('gallery.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -143,9 +145,9 @@ export default function GalleriaScreen() {
   return (
     <View style={[s.root, { paddingTop: insets.top + 16 }]}>
       <View style={s.header}>
-        <Text style={s.title}>Galleria</Text>
+        <Text style={s.title}>{t('tabs.gallery')}</Text>
         <Pressable accessibilityRole="button" onPress={() => (selecting ? exitSelection() : setSelecting(true))} hitSlop={8}>
-          <Text style={s.headerBtn}>{selecting ? 'Annulla' : 'Seleziona'}</Text>
+          <Text style={s.headerBtn}>{selecting ? t('common.cancel') : t('gallery.select')}</Text>
         </Pressable>
       </View>
       <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}><ConnectionBadge demo={demo} /></View>
@@ -160,7 +162,7 @@ export default function GalleriaScreen() {
             onPress={() => setFilter(f)}
             style={[s.filter, filter === f && { backgroundColor: C.text }]}
           >
-            <Text style={[s.filterText, filter === f && { color: C.bg }]}>{f[0].toUpperCase() + f.slice(1)}</Text>
+            <Text style={[s.filterText, filter === f && { color: C.bg }]}>{t(FILTER_LABEL[f])}</Text>
           </Pressable>
         ))}
       </View>
@@ -173,14 +175,14 @@ export default function GalleriaScreen() {
         columnWrapperStyle={{ gap: 6 }}
         contentContainerStyle={{ paddingHorizontal: 16, gap: 6, paddingBottom: 16 }}
         refreshControl={<RefreshControl refreshing={loading} onRefresh={load} tintColor={C.accent} colors={[C.accent]} />}
-        ListEmptyComponent={!loading ? <Text style={s.empty}>Nessun file sulla scheda SD.</Text> : undefined}
+        ListEmptyComponent={!loading ? <Text style={s.empty}>{t('gallery.empty')}</Text> : undefined}
       />
 
       {progress && (
         <View style={s.progressCard}>
           <View style={s.progressRow}>
             <Text style={s.progressName} numberOfLines={1}>
-              Scarico {progress.name}{progress.total > 1 ? ` (${progress.index}/${progress.total})` : ''}
+              {t('gallery.downloading', { name: progress.name })}{progress.total > 1 ? ` (${progress.index}/${progress.total})` : ''}
             </Text>
             <Text style={s.muted}>{Math.round(progress.fraction * 100)}%</Text>
           </View>
@@ -196,7 +198,7 @@ export default function GalleriaScreen() {
             onPress={download}
             style={[s.actPrimary, (selected.size === 0 || !!progress) && { opacity: 0.5 }]}
           >
-            <Text style={s.actPrimaryText}>Scarica{selected.size ? ` (${selected.size})` : ''}</Text>
+            <Text style={s.actPrimaryText}>{t('gallery.download')}{selected.size ? ` (${selected.size})` : ''}</Text>
           </Pressable>
           <Pressable
             accessibilityRole="button"
@@ -204,7 +206,7 @@ export default function GalleriaScreen() {
             onPress={remove}
             style={[s.actDanger, (selected.size === 0 || !!progress) && { opacity: 0.5 }]}
           >
-            <Text style={s.actDangerText}>Elimina</Text>
+            <Text style={s.actDangerText}>{t('gallery.delete')}</Text>
           </Pressable>
         </View>
       )}

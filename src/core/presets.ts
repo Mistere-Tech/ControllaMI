@@ -1,3 +1,4 @@
+import { hasKey, t } from './i18n';
 /**
  * Scelta dei valori "migliori" tra le opzioni che la camera dichiara (msg 9).
  * Si lavora sulle opzioni reali e non su valori fissi, così funziona anche
@@ -75,4 +76,8 @@ export function findExposureKey(keys: string[]): string | null {
 }
 
 /** Etichette leggibili per la misurazione dell'esposizione. */
-export const METER_LABEL: Record<string, string> = { center: 'Centro', average: 'Media', spot: 'Spot' };
+/** Nome della modalità di misurazione nella lingua dell'app (valori sconosciuti: com'è). */
+export function meterLabel(mode: string): string {
+  const key = `meter.${mode}`;
+  return hasKey(key) ? t(key) : mode;
+}

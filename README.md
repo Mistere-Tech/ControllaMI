@@ -31,7 +31,7 @@ The official YI app is no longer updated and often does not work on recent phone
 2. Open it: Android asks you to allow "install unknown apps" for your browser. Confirm.
 3. Turn on the camera's Wi-Fi, connect the phone to its network (`YDXJ_…`) and open ControllaMI.
 
-**Updates:** at startup the app checks for a new version and, if there is one, asks you to install it before going on (for security, only the latest version is used). Tap "Scarica e installa" and confirm with "Install".
+**Updates:** at startup the app checks for a new version and, if there is one, asks you to install it before going on (for security, only the latest version is used). Tap "Download and install" and confirm with "Install".
 
 Requirements: a 64-bit Android phone (arm64, which is almost every phone from recent years). The app is not on the Play Store.
 
@@ -43,9 +43,8 @@ Requirements: a 64-bit Android phone (arm64, which is almost every phone from re
 - Connection indicator (stable, unstable or lost) with automatic reconnection
 - Gallery: list of files, download to the phone's gallery, delete
 - Clear messages when a command fails (for example, no SD card)
+- **Italian and English**, following the phone's language
 - Demo mode with a simulated camera, to try the app without a camera
-
-The app's interface is in Italian for now; an English interface is planned.
 
 ## Compatible cameras
 
@@ -74,7 +73,7 @@ npm run mock          # fake YI on port 7878
 npx expo run:android  # build and install on a phone connected via USB
 ```
 
-To try the app against the mock: phone and PC on the same network; in the app tap **Avanzate** (Advanced) and enter the PC's IP address.
+To try the app against the mock: phone and PC on the same network; in the app tap **Advanced** and enter the PC's IP address.
 
 Built with React Native 0.88 + Expo SDK 58 (New Architecture, development build, not Expo Go) and a small native module in Kotlin.
 

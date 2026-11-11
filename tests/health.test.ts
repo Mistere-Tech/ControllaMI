@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeHealth, HEALTH_LABEL } from '../src/core/health';
+import { computeHealth, healthLabel } from '../src/core/health';
 import { CameraController } from '../src/core/CameraController';
 import { FakeCamera } from '../src/core/fakeCamera';
 import { createInMemoryTransport } from '../src/core/inMemoryTransport';
@@ -33,9 +33,9 @@ test('live view che riprova o va in errore → instabile', () => {
 });
 
 test('etichette in italiano', () => {
-  assert.equal(HEALTH_LABEL.stable, 'Connessione stabile');
-  assert.equal(HEALTH_LABEL.unstable, 'Connessione instabile');
-  assert.equal(HEALTH_LABEL.lost, 'Connessione persa');
+  assert.equal(healthLabel('stable'), 'Connessione stabile');
+  assert.equal(healthLabel('unstable'), 'Connessione instabile');
+  assert.equal(healthLabel('lost'), 'Connessione persa');
 });
 
 test('il controller manda un battito periodico e registra i tempi di risposta', async () => {

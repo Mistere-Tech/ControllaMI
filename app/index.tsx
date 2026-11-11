@@ -6,11 +6,12 @@ import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useCameraCtx, useCameraState } from '../src/state/CameraContext';
 import { C, R } from '../src/ui/theme';
 import { CAMERA_HOST } from '../src/core/gallery';
+import { t } from '../src/core/i18n';
 
-const STEPS = [
-  { title: 'Accendi il Wi-Fi della camera', text: 'Tieni premuto il tasto Wi-Fi finché il LED diventa blu.' },
-  { title: 'Collega il telefono a YDXJ_…', text: 'Password predefinita: 1234567890' },
-  { title: 'Torna qui e tocca Connetti', text: 'L’app resta sulla rete della camera anche se non ha internet.' },
+const steps = () => [
+  { title: t('connect.step1.title'), text: t('connect.step1.text') },
+  { title: t('connect.step2.title'), text: t('connect.step2.text') },
+  { title: t('connect.step3.title'), text: t('connect.step3.text') },
 ];
 
 export default function ConnessioneScreen() {
@@ -26,14 +27,18 @@ export default function ConnessioneScreen() {
   }, [state.status]);
 
   const statusText =
-    state.status === 'connecting' ? 'Mi collego alla camera…' : state.status === 'error' ? state.error ?? 'Errore di connessione' : 'Cerco la rete YDXJ_…';
+    state.status === 'connecting'
+      ? t('connect.status.connecting')
+      : state.status === 'error'
+        ? state.error ?? t('connect.status.error')
+        : t('connect.status.searching');
   const dot = state.status === 'error' ? C.rec : C.accent;
 
   return (
     <ScrollView style={{ backgroundColor: C.bg }} contentContainerStyle={[s.root, { paddingTop: insets.top + 32, paddingBottom: insets.bottom + 24 }]}>
       <View style={{ gap: 6 }}>
         <Text style={s.title}>ControllaMI</Text>
-        <Text style={s.subtitle}>YI Action Camera · prima serie</Text>
+        <Text style={s.subtitle}>{t('connect.subtitle')}</Text>
       </View>
 
       <View style={s.card}>
@@ -42,11 +47,11 @@ export default function ConnessioneScreen() {
           {busy ? <ActivityIndicator color={C.accent} size="small" /> : <View style={[s.dot, { backgroundColor: dot }]} />}
           <Text style={s.statusText} numberOfLines={3}>{statusText}</Text>
         </View>
-        <Text style={s.cardHint}>Il telefono deve essere collegato al Wi-Fi della camera</Text>
+        <Text style={s.cardHint}>{t('connect.hint')}</Text>
       </View>
 
       <View style={{ gap: 16 }}>
-        {STEPS.map((st, i) => (
+        {steps().map((st, i) => (
           <View key={st.title} style={s.step}>
             <View style={s.stepNum}><Text style={s.stepNumText}>{i + 1}</Text></View>
             <View style={{ flex: 1, gap: 2 }}>
@@ -61,7 +66,7 @@ export default function ConnessioneScreen() {
 
       {advanced && (
         <View style={{ gap: 6 }}>
-          <Text style={s.label}>Indirizzo camera (per il mock sul PC metti l’IP del PC)</Text>
+          <Text style={s.label}>{t('connect.hostLabel')}</Text>
           <TextInput
             value={host}
             onChangeText={setHost}
@@ -69,7 +74,7 @@ export default function ConnessioneScreen() {
             keyboardType="numbers-and-punctuation"
             style={s.input}
             placeholderTextColor={C.faint}
-            accessibilityLabel="Indirizzo camera"
+            accessibilityLabel={t('connect.hostA11y')}
           />
         </View>
       )}
@@ -81,7 +86,7 @@ export default function ConnessioneScreen() {
           onPress={() => connectReal(host.trim() || CAMERA_HOST).catch(() => {})}
           style={({ pressed }) => [s.primary, (pressed || busy) && { opacity: 0.7 }]}
         >
-          <Text style={s.primaryText}>{busy ? 'Connessione…' : 'Connetti alla camera'}</Text>
+          <Text style={s.primaryText}>{busy ? t('connect.buttonBusy') : t('connect.button')}</Text>
         </Pressable>
         {busy ? (
           <Pressable
@@ -89,7 +94,7 @@ export default function ConnessioneScreen() {
             onPress={disconnect}
             style={({ pressed }) => [s.secondary, pressed && { opacity: 0.7 }]}
           >
-            <Text style={s.secondaryText}>Annulla</Text>
+            <Text style={s.secondaryText}>{t('common.cancel')}</Text>
           </Pressable>
         ) : (
           <Pressable
@@ -97,15 +102,15 @@ export default function ConnessioneScreen() {
             onPress={() => Linking.sendIntent('android.settings.WIFI_SETTINGS').catch(() => Linking.openSettings())}
             style={({ pressed }) => [s.secondary, pressed && { opacity: 0.7 }]}
           >
-            <Text style={s.secondaryText}>Apri impostazioni Wi-Fi</Text>
+            <Text style={s.secondaryText}>{t('connect.wifiSettings')}</Text>
           </Pressable>
         )}
         <View style={s.linksRow}>
           <Pressable accessibilityRole="button" onPress={() => connectDemo().catch(() => {})} hitSlop={8}>
-            <Text style={s.link}>Usa la camera simulata (demo)</Text>
+            <Text style={s.link}>{t('connect.demo')}</Text>
           </Pressable>
           <Pressable accessibilityRole="button" onPress={() => setAdvanced((a) => !a)} hitSlop={8}>
-            <Text style={[s.link, { color: C.muted }]}>{advanced ? 'Nascondi' : 'Avanzate'}</Text>
+            <Text style={[s.link, { color: C.muted }]}>{advanced ? t('connect.hide') : t('connect.advanced')}</Text>
           </Pressable>
         </View>
       </View>

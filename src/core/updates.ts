@@ -1,3 +1,4 @@
+import type { Lang } from './i18n';
 /**
  * Aggiornamenti dell'app dalle Release di GitHub.
  * Regola (scelta per sicurezza): se esiste una versione più nuova l'app si blocca
@@ -86,6 +87,22 @@ export function releaseFromGitHub(json: {
     notes: json.body ?? '',
     publishedAt: json.published_at ?? '',
   };
+}
+
+const FLAG: Record<Lang, string> = { en: '🇬🇧', it: '🇮🇹' };
+
+/**
+ * Dalle note di rilascio in due lingue (🇬🇧 … 🇮🇹 …) prende la parte nella lingua dell'app,
+ * senza il "Full Changelog" in fondo. Note senza bandiere: tutte come sono.
+ */
+export function notesFor(body: string, lang: Lang): string {
+  const text = String(body ?? '');
+  const start = text.indexOf(FLAG[lang]);
+  if (start < 0) return text.trim();
+  let part = text.slice(start + FLAG[lang].length);
+  const other = (Object.values(FLAG) as string[]).filter((f) => f !== FLAG[lang]).map((f) => part.indexOf(f)).filter((i) => i >= 0);
+  if (other.length) part = part.slice(0, Math.min(...other));
+  return part.replace(/\*\*Full Changelog\*\*[\s\S]*$/, '').trim();
 }
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {

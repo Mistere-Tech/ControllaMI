@@ -3,7 +3,8 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useCameraCtx, useCameraState, useModes } from '../state/CameraContext';
 import { INTERVAL_CHOICES, SimpleMode } from '../core/modes';
-import { METER_LABEL } from '../core/presets';
+import { meterLabel } from '../core/presets';
+import { t } from '../core/i18n';
 import { C } from './theme';
 
 type Run = (fn: () => Promise<void>) => void;
@@ -29,9 +30,9 @@ export function SimpleControls({ run, disabled }: { run: Run; disabled: boolean 
       <View style={s.segment}>
         {(
           [
-            ['video', 'Video'],
-            ['photo', 'Foto'],
-            ['timelapse', 'Timelapse'],
+            ['video', t('mode.video')],
+            ['photo', t('mode.photo')],
+            ['timelapse', t('mode.timelapse')],
           ] as const
         ).map(([k, label]) => (
           <Pressable
@@ -52,14 +53,14 @@ export function SimpleControls({ run, disabled }: { run: Run; disabled: boolean 
           <View style={s.subSegment}>
             {(
               [
-                ['timelapse_video', 'Video'],
-                ['timelapse_photo', 'Foto'],
+                ['timelapse_video', t('mode.video')],
+                ['timelapse_photo', t('mode.photo')],
               ] as const
             ).map(([k, label]) => (
               <Pressable
                 key={k}
                 accessibilityRole="button"
-                accessibilityLabel={`Timelapse ${label.toLowerCase()}`}
+                accessibilityLabel={k === 'timelapse_video' ? t('simple.timelapseVideo') : t('simple.timelapsePhoto')}
                 accessibilityState={{ selected: mode === k, disabled }}
                 disabled={disabled}
                 onPress={() => select(k)}
@@ -70,14 +71,14 @@ export function SimpleControls({ run, disabled }: { run: Run; disabled: boolean 
             ))}
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.chips}>
-            <Text style={s.rowLabel}>Ogni</Text>
+            <Text style={s.rowLabel}>{t('simple.every')}</Text>
             {INTERVAL_CHOICES.map((sec) => {
               const sel = ms.intervals[mode] === sec;
               return (
                 <Pressable
                   key={sec}
                   accessibilityRole="button"
-                  accessibilityLabel={`Intervallo ${intervalLabel(sec)}`}
+                  accessibilityLabel={t('simple.intervalA11y', { value: intervalLabel(sec) })}
                   accessibilityState={{ selected: sel, disabled }}
                   disabled={disabled}
                   onPress={() => run(() => modes.setInterval(mode, sec))}
@@ -114,20 +115,20 @@ function ExposureRow({ run, disabled, settingsKey }: { run: Run; disabled: boole
   if (ctl.key === 'meter_mode') {
     return (
       <View style={s.chips}>
-        <Text style={s.rowLabel}>Esposizione</Text>
+        <Text style={s.rowLabel}>{t('simple.exposure')}</Text>
         {ctl.options.map((o) => {
           const sel = ctl.value === o;
           return (
             <Pressable
               key={o}
               accessibilityRole="button"
-              accessibilityLabel={`Misurazione ${METER_LABEL[o] ?? o}`}
+              accessibilityLabel={t('simple.meterA11y', { value: meterLabel(o) })}
               accessibilityState={{ selected: sel, disabled }}
               disabled={disabled}
               onPress={() => set(o)}
               style={[s.chip, sel && s.chipSel]}
             >
-              <Text style={[s.chipText, sel && s.chipTextSel]}>{METER_LABEL[o] ?? o}</Text>
+              <Text style={[s.chipText, sel && s.chipTextSel]}>{meterLabel(o)}</Text>
             </Pressable>
           );
         })}
@@ -141,20 +142,20 @@ function ExposureRow({ run, disabled, settingsKey }: { run: Run; disabled: boole
   const next = ctl.options[i + 1];
   return (
     <View style={s.chips}>
-      <Text style={s.rowLabel}>Esposizione</Text>
+      <Text style={s.rowLabel}>{t('simple.exposure')}</Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Più scuro"
+        accessibilityLabel={t('simple.darker')}
         disabled={disabled || !prev}
         onPress={() => prev && set(prev)}
         style={[s.stepBtn, (!prev || disabled) && { opacity: 0.4 }]}
       >
         <Ionicons name="remove" size={20} color={C.text} />
       </Pressable>
-      <Text style={s.evValue} accessibilityLabel={`Esposizione ${ctl.value ?? ''}`}>{ctl.value ?? '–'} EV</Text>
+      <Text style={s.evValue} accessibilityLabel={t('simple.exposureA11y', { value: ctl.value ?? '' })}>{ctl.value ?? '–'} EV</Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Più chiaro"
+        accessibilityLabel={t('simple.brighter')}
         disabled={disabled || !next}
         onPress={() => next && set(next)}
         style={[s.stepBtn, (!next || disabled) && { opacity: 0.4 }]}

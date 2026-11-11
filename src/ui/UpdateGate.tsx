@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { AppState, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { UpdateResult } from '../core/updates';
+import { notesFor, UpdateResult } from '../core/updates';
+import { getLang, t } from '../core/i18n';
 import { formatSize } from '../core/gallery';
 import { checkAppUpdate, downloadAndInstall, installedVersion } from '../net/updater';
 import { C } from './theme';
@@ -35,6 +36,7 @@ export function UpdateGate({ children }: { children: React.ReactNode }) {
 function UpdateRequired({ result }: { result: UpdateResult }) {
   const insets = useSafeAreaInsets();
   const latest = result.latest!;
+  const notes = notesFor(latest.notes, getLang());
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,7 +46,7 @@ function UpdateRequired({ result }: { result: UpdateResult }) {
     try {
       await downloadAndInstall(latest, setProgress);
     } catch (e) {
-      setError((e as Error).message || 'Aggiornamento non riuscito');
+      setError((e as Error).message || t('update.failed'));
     } finally {
       setProgress(null);
     }
@@ -55,16 +57,15 @@ function UpdateRequired({ result }: { result: UpdateResult }) {
       <View style={s.icon}>
         <Ionicons name="cloud-download-outline" size={36} color={C.accent} />
       </View>
-      <Text style={s.title}>Aggiornamento obbligatorio</Text>
+      <Text style={s.title}>{t('update.title')}</Text>
       <Text style={s.subtitle}>
-        È disponibile la versione {latest.version} (hai la {installedVersion()}). Per sicurezza l’app funziona solo
-        all’ultima versione.
+        {t('update.subtitle', { latest: latest.version, current: installedVersion() })}
       </Text>
 
-      {latest.notes ? (
+      {notes ? (
         <ScrollView style={s.notes} contentContainerStyle={{ padding: 14 }}>
-          <Text style={s.notesTitle}>Novità</Text>
-          <Text style={s.notesText}>{latest.notes}</Text>
+          <Text style={s.notesTitle}>{t('update.notes')}</Text>
+          <Text style={s.notesText}>{notes}</Text>
         </ScrollView>
       ) : (
         <View style={{ flex: 1 }} />
@@ -73,19 +74,19 @@ function UpdateRequired({ result }: { result: UpdateResult }) {
       {error ? <Text style={s.error}>{error}</Text> : null}
 
       {progress !== null ? (
-        <View style={s.progressBox} accessibilityLabel={`Download ${Math.round(progress * 100)} per cento`}>
+        <View style={s.progressBox} accessibilityLabel={t('update.downloadA11y', { pct: Math.round(progress * 100) })}>
           <View style={s.track}>
             <View style={[s.bar, { width: `${Math.round(progress * 100)}%` }]} />
           </View>
-          <Text style={s.progressText}>Scarico l’aggiornamento… {Math.round(progress * 100)}%</Text>
+          <Text style={s.progressText}>{t('update.downloading', { pct: Math.round(progress * 100) })}</Text>
         </View>
       ) : (
         <Pressable accessibilityRole="button" onPress={update} style={({ pressed }) => [s.button, pressed && { opacity: 0.85 }]}>
-          <Text style={s.buttonText}>Scarica e installa{latest.apkSize ? ` · ${formatSize(latest.apkSize)}` : ''}</Text>
+          <Text style={s.buttonText}>{t('update.button')}{latest.apkSize ? ` · ${formatSize(latest.apkSize)}` : ''}</Text>
         </Pressable>
       )}
       <Text style={s.hint}>
-        Android ti chiederà di confermare con “Installa”. Se è la prima volta, consenti a ControllaMI di installare app.
+        {t('update.hint')}
       </Text>
     </View>
   );

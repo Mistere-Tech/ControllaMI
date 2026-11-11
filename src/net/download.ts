@@ -1,11 +1,12 @@
 import { DownloadTask, File, Paths } from 'expo-file-system';
 import { Asset, requestPermissionsAsync } from 'expo-media-library';
 import { CamFile } from '../core/gallery';
+import { t } from '../core/i18n';
 
 /** Scarica un file dalla camera e lo salva nella galleria del telefono. */
 export async function downloadToGallery(file: CamFile, onProgress: (fraction: number) => void): Promise<void> {
   const perm = await requestPermissionsAsync(true, ['photo', 'video']);
-  if (!perm.granted) throw new Error('Serve il permesso per salvare in galleria');
+  if (!perm.granted) throw new Error(t('gallery.needPermission'));
 
   const target = new File(Paths.cache, file.name);
   if (target.exists) target.delete();
@@ -20,7 +21,7 @@ export async function downloadToGallery(file: CamFile, onProgress: (fraction: nu
   try {
     downloaded = await task.downloadAsync();
     if (!downloaded || !downloaded.exists || downloaded.size === 0) {
-      throw new Error('Download non riuscito');
+      throw new Error(t('gallery.downloadFailed'));
     }
     await Asset.create(downloaded.uri);
   } finally {

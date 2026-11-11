@@ -42,7 +42,8 @@ Requisiti: telefono Android a 64 bit (arm64, cioè quasi tutti quelli degli ulti
 - Live view dalla camera, che si riprende da sola se si interrompe
 - Indicatore della connessione: stabile, instabile o persa, con riconnessione automatica
 - Galleria: elenco dei file, download nella galleria del telefono, eliminazione
-- Avvisi chiari in italiano quando un comando non riesce (ad esempio scheda SD assente)
+- Avvisi chiari quando un comando non riesce (ad esempio scheda SD assente)
+- **In italiano e in inglese**, secondo la lingua del telefono
 - Modalità demo con una camera simulata, per provare l'app senza camera
 
 ## Camere compatibili

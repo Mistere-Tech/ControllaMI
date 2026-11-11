@@ -2,6 +2,7 @@ import { DownloadTask, File, Paths } from 'expo-file-system';
 import * as Application from 'expo-application';
 import { startActivityAsync } from 'expo-intent-launcher';
 import { checkForUpdate, fetchLatestFromGitHub, LatestRelease, UpdateCache, UpdateResult } from '../core/updates';
+import { t } from '../core/i18n';
 
 const FLAG_GRANT_READ_URI_PERMISSION = 1;
 const APK_MIME = 'application/vnd.android.package-archive';
@@ -39,7 +40,7 @@ export async function downloadAndInstall(release: LatestRelease, onProgress: (fr
   });
   try {
     const apk = await task.downloadAsync();
-    if (!apk || !apk.exists || apk.size === 0) throw new Error('Download dell’aggiornamento non riuscito');
+    if (!apk || !apk.exists || apk.size === 0) throw new Error(t('update.downloadFailed'));
     await startActivityAsync('android.intent.action.VIEW', {
       data: apk.contentUri,
       type: APK_MIME,

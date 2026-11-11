@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useCameraState } from '../state/CameraContext';
 import { C } from './theme';
+import { t } from '../core/i18n';
 
 /** Striscia fissa quando la SD manca o va formattata: spiega perché REC, foto e galleria sono spenti. */
 export function SdBanner() {
@@ -13,8 +14,8 @@ export function SdBanner() {
       <Ionicons name="save-outline" size={18} color={C.warn} />
       <Text style={s.text}>
         {missing
-          ? 'Scheda SD assente: inserisci una SD per registrare, scattare e vedere i file.'
-          : 'La scheda SD va formattata dal menu della camera.'}
+          ? t('sd.bannerMissing')
+          : t('sd.bannerFormat')}
       </Text>
     </View>
   );

@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useProblems } from '../state/ProblemContext';
 import { C } from './theme';
+import { t } from '../core/i18n';
 
 /** Avviso in alto per i comandi non riusciti: sostituisce i popup di sistema. */
 export function ProblemBanner() {
@@ -27,7 +28,7 @@ export function ProblemBanner() {
         <View style={s.body}>
           <Text style={s.title}>{problem.title}</Text>
           <Text style={s.message}>{problem.message}</Text>
-          {problem.code ? <Text style={s.code}>Codice {problem.code}</Text> : null}
+          {problem.code ? <Text style={s.code}>{t('problem.code', { code: problem.code })}</Text> : null}
           {retry ? (
             <Pressable
               accessibilityRole="button"
@@ -37,11 +38,11 @@ export function ProblemBanner() {
               }}
               style={({ pressed }) => [s.retry, pressed && { opacity: 0.8 }]}
             >
-              <Text style={s.retryText}>Riprova</Text>
+              <Text style={s.retryText}>{t('common.retry')}</Text>
             </Pressable>
           ) : null}
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Chiudi avviso" onPress={dismiss} hitSlop={12}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('problem.dismiss')} onPress={dismiss} hitSlop={12}>
           <Ionicons name="close" size={20} color={C.muted} />
         </Pressable>
       </View>

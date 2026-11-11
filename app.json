@@ -45,7 +45,8 @@
         }
       ],
       "expo-status-bar",
-      "./plugins/withReleaseSigning"
+      "./plugins/withReleaseSigning",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": false

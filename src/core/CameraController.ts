@@ -1,3 +1,4 @@
+import { t } from './i18n';
 import { Transport } from './transport';
 import { YiClient, YiNotification } from './YiClient';
 import { CamFile } from './gallery';
@@ -35,15 +36,14 @@ export interface ControllerOptions {
   now?: () => number;
 }
 
-/** Messaggio quando la camera non si trova (di solito: telefono non sul Wi-Fi della camera). */
-export const CONNECT_HINT = 'Non trovo la camera. Collega il telefono al Wi-Fi YDXJ_… e riprova.';
 
 /** Tentativo di connessione superato da un altro, annullato o scaduto. */
 class AbandonedError extends Error {}
 
 function connectError(e: Error): string {
-  if (/timeout/i.test(e.message)) return CONNECT_HINT;
-  return `${CONNECT_HINT} (${e.message})`;
+  // di solito il telefono non è sul Wi-Fi della camera
+  if (/timeout/i.test(e.message)) return t('connect.notFound');
+  return `${t('connect.notFound')} (${e.message})`;
 }
 
 /** Quanti battiti tenere in memoria. */
@@ -242,7 +242,7 @@ export class CameraController {
   private scheduleReconnect() {
     const max = this.opts.maxReconnects ?? 5;
     if (this.attempts >= max) {
-      this.set({ status: 'error', error: 'Connessione persa con la camera' });
+      this.set({ status: 'error', error: t('connect.lost') });
       return;
     }
     this.attempts++;
