@@ -95,5 +95,8 @@ jobs:
           files: out/*.apk
           generate_release_notes: true
           body: |
-            APK per Android 64 bit (arm64) per la **YI Action Camera prima serie**.
+            🇬🇧 Android 64-bit (arm64) APK for the **first-generation YI Action Camera** (YDXJ01XY).
+            Download `${{ steps.apk.outputs.name }}` below and install it on your phone (allow "install unknown apps").
+
+            🇮🇹 APK per Android 64 bit (arm64) per la **YI Action Camera prima serie** (YDXJ01XY).
             Scarica `${{ steps.apk.outputs.name }}` qui sotto e installalo sul telefono (consenti "installa app sconosciute").

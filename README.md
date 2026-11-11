@@ -1,111 +1,130 @@
-# ControllaMI
+<p align="center">
+  <img src="assets/icon.png" alt="ControllaMI" width="128">
+</p>
 
-**App Android open source e gratuita per controllare la Xiaomi YI Action Camera di prima generazione** (la prima YI uscita sul mercato nel 2015, modello YDXJ01XY).
+<h1 align="center">ControllaMI</h1>
 
-L'app ufficiale non è più aggiornata e sui telefoni recenti spesso non funziona: ControllaMI la sostituisce con un'app moderna, a 64 bit, che parla direttamente con la camera via Wi-Fi.
+<p align="center">
+  <b>Control your first-generation Xiaomi YI Action Camera from a modern Android phone.</b><br>
+  Free and open source, by <a href="https://github.com/Mistere-Tech">Mistere Tech</a>
+</p>
 
-> *English: free, open source Android app to control the first-generation Xiaomi YI Action Camera (2015, model YDXJ01XY). Download the APK from [Releases](https://github.com/Mistere-Tech/ControllaMI/releases/latest).*
+<p align="center">
+  <a href="https://github.com/Mistere-Tech/ControllaMI/releases/latest"><img src="https://img.shields.io/github/v/release/Mistere-Tech/ControllaMI?style=flat-square&label=download%20APK&color=FF8A3D" alt="Download APK"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f?style=flat-square" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/free-no%20ads%20·%20no%20tracking-2ea44f?style=flat-square" alt="Free, no ads, no tracking">
+  <img src="https://img.shields.io/badge/Android-64%20bit-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android 64 bit">
+  <img src="https://img.shields.io/badge/camera-YI%20YDXJ01XY%20(2015)-1A4752?style=flat-square" alt="YI Action Camera YDXJ01XY">
+</p>
 
-## Scarica l'app
+<p align="center"><b>English</b> · <a href="README.it.md">Italiano</a></p>
 
-👉 **[Scarica l'ultima versione (APK)](https://github.com/Mistere-Tech/ControllaMI/releases/latest)**
+ControllaMI is a **free, open-source Android app for the Xiaomi YI Action Camera, first generation** (the original YI released in 2015, model YDXJ01XY).
 
-1. Apri il link dal telefono e scarica il file `ControllaMI-vX.Y.Z-arm64.apk`.
-2. Aprilo: Android ti chiede di consentire "installa app sconosciute" per il browser, conferma.
-3. Accendi il Wi-Fi della camera, collegati alla sua rete e apri ControllaMI.
+The official YI app is no longer updated and often does not work on recent phones. ControllaMI replaces it with a modern 64-bit app that talks to the camera directly over its Wi-Fi.
 
-**Aggiornamenti:** all'avvio l'app controlla se c'è una versione nuova e, se c'è, chiede di installarla prima di continuare (per sicurezza si usa sempre l'ultima versione). Basta toccare "Scarica e installa" e confermare con "Installa".
+## Download
 
-Requisiti: telefono Android a 64 bit (arm64, cioè quasi tutti quelli degli ultimi anni). L'APK non è sul Play Store.
+👉 **[Download the latest version (APK)](https://github.com/Mistere-Tech/ControllaMI/releases/latest)**
 
-## Cosa fa
+1. Open the link on your phone and download `ControllaMI-vX.Y.Z-arm64.apk`.
+2. Open it: Android asks you to allow "install unknown apps" for your browser. Confirm.
+3. Turn on the camera's Wi-Fi, connect the phone to its network (`YDXJ_…`) and open ControllaMI.
 
-- **Modalità Semplice**: video 1080p 60 fps al bitrate massimo, foto alla massima qualità, timelapse video o foto con l'intervallo che scegli, regolazione dell'esposizione. L'app imposta la camera da sola.
-- **Modalità Pro**: tutte le impostazioni della camera, a mano. Passando da una modalità all'altra le tue impostazioni Pro restano salvate.
-- Live view dalla camera, che si riprende da sola se si interrompe
-- Indicatore della connessione: stabile, instabile o persa, con riconnessione automatica
-- Galleria: elenco dei file, download nella galleria del telefono, eliminazione
-- Avvisi chiari in italiano quando un comando non riesce (ad esempio scheda SD assente)
-- Modalità demo con una camera simulata, per provare l'app senza camera
+**Updates:** at startup the app checks for a new version and, if there is one, asks you to install it before going on (for security, only the latest version is used). Tap "Scarica e installa" and confirm with "Install".
 
-## Camere compatibili
+Requirements: a 64-bit Android phone (arm64, which is almost every phone from recent years). The app is not on the Play Store.
 
-| Camera | Supportata |
+## What it does
+
+- **Simple mode**: 1080p 60 fps video at the highest bitrate, photos at the highest quality, video or photo timelapse with the interval you choose, exposure adjustment. The app sets up the camera for you.
+- **Pro mode**: every camera setting, by hand. Your Pro settings are kept when you switch between modes.
+- Live view from the camera, which recovers by itself if it stops
+- Connection indicator (stable, unstable or lost) with automatic reconnection
+- Gallery: list of files, download to the phone's gallery, delete
+- Clear messages when a command fails (for example, no SD card)
+- Demo mode with a simulated camera, to try the app without a camera
+
+The app's interface is in Italian for now; an English interface is planned.
+
+## Compatible cameras
+
+| Camera | Supported |
 |---|---|
-| Xiaomi YI Action Camera, prima generazione (YDXJ01XY) | ✅ è quella per cui è fatta l'app |
-| YI 4K, YI 4K+, YI Lite, YI Discovery e successive | ❌ non supportate |
+| Xiaomi YI Action Camera, first generation (YDXJ01XY) | ✅ the camera this app is made for |
+| YI 4K, YI 4K+, YI Lite, YI Discovery and later | ❌ not supported |
 
-## Stato del progetto
+## Project status
 
-🧪 **Prima versione pubblica (0.1.x).** Provata su una YI prima serie: live view, foto, video, timelapse, impostazioni e download dalla galleria funzionano. Il protocollo è coperto da test automatici, ma l'app non è ancora stata provata su tutte le versioni di firmware. Se qualcosa non funziona con la tua camera, apri una [segnalazione](https://github.com/Mistere-Tech/ControllaMI/issues) indicando modello di telefono, versione di Android e firmware della camera.
+🧪 **First public version (0.1.x).** Tested on a first-generation YI: live view, photo, video, timelapse, settings and gallery download work. The protocol is covered by automated tests, but the app has not been tried with every firmware version yet. If something does not work with your camera, please open an [issue](https://github.com/Mistere-Tech/ControllaMI/issues) with your phone model, Android version and camera firmware.
 
-Problema noto su Android 10 e successivi: quando ti colleghi al Wi-Fi della camera Android può chiedere "Questa rete non ha accesso a internet, rimanere connessi?". Rispondi **sì**.
+Known issue on Android 10 and later: when you connect to the camera's Wi-Fi, Android may ask "This network has no internet access. Stay connected?". Answer **yes**.
 
-## Contribuire
+## Contributing
 
-Il codice è aperto e i contributi sono benvenuti: segnalazioni, test con la propria camera, pull request.
+The code is open and contributions are welcome: bug reports, tests with your own camera, pull requests.
 
-### Sviluppo in locale
+### Local development
 
 ```bash
 npm install
 npx expo install --fix
-npm test              # test del protocollo e della logica
-npm run mock          # finta YI sulla porta 7878
-npx expo run:android  # compila e installa su telefono collegato via USB
+npm test              # protocol and logic tests
+npm run mock          # fake YI on port 7878
+npx expo run:android  # build and install on a phone connected via USB
 ```
 
-Per provare l'app contro il mock: telefono e PC sulla stessa rete, nell'app tocca **Avanzate** e metti l'IP del PC.
+To try the app against the mock: phone and PC on the same network; in the app tap **Avanzate** (Advanced) and enter the PC's IP address.
 
-L'app è fatta con React Native 0.88 + Expo SDK 58 (New Architecture, development build, non Expo Go) e un piccolo modulo nativo in Kotlin.
+Built with React Native 0.88 + Expo SDK 58 (New Architecture, development build, not Expo Go) and a small native module in Kotlin.
 
-### Come nasce un APK
+### How an APK is made
 
-La GitHub Action [`android.yml`](.github/workflows/android.yml) compila l'app a ogni push su `main` (APK scaricabile come artifact dell'esecuzione). Quando si crea un tag `v*`, per esempio:
+The GitHub Action [`android.yml`](.github/workflows/android.yml) builds the app on every push to `main` (the APK is available as an artifact of the run). When a `v*` tag is pushed, for example:
 
 ```bash
 git tag v0.1.0
 git push origin v0.1.0
 ```
 
-la stessa Action pubblica una **Release** con l'APK allegato, ed è quella che trova chi scarica l'app.
+the same Action publishes a **Release** with the APK attached, which is what people download.
 
-Gli APK sono firmati con la chiave di release del progetto, custodita nei GitHub Secrets: è quella che permette agli aggiornamenti di installarsi sopra l'app esistente. Le build di fork e pull request, che non hanno accesso ai Secrets, escono firmate con la chiave di debug di Expo.
+APKs are signed with the project's release key, kept in GitHub Secrets: that is what lets updates install over the existing app. Builds from forks and pull requests, which cannot read the Secrets, are signed with Expo's debug key.
 
-### Struttura
+### Layout
 
 ```
-app/                  schermate (expo-router): connessione + tab Controllo / Galleria / Impostazioni
-src/core/             protocollo YI, puro TypeScript e testato
-  jsonStream.ts       parser dei JSON attaccati che arrivano dal TCP
-  YiClient.ts         sessione/token, coda comandi, timeout, notifiche, token scaduto
-  CameraController.ts stato dell'app, riconnessione, REC/foto, impostazioni, file
-  fakeCamera.ts       camera simulata (test, mock server, demo)
-src/net/              TCP (react-native-tcp-socket) e download in galleria
-modules/yi-native/    modulo Expo nativo in Kotlin: bind al Wi-Fi e player RTSP
-mock/mockServer.ts    finta camera via TCP
-tests/                test node:test (npm test)
+app/                  screens (expo-router): connection + Control / Gallery / Settings tabs
+src/core/             YI protocol, plain TypeScript, tested
+  jsonStream.ts       parser for the back-to-back JSON objects arriving over TCP
+  YiClient.ts         session/token, command queue, timeouts, notifications, expired token
+  CameraController.ts app state, reconnection, REC/photo, settings, files
+  fakeCamera.ts       simulated camera (tests, mock server, demo)
+src/net/              TCP (react-native-tcp-socket) and gallery download
+modules/yi-native/    native Expo module in Kotlin: Wi-Fi binding and RTSP player
+mock/mockServer.ts    fake camera over TCP
+tests/                node:test tests (npm test)
 ```
 
-### Protocollo della camera
+### Camera protocol
 
-La camera espone un server TCP su `192.168.42.1:7878` che parla JSON; i file si scaricano via HTTP da `http://192.168.42.1/DCIM/100MEDIA/` e la live view è su `rtsp://192.168.42.1/live`.
+The camera runs a TCP server on `192.168.42.1:7878` that speaks JSON. Files are downloaded over HTTP from `http://192.168.42.1/DCIM/<folder>/` (`100MEDIA`, `101MEDIA`, …) and the live view is at `rtsp://192.168.42.1/live`.
 
-| msg_id | Cosa fa |
+| msg_id | What it does |
 |---|---|
-| 257 / 258 | apre / chiude la sessione (token) |
-| 3 / 9 / 2 | tutte le impostazioni / opzioni ammesse / modifica |
-| 13 | batteria |
-| 513 / 514 | avvia / ferma registrazione |
-| 769 | foto |
-| 259 | avvia lo stream per la live view |
-| 1283 / 1282 / 1281 | cd / elenco / elimina file |
-| 7 | notifiche della camera (inizio/fine REC, foto scattata…) |
+| 257 / 258 | open / close the session (token) |
+| 3 / 9 / 2 | all settings / allowed options / change a setting |
+| 13 | battery |
+| 513 / 514 | start / stop recording |
+| 769 | photo |
+| 259 | start the live view stream |
+| 1283 / 1282 / 1281 | cd / list / delete files |
+| 7 | camera notifications (REC started/stopped, photo taken…) |
 
-Questi codici vengono dalla documentazione della community e possono variare con il firmware.
+These codes come from community documentation and may vary with the firmware.
 
-## Licenza
+## License
 
-[MIT](LICENSE): puoi usare, modificare e ridistribuire il codice liberamente.
+[MIT](LICENSE): you are free to use, modify and redistribute the code.
 
-ControllaMI è un progetto indipendente, non affiliato a Xiaomi né a YI Technology. I nomi Xiaomi e YI sono dei rispettivi proprietari.
+ControllaMI is an independent project, not affiliated with Xiaomi or YI Technology. Xiaomi and YI are trademarks of their respective owners.
