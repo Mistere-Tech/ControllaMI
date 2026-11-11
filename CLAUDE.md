@@ -3,7 +3,7 @@
 App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, development build) per controllare la **YI Action Camera prima serie** (Xiaomi). Nata in una chat di Claude il 9–10/11/2026; questo file riassume dove siamo arrivati.
 
 ## Stato
-- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 143 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
+- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 151 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
 - Schermate in `app/` (expo-router): connessione, poi tab Controllo / Galleria / Impostazioni. Provata sul telefono il 10/11 (build #5): parte e la live view si vede.
 - Modulo nativo `modules/yi-native/` (Kotlin): `bindToWifi` (requestNetwork Wi-Fi senza internet + bindProcessToNetwork) e vista RTSP con Media3 1.11.1.
 - Live view: la decide `LiveViewSupervisor` (src/core/liveView.ts), il player nativo esegue. Riavvio a ogni ritorno sulla schermata, vf_stop/vf_start, cambio impostazione, errore, buffering bloccato.
@@ -16,6 +16,7 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Open source, licenza MIT. Repo **pubblico** dal 10/11/2026.
 - Prima Release: **v0.1.0** (10/11, versionCode 1000, firmata con la chiave di release); l'API `releases/latest` la vede senza login.
 - Connessione: ogni tentativo ha un tempo massimo (`connectTimeoutMs`, 12 s nell'app) e si può annullare.
+- Data e ora: a ogni connessione, se l'ora della camera (`camera_clock`, "AAAA-MM-GG hh:mm:ss") differisce di più di 60 s da quella del telefono, l'app la riscrive (src/core/clock.ts); da Impostazioni toccando "Data e ora" si rimette subito. Errori ignorati: non bloccano la connessione.
 - Galleria: legge `DCIM` e ogni `xxxMEDIA`; cd in una cartella che non c'è → la YI risponde -1 (visto sul telefono) = nessun file.
 - Repo: https://github.com/Mistere-Tech/ControllaMI (branch main). GitHub CLI autenticata su questo PC (`C:/Program Files/GitHub CLI/gh.exe`).
 

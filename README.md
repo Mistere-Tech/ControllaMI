@@ -42,6 +42,7 @@ Requirements: a 64-bit Android phone (arm64, which is almost every phone from re
 - Live view from the camera, which recovers by itself if it stops
 - Connection indicator (stable, unstable or lost) with automatic reconnection
 - Gallery: list of files, download to the phone's gallery, delete
+- Camera date and time set from the phone at every connection (the YI forgets it when the battery is removed)
 - Clear messages when a command fails (for example, no SD card)
 - **Italian and English**, following the phone's language
 - Demo mode with a simulated camera, to try the app without a camera

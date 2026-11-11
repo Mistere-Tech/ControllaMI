@@ -80,7 +80,6 @@ export class FakeCamera {
     return this.options[key];
   }
 
-  /** Valore attuale di un'impostazione (per i test). */
   /** SD appena formattata: DCIM c'è ma senza cartelle 100MEDIA… */
   formatSd() {
     this.dcim = {};
@@ -110,6 +109,15 @@ export class FakeCamera {
     return mediaPath(dir, name);
   }
 
+  /** Quante volte l'app ha cambiato data e ora (per i test). */
+  clockWrites = 0;
+
+  /** Firmware che non espone un'impostazione (es. camera_clock). */
+  removeSetting(key: string) {
+    delete this.settings[key];
+  }
+
+  /** Valore attuale di un'impostazione (per i test). */
   get(key: string): string | undefined {
     return this.settings[key];
   }
@@ -195,6 +203,13 @@ export class FakeCamera {
         return [ok({ param: req.param, permission: opts ? 'settable' : 'readonly', options: opts ?? [] })];
       }
       case MSG.SET_SETTING: {
+        // data e ora: testo libero "AAAA-MM-GG hh:mm:ss", non una scelta da un elenco
+        if (req.type === 'camera_clock' && 'camera_clock' in this.settings) {
+          if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(String(req.param))) return err(-9);
+          this.settings.camera_clock = req.param;
+          this.clockWrites++;
+          return [ok({ type: req.type, param: req.param })];
+        }
         const opts = this.optionsFor(req.type);
         if (!opts || !opts.includes(req.param)) return err(-9);
         if (this.recording) return err(-14);

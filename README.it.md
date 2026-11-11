@@ -42,6 +42,7 @@ Requisiti: telefono Android a 64 bit (arm64, cioè quasi tutti quelli degli ulti
 - Live view dalla camera, che si riprende da sola se si interrompe
 - Indicatore della connessione: stabile, instabile o persa, con riconnessione automatica
 - Galleria: elenco dei file, download nella galleria del telefono, eliminazione
+- Data e ora della camera prese dal telefono a ogni connessione (la YI le perde quando si toglie la batteria)
 - Avvisi chiari quando un comando non riesce (ad esempio scheda SD assente)
 - **In italiano e in inglese**, secondo la lingua del telefono
 - Modalità demo con una camera simulata, per provare l'app senza camera

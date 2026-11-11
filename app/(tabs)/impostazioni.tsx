@@ -45,6 +45,17 @@ export default function ImpostazioniScreen() {
   const open = async (key: string, value: string) => {
     const info = describeSetting(key);
     if (info.readOnly) return;
+    // data e ora: niente elenco di scelte, si prende l'ora del telefono
+    if (key === 'camera_clock') {
+      try {
+        await controller.syncClock();
+        const value = controller.state.settings.camera_clock ?? '';
+        notify({ title: t('settings.clockSyncedTitle'), message: t('settings.clockSynced', { value }), code: null, action: null, severity: 'info' });
+      } catch (e) {
+        report(e, { retry: () => open(key, value) });
+      }
+      return;
+    }
     setSheet({ key, label: info.label, value, options: null });
     try {
       const o = await controller.getOptions(key);

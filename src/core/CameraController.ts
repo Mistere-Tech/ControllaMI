@@ -1,3 +1,4 @@
+import { clockNeedsSync, formatCameraClock } from './clock';
 import { t } from './i18n';
 import { Transport } from './transport';
 import { YiClient, YiNotification } from './YiClient';
@@ -198,6 +199,10 @@ export class CameraController {
       heartbeats: [],
     });
     this.startHeartbeat(client);
+    // data e ora della camera uguali al telefono (senza batteria la YI torna al 2015/2016)
+    if (clockNeedsSync(settings.camera_clock, this.now()) && 'camera_clock' in settings) {
+      await this.syncClock().catch(() => {});
+    }
   }
 
   private startHeartbeat(client: YiClient) {
@@ -350,6 +355,11 @@ export class CameraController {
 
   getOptions(key: string) {
     return this.need().getOptions(key);
+  }
+
+  /** Rimette data e ora della camera uguali a quelle del telefono. */
+  async syncClock() {
+    await this.changeSetting('camera_clock', formatCameraClock(new Date(this.now())));
   }
 
   async changeSetting(key: string, value: string) {
