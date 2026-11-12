@@ -32,6 +32,7 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 1. Provare la v0.1.0 sul telefono: connessione senza Wi-Fi della camera (errore dopo 12 s, Annulla), galleria e download.
 1b. OTA provata e funzionante l'11/11: dalla v0.1.0 l'app ha chiesto l'aggiornamento e ha installato la v0.1.1 (italiano + inglese, versionCode 1001). Per le prossime versioni basta un tag `vX.Y.Z` su main.
 1c. v0.1.3 pubblicata l'11/11 sera (data e ora della camera dal telefono + pacchetti Expo alle patch dell'11/11, versionCode 1003). Il tag v0.1.2 è rimasto senza Release: la sua build si è bloccata per un guasto di GitHub Actions, poi la CI ha fermato la ripartenza perché Expo aveva pubblicato patch nuove (`expo install --check`). Spostare un tag già pubblicato è bloccato: si fa un tag nuovo.
+1d. v0.1.4 pubblicata il 12/11 (live view senza schermo nero + collegamento guidato al Wi-Fi, versionCode 1004). Da provare sull'Honor 200 Lite del primo utente. Expo pubblica patch quasi ogni giorno: `expo install --check` in CI blocca la build finché non si aggiorna (`npx expo install --fix`).
 2. Build locale su Windows: serve abilitare i percorsi lunghi (limite 260 caratteri nel C++), altrimenti usare la CI.
 3. Cronologia ripulita il 10/11 (file di build, zip APK, email personali → email anonima GitHub; force push fatto). Backup della storia vecchia in `.git/backup-prima-della-pulizia.bundle`. Vecchie esecuzioni delle Actions (#1–#11, sui commit di prima) cancellate il 10/11; restano #12 e #13. Repo reso pubblico e tag v0.1.0 fatti il 10/11.
 
