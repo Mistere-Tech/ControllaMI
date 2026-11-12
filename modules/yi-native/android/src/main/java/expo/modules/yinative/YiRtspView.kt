@@ -62,6 +62,12 @@ class YiRtspView(context: Context, appContext: AppContext) : ExpoView(context, a
         onPlaybackState(mapOf("state" to name))
       }
 
+      // "ready" arriva quando lo stream è agganciato; l'immagine solo col primo fotogramma completo.
+      // La app toglie "Avvio live view…" solo qui (segnalazione del 12/11: schermo nero).
+      override fun onRenderedFirstFrame() {
+        onPlaybackState(mapOf("state" to "firstFrame"))
+      }
+
       override fun onPlayerError(error: PlaybackException) {
         onPlaybackState(mapOf("state" to "error", "message" to (error.message ?: error.errorCodeName)))
       }

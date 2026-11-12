@@ -41,6 +41,7 @@ Requirements: a 64-bit Android phone (arm64, which is almost every phone from re
 - **Pro mode**: every camera setting, by hand. Your Pro settings are kept when you switch between modes.
 - Live view from the camera, which recovers by itself if it stops
 - Connection indicator (stable, unstable or lost) with automatic reconnection
+- On Android 10+ the app connects to the camera's Wi-Fi by itself: no "no internet" prompt, mobile data stays on for other apps
 - Gallery: list of files, download to the phone's gallery, delete
 - Camera date and time set from the phone at every connection (the YI forgets it when the battery is removed)
 - Clear messages when a command fails (for example, no SD card)

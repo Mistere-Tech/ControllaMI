@@ -41,6 +41,7 @@ Requisiti: telefono Android a 64 bit (arm64, cioè quasi tutti quelli degli ulti
 - **Modalità Pro**: tutte le impostazioni della camera, a mano. Passando da una modalità all'altra le tue impostazioni Pro restano salvate.
 - Live view dalla camera, che si riprende da sola se si interrompe
 - Indicatore della connessione: stabile, instabile o persa, con riconnessione automatica
+- Da Android 10 l'app si collega da sola al Wi-Fi della camera: niente avviso "rete senza internet", i dati mobili restano alle altre app
 - Galleria: elenco dei file, download nella galleria del telefono, eliminazione
 - Data e ora della camera prese dal telefono a ogni connessione (la YI le perde quando si toglie la batteria)
 - Avvisi chiari quando un comando non riesce (ad esempio scheda SD assente)

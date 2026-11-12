@@ -34,6 +34,7 @@ async function setup() {
   const playing = async () => {
     await waitFor(() => !!live.state.url);
     live.onPlayerState('ready');
+    live.onPlayerState('firstFrame'); // dal 12/11 "playing" solo con la prima immagine
     return live.state.generation;
   };
   return { cam, ctrl, live, transports, playing, vfStarts: () => vfStarts };
@@ -47,6 +48,7 @@ test('con la schermata attiva e la camera connessa la live view parte (259) e d�
   assert.equal(live.state.url, 'rtsp://192.168.42.1/live');
   assert.equal(live.state.phase, 'starting');
   live.onPlayerState('ready');
+  live.onPlayerState('firstFrame');
   assert.equal(live.state.phase, 'playing');
   live.dispose();
 });
@@ -92,7 +94,7 @@ test('dopo un cambio di impostazione la live view si riavvia da sola', async () 
   live.dispose();
 });
 
-test('errore del player → nuovi tentativi con attesa crescente finché non torna "ready"', async () => {
+test("errore del player → nuovi tentativi con attesa crescente finché non arriva l'immagine", async () => {
   const { live, vfStarts } = await setup();
   live.setActive(true);
   await waitFor(() => !!live.state.url);
@@ -104,6 +106,7 @@ test('errore del player → nuovi tentativi con attesa crescente finché non tor
   assert.equal(live.state.attempts, 2);
   await waitFor(() => vfStarts() >= 3 && !!live.state.url);
   live.onPlayerState('ready');
+  live.onPlayerState('firstFrame');
   assert.equal(live.state.phase, 'playing');
   assert.equal(live.state.attempts, 0);
   live.dispose();

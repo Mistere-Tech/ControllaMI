@@ -196,8 +196,9 @@ const s = StyleSheet.create({
   card: { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1, borderRadius: 16, overflow: 'hidden' },
   row: { minHeight: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, gap: 12 },
   rowBorder: { borderTopWidth: 1, borderTopColor: C.border },
-  rowLabel: { color: C.text, fontSize: 15, flexShrink: 1 },
-  rowRight: { flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 1, maxWidth: '55%' },
+  // l'etichetta resta intera (es. "Versione firmware"); se manca spazio si accorcia il valore
+  rowLabel: { color: C.text, fontSize: 15, flexShrink: 0, maxWidth: '60%' },
+  rowRight: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: 6, minWidth: 0 },
   rowValue: { color: C.muted, fontSize: 14, flexShrink: 1 },
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' },
   sheet: { backgroundColor: C.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 20, paddingHorizontal: 8 },

@@ -9,13 +9,16 @@ import { createInMemoryTransport } from '../core/inMemoryTransport';
 import { connectTcp } from '../net/tcpTransport';
 import { YiNative } from '../../modules/yi-native';
 import { CAMERA_HOST } from '../core/gallery';
+import { prepareNetwork } from '../core/network';
+import { cameraNetworkReady, nativeNetworkDeps } from '../net/device';
 
 interface Ctx {
   controller: CameraController;
   live: LiveViewSupervisor;
   modes: ModeManager;
   demo: boolean;
-  connectReal: (host?: string) => Promise<void>;
+  /** password = Wi-Fi della camera ('' = predefinita). */
+  connectReal: (host?: string, password?: string) => Promise<void>;
   connectDemo: () => Promise<void>;
   disconnect: () => void;
 }
@@ -31,7 +34,8 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
       new CameraController({
         createTransport: async () => {
           if (modeRef.current.demo) return createInMemoryTransport(demoCam.current, { delayMs: 40 });
-          await YiNative.bindToWifi().catch(() => false);
+          // la rete l'ha già preparata connectReal (collegamento guidato); qui solo se si è persa
+          if (!YiNative.isBound()) await YiNative.bindToWifi().catch(() => false);
           return connectTcp(modeRef.current.host, 7878);
         },
         timeoutMs: 5000,
@@ -44,7 +48,11 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
-  const live = useMemo(() => new LiveViewSupervisor(controller), [controller]);
+  // il video parte solo se passa dal Wi-Fi della camera (segnalazione del 12/11, Honor 200 Lite)
+  const live = useMemo(
+    () => new LiveViewSupervisor(controller, { ensureNetwork: async () => modeRef.current.demo || cameraNetworkReady() }),
+    [controller],
+  );
   const modes = useMemo(() => new ModeManager(controller, filePrefsStorage()), [controller]);
 
   // preferenze salvate; a ogni (ri)connessione in Semplice la camera torna ai valori migliori
@@ -67,8 +75,10 @@ export function CameraProvider({ children }: { children: React.ReactNode }) {
       get demo() {
         return modeRef.current.demo;
       },
-      connectReal: async (host = CAMERA_HOST) => {
+      connectReal: async (host = CAMERA_HOST, password = '') => {
         modeRef.current = { demo: false, host };
+        // fuori dal tempo massimo della connessione: la finestra di Android aspetta che l'utente scelga
+        await prepareNetwork(nativeNetworkDeps(), { password });
         await controller.connect();
       },
       connectDemo: async () => {

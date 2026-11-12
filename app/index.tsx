@@ -7,6 +7,8 @@ import { useCameraCtx, useCameraState } from '../src/state/CameraContext';
 import { C, R } from '../src/ui/theme';
 import { CAMERA_HOST } from '../src/core/gallery';
 import { t } from '../src/core/i18n';
+import { networkTip } from '../src/core/network';
+import { loadCameraPassword, phoneManufacturer, saveCameraPassword } from '../src/net/device';
 
 const steps = () => [
   { title: t('connect.step1.title'), text: t('connect.step1.text') },
@@ -20,14 +22,33 @@ export default function ConnessioneScreen() {
   const state = useCameraState();
   const [host, setHost] = useState(CAMERA_HOST);
   const [advanced, setAdvanced] = useState(false);
-  const busy = state.status === 'connecting';
+  const [password, setPassword] = useState('');
+  // collegamento guidato in corso: Android mostra la sua finestra con le reti YDXJ_…
+  const [preparing, setPreparing] = useState(false);
+  const busy = preparing || state.status === 'connecting';
+
+  useEffect(() => {
+    loadCameraPassword().then(setPassword);
+  }, []);
+
+  const connect = async () => {
+    setPreparing(true);
+    try {
+      await saveCameraPassword(password.trim());
+      await connectReal(host.trim() || CAMERA_HOST, password.trim());
+    } catch {
+      /* l'errore lo mostra lo stato della connessione */
+    } finally {
+      setPreparing(false);
+    }
+  };
 
   useEffect(() => {
     if (state.status === 'connected') router.replace('/(tabs)/controllo');
   }, [state.status]);
 
   const statusText =
-    state.status === 'connecting'
+    busy
       ? t('connect.status.connecting')
       : state.status === 'error'
         ? state.error ?? t('connect.status.error')
@@ -47,6 +68,7 @@ export default function ConnessioneScreen() {
           {busy ? <ActivityIndicator color={C.accent} size="small" /> : <View style={[s.dot, { backgroundColor: dot }]} />}
           <Text style={s.statusText} numberOfLines={3}>{statusText}</Text>
         </View>
+        {state.status === 'error' && !busy ? <Text style={s.tip}>{t(networkTip(phoneManufacturer()))}</Text> : null}
         <Text style={s.cardHint}>{t('connect.hint')}</Text>
       </View>
 
@@ -76,6 +98,18 @@ export default function ConnessioneScreen() {
             placeholderTextColor={C.faint}
             accessibilityLabel={t('connect.hostA11y')}
           />
+          <Text style={s.label}>{t('connect.passwordLabel')}</Text>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry
+            placeholder="1234567890"
+            style={s.input}
+            placeholderTextColor={C.faint}
+            accessibilityLabel={t('connect.passwordA11y')}
+          />
         </View>
       )}
 
@@ -83,7 +117,7 @@ export default function ConnessioneScreen() {
         <Pressable
           accessibilityRole="button"
           disabled={busy}
-          onPress={() => connectReal(host.trim() || CAMERA_HOST).catch(() => {})}
+          onPress={connect}
           style={({ pressed }) => [s.primary, (pressed || busy) && { opacity: 0.7 }]}
         >
           <Text style={s.primaryText}>{busy ? t('connect.buttonBusy') : t('connect.button')}</Text>
@@ -139,6 +173,7 @@ const s = StyleSheet.create({
   dot: { width: 10, height: 10, borderRadius: 5 },
   statusText: { color: C.text, fontSize: 15, fontWeight: '500', flexShrink: 1, textAlign: 'center' },
   cardHint: { color: C.muted, fontSize: 13, textAlign: 'center', lineHeight: 19 },
+  tip: { color: C.warn, fontSize: 13, textAlign: 'center', lineHeight: 19 },
   step: { flexDirection: 'row', gap: 14, alignItems: 'flex-start' },
   stepNum: { width: 28, height: 28, borderRadius: 14, backgroundColor: C.border, alignItems: 'center', justifyContent: 'center' },
   stepNumText: { color: C.text, fontSize: 14, fontWeight: '700' },

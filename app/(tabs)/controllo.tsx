@@ -12,6 +12,8 @@ import { formatElapsed } from '../../src/core/CameraController';
 import { RtspView } from '../../modules/yi-native';
 import { C } from '../../src/ui/theme';
 import { t } from '../../src/core/i18n';
+import { networkTip } from '../../src/core/network';
+import { phoneManufacturer } from '../../src/net/device';
 
 function shortRes(v?: string) {
   if (!v) return '';
@@ -113,10 +115,13 @@ export default function ControlloScreen() {
             <Text style={s.liveMsg}>
               {demo
                 ? t('control.liveDemo')
-                : lv.phase === 'retrying'
-                  ? t('control.liveRetrying')
-                  : t('control.liveStarting')}
+                : lv.phase === 'no_network'
+                  ? t('control.liveNoNetwork')
+                  : lv.phase === 'retrying'
+                    ? t('control.liveRetrying')
+                    : t('control.liveStarting')}
             </Text>
+            {lv.phase === 'no_network' ? <Text style={s.liveTip}>{t(networkTip(phoneManufacturer()))}</Text> : null}
           </View>
         )}
         <View style={s.liveBadge}><Text style={s.liveBadgeText}>LIVE</Text></View>
@@ -201,7 +206,8 @@ const s = StyleSheet.create({
   muted: { color: C.muted, fontSize: 13 },
   live: { marginHorizontal: 16, aspectRatio: 16 / 9, borderRadius: 16, backgroundColor: C.black, borderWidth: 1, borderColor: C.border, overflow: 'hidden' },
   livePlaceholder: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', gap: 8 },
-  liveMsg: { color: C.muted, fontSize: 13 },
+  liveMsg: { color: C.muted, fontSize: 13, textAlign: 'center', paddingHorizontal: 24 },
+  liveTip: { color: C.warn, fontSize: 12, textAlign: 'center', lineHeight: 17, paddingHorizontal: 24 },
   liveBadge: { position: 'absolute', top: 12, left: 12, backgroundColor: 'rgba(14,17,22,0.8)', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
   recBadge: { position: 'absolute', top: 12, right: 12, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(14,17,22,0.8)', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 },
   recDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: C.rec },

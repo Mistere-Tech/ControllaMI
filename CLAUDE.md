@@ -3,10 +3,11 @@
 App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, development build) per controllare la **YI Action Camera prima serie** (Xiaomi). Nata in una chat di Claude il 9–10/11/2026; questo file riassume dove siamo arrivati.
 
 ## Stato
-- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 151 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
+- Logica in `src/core/`: puro TypeScript, testata. `npm test` → 167 test verdi (node:test + tsx). Nei test usare `waitFor` (tests/helpers.ts), mai attese fisse: su Windows i timer hanno ~15 ms di granularità e i file girano in parallelo.
 - Schermate in `app/` (expo-router): connessione, poi tab Controllo / Galleria / Impostazioni. Provata sul telefono il 10/11 (build #5): parte e la live view si vede.
 - Modulo nativo `modules/yi-native/` (Kotlin): `bindToWifi` (requestNetwork Wi-Fi senza internet + bindProcessToNetwork) e vista RTSP con Media3 1.11.1.
-- Live view: la decide `LiveViewSupervisor` (src/core/liveView.ts), il player nativo esegue. Riavvio a ogni ritorno sulla schermata, vf_stop/vf_start, cambio impostazione, errore, buffering bloccato.
+- Live view: la decide `LiveViewSupervisor` (src/core/liveView.ts), il player nativo esegue. Riavvio a ogni ritorno sulla schermata, vf_stop/vf_start, cambio impostazione, errore, buffering bloccato. "playing" solo col primo fotogramma vero (`onRenderedFirstFrame` → `firstFrame`), non con "ready": prima restava nero. Prima di avviare il video controlla la rete (`ensureNetwork`): se Android non usa il Wi-Fi della camera → fase `no_network` con consiglio per marca.
+- Rete (src/core/network.ts + src/net/device.ts): da Android 10 collegamento guidato `WifiNetworkSpecifier` alle reti `YDXJ_` (password predefinita 1234567890, modificabile in Avanzate); se annullato o prima di Android 10 → `bindToWifi`. Fatto fuori dal tempo massimo della connessione. Segnalazione 12/11: Honor 200 Lite (MagicOS, Android 14), "WLAN+" passa ai dati mobili.
 - Connessione: battito ogni 3 s (msg 13) → `computeHealth` stabile/instabile/persa → `ConnectionBadge`.
 - Errori: `describeError` (src/core/errors.ts) + `ProblemBanner` al posto di Alert. Stato SD dal controller (`state.sd`), senza SD REC/foto/elenco file non partono.
 - Modalità Semplice/Pro: `ModeManager` (src/core/modes.ts) + scelte in src/core/presets.ts. Semplice = video 1080p60 S.Fine NTSC, foto max, timelapse video/foto con intervallo, esposizione (EV se c'è, altrimenti meter_mode). Pro→Semplice salva i valori Pro e li rimette al ritorno.
@@ -21,6 +22,8 @@ App Android 64 bit (React Native 0.88 + Expo SDK 58, New Architecture, developme
 - Repo: https://github.com/Mistere-Tech/ControllaMI (branch main). GitHub CLI autenticata su questo PC (`C:/Program Files/GitHub CLI/gh.exe`).
 
 ## Da verificare con la camera vera
+- Firmware visto sul campo (12/11): YDXJv22L_1.5.12, hardware YDXJ_v22L.
+- Collegamento guidato (finestra di Android con le reti YDXJ_) sul telefono vero, e che la live view parta senza schermo nero.
 - Codice d'errore della YI senza SD (nella camera finta è -27, inventato), nome della notifica SD (`sd_card_status`?) e delle notifiche `vf_start`/`vf_stop`.
 - msg 770 per fermare il timelapse foto; chiavi `rec_mode`, `timelapse_video`, `precise_cont_time`; chiave della compensazione EV (se esiste nel firmware).
 - Che il ritorno da Impostazioni non perda più la live view.

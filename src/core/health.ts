@@ -26,6 +26,6 @@ export function computeHealth({ status, heartbeats, live }: HealthInput): Health
   if (status !== 'connected') return 'lost';
   const recent = heartbeats.slice(-HEALTH_WINDOW);
   if (recent.some((h) => h === null || h > SLOW_MS)) return 'unstable';
-  if (live === 'retrying' || live === 'error') return 'unstable';
+  if (live === 'retrying' || live === 'no_network' || live === 'error') return 'unstable';
   return 'stable';
 }

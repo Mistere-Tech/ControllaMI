@@ -2,7 +2,7 @@ import { requireNativeModule, requireNativeViewManager } from 'expo-modules-core
 import type { ComponentType } from 'react';
 import type { ViewProps } from 'react-native';
 
-export type PlaybackState = 'idle' | 'buffering' | 'ready' | 'ended' | 'error';
+export type PlaybackState = 'idle' | 'buffering' | 'ready' | 'firstFrame' | 'ended' | 'error';
 
 export interface RtspViewProps extends ViewProps {
   url: string | null;
@@ -12,6 +12,10 @@ export interface RtspViewProps extends ViewProps {
 interface YiNativeModuleType {
   /** Lega tutto il traffico dell'app alla rete Wi-Fi (quella della camera). */
   bindToWifi(): Promise<boolean>;
+  /** Android 10+: collegamento guidato alle reti che iniziano per ssidPrefix ("ok" o "unavailable"). */
+  connectToCamera(ssidPrefix: string, password: string): Promise<'ok' | 'unavailable'>;
+  /** true se il traffico dell'app passa già dal Wi-Fi scelto. */
+  isBound(): boolean;
   /** Torna alla rete predefinita di Android. */
   unbind(): void;
   /** true se il telefono è collegato a un Wi-Fi in questo momento. */
@@ -27,6 +31,8 @@ try {
 
 export const YiNative: YiNativeModuleType = {
   bindToWifi: () => (native ? native.bindToWifi() : Promise.resolve(false)),
+  connectToCamera: (ssidPrefix, password) => (native ? native.connectToCamera(ssidPrefix, password) : Promise.resolve('unavailable')),
+  isBound: () => (native ? native.isBound() : false),
   unbind: () => native?.unbind(),
   isWifiConnected: () => (native ? native.isWifiConnected() : false),
 };
